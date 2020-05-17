@@ -81,3 +81,8 @@ div {
 .align-right {
     text-align: right;
 }
+
+.transition {
+    background: #eaeaea;
+    transition: background-color 2s ease-in-out;
+}
