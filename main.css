@@ -68,6 +68,7 @@ div {
     flex-wrap: wrap;
     justify-content: center;
     padding: 18px;
+    overflow: hidden;
 }
 
 .panel {
@@ -78,6 +79,21 @@ div {
     border-radius: 18px;
 }
 
+.panel:hover {
+    animation: expand .2s linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes expand {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.2);
+    }
+}
+
 .align-right {
     text-align: right;
 }
@@ -85,4 +101,13 @@ div {
 .transition {
     background: #eaeaea;
     transition: background-color 2s ease-in-out;
+}
+
+@keyframes from-left {
+    0% {
+        transform: translateX(-100px);
+    }
+    100% {
+        transform: translateX(0px);
+    }
 }
