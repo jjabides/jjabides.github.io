@@ -93,23 +93,20 @@ div {
     width: 256px;
     height: 256px;
     border: 1px solid #eaeaea;
-    margin: 16px;
+    margin: 32px;
     border-radius: 18px;
+    background: white;
+    transition: transform .6s ease;
 }
 
 .panel:hover {
-    animation: expand .2s linear;
-    animation-fill-mode: forwards;
+    transform: scale(1.2);
 }
 
-@keyframes expand {
-    0% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(1.2);
-    }
+.tools .panel {
+    width: 128px;
+    height: 128px;
+    margin: 16px;
 }
 
 .align-right {
@@ -117,15 +114,16 @@ div {
 }
 
 .transition {
-    background: #eaeaea;
-    transition: background-color 2s ease-in-out;
+    animation: from-left .6s;
 }
 
 @keyframes from-left {
     0% {
+        opacity: 0;
         transform: translateX(-100px);
     }
     100% {
+        opacity: 1;
         transform: translateX(0px);
     }
 }
