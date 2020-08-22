@@ -114,15 +114,17 @@ div {
 }
 
 .transition {
-    animation: from-left .6s;
+    animation: from-left .5s;
 }
 
 @keyframes from-left {
     0% {
+        pointer-events: none;
         opacity: 0;
         transform: translateX(-100px);
     }
     100% {
+        pointer-events: auto;
         opacity: 1;
         transform: translateX(0px);
     }

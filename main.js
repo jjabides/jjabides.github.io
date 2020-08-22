@@ -40,19 +40,38 @@ function getOffsetTop(element) {
 function pageStartupAnimation() {
     var helloSplash = document.getElementById('hello-splash');
 
-    var fade = () => {
-        setTimeout(() => {
-            helloSplash.style.opacity = 1;
-            setTimeout(() => {
-                helloSplash.style.opacity = 0;
-    
-                setTimeout(() => {
-                    helloSplash.style.display = 'none';
-                    var headerDesc = document.getElementsByClassName('header-desc')[0].style.opacity = 1;
-                }, 1000);
-            }, 1500);
-        }, 100);  
+    var display = () => {
+        helloSplash.style.opacity = 1;
     }
 
-    fade();
+    var fadeOut = () => {
+        helloSplash.style.opacity = 0;
+    }
+
+    var remove = () => {
+        helloSplash.style.display = 'none';
+        var headerDesc = document.getElementsByClassName('header-desc')[0].style.opacity = 1;
+    }
+
+    var actionDelayPair = new Array();
+
+    actionDelayPair.push(
+        {action: display, delay: 100}, 
+        { action: fadeOut, delay: 1500 }, 
+        { action: remove, delay: 1000 }
+    );
+
+    sequence(actionDelayPair);
+}
+
+function sequence(actions) {
+    if (actions.length === 0) return;
+
+    var actionDelayPair = actions.shift();
+
+    setTimeout(() => 
+    { 
+        actionDelayPair.action(); 
+        sequence(actions);
+    }, actionDelayPair.delay);
 }
