@@ -60,7 +60,7 @@ function pageStartupAnimation() {
     var actionDelayPair = new Array();
 
     actionDelayPair.push(
-        { action: display, delay: 100 }, 
+        { action: display, delay: 300 }, 
         { action: fadeOut, delay: 1200 }, 
         { action: remove, delay: 1000 },
         { action: displayArrow, delay: 1000 }
