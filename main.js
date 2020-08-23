@@ -50,15 +50,20 @@ function pageStartupAnimation() {
 
     var remove = () => {
         helloSplash.style.display = 'none';
-        var headerDesc = document.getElementsByClassName('header-desc')[0].style.opacity = 1;
+       document.getElementsByClassName('header-desc')[0].style.opacity = 1;
+    }
+
+    var displayArrow = () => {
+        document.getElementById("down-arrow").style.opacity = 1;
     }
 
     var actionDelayPair = new Array();
 
     actionDelayPair.push(
-        {action: display, delay: 100}, 
-        { action: fadeOut, delay: 1500 }, 
-        { action: remove, delay: 1000 }
+        { action: display, delay: 100 }, 
+        { action: fadeOut, delay: 1200 }, 
+        { action: remove, delay: 1000 },
+        { action: displayArrow, delay: 1000 }
     );
 
     sequence(actionDelayPair);

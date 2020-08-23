@@ -9,6 +9,19 @@ head, body {
     background: #1c1c1c;
 }
 
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+    background: black;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #5a5a5a;
+    border-radius: 4px;
+}
+
 div {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 500;
@@ -30,7 +43,6 @@ div {
     overflow: hidden;
     display: flex;
     align-items: center;
-    border: 1px solid #eaeaea;
     border-radius: 18px;
     position: relative;
 }
@@ -56,6 +68,23 @@ div {
     transition: opacity .7s;
 }
 
+#down-arrow {
+    position: absolute;
+    bottom: 0px;
+    left: calc(50% - 50px);
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+    transition: opacity .4s;
+    cursor: pointer;
+}
+
+#down-arrow svg path {
+    stroke: #eaeaea;
+    stroke-width: 1;
+    fill: none;
+}
+
 .header img {
     height: 100%;
     border-radius: 36px;
@@ -78,7 +107,7 @@ div {
 
 .section {
     margin: 24px 0px;
-    min-height: 800px;
+    min-height: 100vh;
 }
 
 .grid {
@@ -96,11 +125,35 @@ div {
     margin: 32px;
     border-radius: 18px;
     background: white;
-    transition: transform .6s ease;
+    transition: transform .4s ease;
+    cursor: pointer;
+    overflow: hidden;
 }
 
 .panel:hover {
     transform: scale(1.2);
+}
+
+.panel:hover .blur {
+    opacity: .8;
+}
+
+.panel img {
+    object-fit: cover;
+    width: auto;
+    height: 100%;
+}
+
+.panel .blur {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(#1c1c1c 20%, #313131 50%, #1c1c1c 80%);
+    transition: opacity .3s linear;
 }
 
 .tools .panel {
@@ -111,10 +164,6 @@ div {
 
 .align-right {
     text-align: right;
-}
-
-.transition {
-    animation: from-left .5s;
 }
 
 @keyframes from-left {
