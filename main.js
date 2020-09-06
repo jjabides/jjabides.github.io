@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", (event) => {
-    pageStartupAnimation();
+    //pageStartupAnimation();
 
     window.onscroll = () => {
 
@@ -50,7 +50,7 @@ function pageStartupAnimation() {
 
     var remove = () => {
         helloSplash.style.display = 'none';
-       document.getElementsByClassName('header-desc')[0].style.opacity = 1;
+       document.getElementsByClassName('introduction-desc')[0].style.opacity = 1;
     }
 
     var displayArrow = () => {
