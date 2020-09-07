@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import Cartridge from "./components/cartridge";
+import Cartridges from "./components/cartridges";
 
 class App extends Component {
   state = {
@@ -39,8 +39,10 @@ class App extends Component {
       case 2:
         return (
           <div className="introduction-desc floating-text">
+            Welcome to my web portfolio!
+            <br />
             My name is JJ Abides. I'm a software developer with 2+ years of
-            front-end experience.
+            experience.
           </div>
         );
       default:
@@ -71,7 +73,7 @@ class App extends Component {
   };
 
   displayMainContent = () => {
-    if (this.state.textSequenceState > 3) return <Cartridge />;
+    if (this.state.textSequenceState > 3) return <Cartridges />;
   };
 }
 

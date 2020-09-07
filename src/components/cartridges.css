@@ -1,0 +1,6 @@
+.cartridges-container {
+  display: flex;
+  width: 352px;
+  margin: auto 24px auto auto;
+  flex-wrap: wrap;
+}

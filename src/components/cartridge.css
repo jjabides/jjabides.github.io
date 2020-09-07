@@ -1,14 +1,25 @@
+.cartridge-container {
+  width: 128px;
+  height: 128px;
+  margin: 24px;
+}
+
 .cartridge {
   width: 128px;
   height: 128px;
-  border-radius: 12px;
   background: white;
-  margin: auto;
   cursor: pointer;
+  border-radius: 12px;
   transform: rotate(25deg);
+  position: absolute;
 
-  transition: transform 0.6s;
-  animation: cartridge-startup-anim 0.7s;
+  transition: all 0.6s;
+  animation: cartridge-startup-anim 0.6s;
+}
+
+.place-holder {
+  width: 128px;
+  height: 128px;
 }
 
 .cartridge:hover {
@@ -24,5 +35,19 @@
   100% {
     pointer-events: auto;
     opacity: 1;
+  }
+}
+
+.selected {
+  animation: selected-anim 0.6s 1 forwards;
+}
+
+@keyframes selected-anim {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(720deg);
   }
 }
