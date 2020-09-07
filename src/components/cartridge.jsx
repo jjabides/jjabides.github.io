@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./cartridge.css";
+import "../stylesheets/cartridge.css";
 
 class Cartridge extends Component {
   state = {
@@ -36,13 +36,13 @@ class Cartridge extends Component {
       };
     } else if (state === 3) {
       return {
-        top: "calc(50% - 128px)",
+        top: "calc(50% - 64px)",
         left: "calc(50% - 64px)",
         transition: "all .2s ease-out",
       };
     } else if (state >= 4) {
       return {
-        top: "calc(50% - 192px)",
+        top: "calc(50% - 128px)",
         left: "calc(50% - 64px)",
         transition: "all .4s ease",
       };
@@ -59,6 +59,7 @@ class Cartridge extends Component {
 
   handleOnClick = () => {
     this.setState({ selected: true });
+    this.props.selectGame(this.props.id);
     this.startSelectedAnimation();
   };
 

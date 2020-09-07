@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import "./App.css";
+import "./stylesheets/App.css";
 import Cartridges from "./components/cartridges";
+import Gameboy from "./components/gameboy";
 
 class App extends Component {
   state = {
     textSequenceState: 0,
     sequenceStateDurations: [0, 2000, 4000, 1600],
+    selectedGame: null,
   };
 
   constructor() {
@@ -73,7 +75,18 @@ class App extends Component {
   };
 
   displayMainContent = () => {
-    if (this.state.textSequenceState > 3) return <Cartridges />;
+    if (this.state.textSequenceState > 3)
+      return (
+        <div className="main-content-cont">
+          <Gameboy game={this.state.selectedGame} />
+          <Cartridges selectGame={this.handleSelectGame} />
+        </div>
+      );
+  };
+
+  handleSelectGame = (name) => {
+    console.log("hit", name);
+    this.setState({ selectedGame: name });
   };
 }
 

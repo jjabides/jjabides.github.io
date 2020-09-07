@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Cartridge from "./cartridge";
-import "./cartridges.css";
+import "../stylesheets/cartridges.css";
 
 class Cartridges extends Component {
   state = {
@@ -15,7 +15,11 @@ class Cartridges extends Component {
     return (
       <div className="cartridges-container">
         {this.state.cartridges.map((cartridge) => (
-          <Cartridge key={cartridge.id} id={"cartridge-" + cartridge.id} />
+          <Cartridge
+            selectGame={this.props.selectGame}
+            key={cartridge.id}
+            id={"cartridge-" + cartridge.id}
+          />
         ))}
       </div>
     );
