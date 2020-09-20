@@ -78,8 +78,11 @@ class App extends Component {
     if (this.state.textSequenceState > 3)
       return (
         <div className="main-content-cont">
+          <Cartridges
+            game={this.state.selectedGame}
+            selectGame={this.handleSelectGame}
+          />
           <Gameboy game={this.state.selectedGame} />
-          <Cartridges selectGame={this.handleSelectGame} />
         </div>
       );
   };

@@ -1,6 +1,21 @@
 .cartridges-container {
   display: flex;
-  width: 352px;
-  margin: auto 24px auto auto;
+  width: 100%;
+  margin: 24px auto auto auto;
+  padding: 24px;
   flex-wrap: wrap;
+}
+
+.selection-made .cartridge:not(.selected) {
+  animation: fade-out 0.7s forwards;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }

@@ -36,13 +36,13 @@ class Cartridge extends Component {
       };
     } else if (state === 3) {
       return {
-        top: "calc(50% - 64px)",
+        top: "calc(50% - 32px)",
         left: "calc(50% - 64px)",
         transition: "all .2s ease-out",
       };
     } else if (state >= 4) {
       return {
-        top: "calc(50% - 128px)",
+        top: "calc(50% - 98px)",
         left: "calc(50% - 64px)",
         transition: "all .4s ease",
       };
