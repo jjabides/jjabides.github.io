@@ -88,7 +88,6 @@ class App extends Component {
   };
 
   handleSelectGame = (name) => {
-    console.log("hit", name);
     this.setState({ selectedGame: name });
   };
 }

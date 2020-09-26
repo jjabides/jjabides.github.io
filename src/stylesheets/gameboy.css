@@ -10,6 +10,16 @@
   animation: init-gameboy-anim 0.6s 1 forwards;
 }
 
+.screen-only {
+  width: 100%;
+  height: calc(100% + 66px);
+  position: absolute;
+  top: -66px;
+  background: red;
+
+  animation: fade-in 1s forwards;
+}
+
 .gameboy:hover {
   transform: rotate(0deg) scale(1.2);
 }
@@ -26,22 +36,23 @@
 
 .game-selected {
   position: absolute;
+  pointer-events: none;
   animation: gameboy-selected-anim 1.3s forwards;
 }
 
 .zoom-in {
+  pointer-events: none;
   position: absolute;
-  animation: zoom-in-anim 2s forwards;
+  animation: zoom-in-anim 1.2s linear forwards;
 }
 
 @keyframes gameboy-selected-anim {
   0% {
     left: calc(50% - 128px);
     bottom: 36px;
-    pointer-events: none;
   }
 
-  65% {
+  63% {
     bottom: calc(50% - 96px);
   }
 
@@ -52,7 +63,6 @@
   100% {
     left: calc(50% - 128px);
     bottom: calc(50% - 96px);
-    pointer-events: none;
   }
 }
 
@@ -70,6 +80,16 @@
     bottom: calc(50% - 96px);
     pointer-events: none;
 
-    transform: scale(10);
+    transform: scale(11);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    background: #eaeaea;
+  }
+
+  100% {
+    background: red;
   }
 }

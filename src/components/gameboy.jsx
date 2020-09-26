@@ -4,7 +4,7 @@ import "../stylesheets/gameboy.css";
 class Gameboy extends Component {
   state = {
     animationState: 0,
-    animationStateDurations: [0, 1600, 2000],
+    animationStateDurations: [0, 1600, 2000, 1000],
   };
 
   render() {
@@ -22,8 +22,10 @@ class Gameboy extends Component {
         retVal += " game-selected";
         break;
       case 2:
-        console.log("zoom-in");
         retVal += " zoom-in";
+        break;
+      case 3:
+        retVal = "screen-only";
         break;
       default:
         break;
@@ -33,20 +35,23 @@ class Gameboy extends Component {
   };
 
   startSelectedAnimation = () => {
-    var runAnimation = () => {
-      if (this.state.animationState < 2) {
-        var animState = this.state.animationState;
-
-        this.setState({ animationState: animState + 1 });
+    var runAnimation = (state) => {
+      if (
+        state > this.state.animationState &&
+        state < this.state.animationStateDurations.length
+      ) {
+        this.setState({ animationState: state });
 
         setTimeout(
-          runAnimation,
-          this.state.animationStateDurations[animState + 1]
+          () => runAnimation(state + 1),
+          this.state.animationStateDurations[state]
         );
       }
     };
 
-    runAnimation();
+    setTimeout(() => {
+      runAnimation(1);
+    }, 0);
   };
 }
 

@@ -16,7 +16,9 @@ class Cartridge extends Component {
           style={this.getStyles()}
           className={this.getClasses()}
           onClick={this.handleOnClick}
-        ></div>
+        >
+          <img className="cartridge-icon" src={this.props.icon} />
+        </div>
         <div className="place-holder"></div>
       </div>
     );
