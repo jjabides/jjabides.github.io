@@ -4,12 +4,28 @@ import "../stylesheets/gameboy.css";
 class Gameboy extends Component {
   state = {
     animationState: 0,
-    animationStateDurations: [0, 1600, 2000, 1000],
+    animationStateDurations: [0, 1600, 2000, 1000, 1000],
   };
 
   render() {
-    return <div className={this.getClasses()}></div>;
+    return <div className={this.getClasses()}>{this.screenOnlyRender()}</div>;
   }
+
+  screenOnlyRender = () => {
+    if (this.state.animationState !== 4) return "";
+
+    return (
+      <div className="game-screen-cont">
+        <div className="img-cont">
+          <img className="game-images" src={this.props.game.icon} />
+        </div>
+        <div className="game-desc-cont">
+          <div className="game-title">{this.props.game.title}</div>
+          <div className="game-desc">{this.props.game.description}</div>
+        </div>
+      </div>
+    );
+  };
 
   getClasses = () => {
     var retVal = "gameboy";
@@ -25,6 +41,9 @@ class Gameboy extends Component {
         retVal += " zoom-in";
         break;
       case 3:
+        retVal = "screen-only";
+        break;
+      case 4:
         retVal = "screen-only";
         break;
       default:

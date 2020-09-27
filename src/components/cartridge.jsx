@@ -1,7 +1,18 @@
 import React, { Component } from "react";
 import "../stylesheets/cartridge.css";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "../stylesheets/customTippyStyles.css";
+import "tippy.js/animations/shift-away.css";
 
 class Cartridge extends Component {
+  constructor(props) {
+    super();
+
+    this.game = props.game;
+  }
+  game = {};
+
   state = {
     selected: false,
     animationState: 0,
@@ -11,14 +22,24 @@ class Cartridge extends Component {
   render() {
     return (
       <div className="cartridge-container">
-        <div
-          id={this.props.id}
-          style={this.getStyles()}
-          className={this.getClasses()}
-          onClick={this.handleOnClick}
+        <Tippy
+          content={this.game.title}
+          placement="bottom"
+          disabled={this.state.selected}
+          duration={[700, 500]}
+          animation="shift-away"
+          zIndex="100"
         >
-          <img className="cartridge-icon" src={this.props.icon} />
-        </div>
+          <div
+            id={this.props.id}
+            style={this.getStyles()}
+            className={this.getClasses()}
+            onClick={this.handleOnClick}
+          >
+            <img className="cartridge-icon" src={this.game.icon} />
+          </div>
+        </Tippy>
+
         <div className="place-holder"></div>
       </div>
     );
@@ -61,7 +82,7 @@ class Cartridge extends Component {
 
   handleOnClick = () => {
     this.setState({ selected: true });
-    this.props.selectGame(this.props.id);
+    this.props.selectGame(this.game);
     this.startSelectedAnimation();
   };
 

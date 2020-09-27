@@ -26,9 +26,8 @@ class Cartridges extends Component {
             class="cartridge"
             selectGame={this.props.selectGame}
             key={cartridge.id}
+            game={cartridge}
             id={"cartridge-" + cartridge.id}
-            icon={cartridge.icon}
-            title={cartridge.title}
           />
         ))}
       </div>
@@ -52,7 +51,7 @@ class Cartridges extends Component {
         textIcon: "",
         id: i,
         title: "",
-        body: "",
+        description: "",
         links: [],
       };
 
@@ -68,21 +67,62 @@ class Cartridges extends Component {
     switch (cartridge.id) {
       case 0:
         cartridge.icon = sunburstDiagramIcon;
-        cartridge.title = "Sunburst Diagram";
-        cartridge.body =
-          "This is a project I built at River Logic. I was in charge of implementing designs for a radial graph that would represent customer Job usage. \nUsers would be able to manipulate the graph to highlight Job Units within a specific week or month. This web app would also calculate metrics like used Job Units, averages, and remaining balance within a billing cycle.\nI wrote the front-end code in HTML, LESS, TypeScript, KnockoutJS, and SVG. I did all the data aggregation on the back-end using C# and pulling from Azure Table Storage.";
+        cartridge.title = "Sunburst Diagram Project";
+        cartridge.description = (
+          <div>
+            This is a project I built at River Logic. I was in charge of
+            implementing designs for a radial graph that would represent
+            customer Job usage.
+            <br />
+            <br />
+            Users would be able to manipulate the graph to highlight Job Units
+            within a specific week or month. This web app would also calculate
+            metrics like used Job Units, averages, and remaining balance within
+            a billing cycle.
+            <br />
+            <br />I wrote the front-end code in HTML, LESS, TypeScript,
+            KnockoutJS, and SVG. I did all the data aggregation on the back-end
+            using C# and pulling from Azure Table Storage.
+          </div>
+        );
         break;
       case 1:
         cartridge.icon = DALIcon;
-        cartridge.title = "Data Access Layer (DAL)";
-        cartridge.body =
-          "This is a project I built at River Logic. I was in charge of implementing a new layer in our system in which data is retrieved and cached (in memory and in browser cache). This class acted as an in-memory cache and can be accessed by any class in the system. If the data that class is looking for isn't avaiable in DAL, DAL would make an AJAX call to our back-end to retrieve the data, and later store it in memory. DAL would also listen for Pusher notifications to stay in sync with live updates. DAL also sends messages to Service Worker to update browser cache.";
+        cartridge.title = "Data Access Layer (DAL) Project";
+        cartridge.description = (
+          <div>
+            This is a project I built at River Logic. I was in charge of
+            implementing a new layer in our system in which data is retrieved
+            and cached (in memory and in browser cache).
+            <br />
+            <br />
+            This class acted as an in-memory cache and can be accessed by any
+            class in the system. If the data that class is looking for isn't
+            avaiable in DAL, DAL would make an AJAX call to our back-end to
+            retrieve the data, and later store it in memory.
+            <br />
+            <br />
+            DAL would also listen for Pusher notifications to stay in sync with
+            live updates. DAL also sends messages to Service Worker to update
+            browser cache.
+          </div>
+        );
         break;
       case 2:
         cartridge.icon = TrackAttackIcon;
-        cartridge.title = "Track Attack";
-        cartridge.body =
-          "A project from my game development course where I worked in a team of 4 to build a small game within 6 weeks. We built a game called Track Attack, which is a 2D side-scroller that involved dynamic obstacle creation and depended on the pitch and noise of song that was playing. I was in charge UI, custom music, sound effects, and obstacle design. We used Unity for our game engine and wrote in ";
+        cartridge.title = "Track Attack Video Game Project";
+        cartridge.description = (
+          <div>
+            A project from my game development course where I worked in a team
+            of 4 to build a small game within 6 weeks. We built a game called
+            Track Attack, which is a 2D side-scroller that involved dynamic
+            obstacle creation and depended on the pitch and noise of song that
+            was playing.
+            <br />
+            <br />I was in charge UI, custom music, sound effects, and obstacle
+            design. We used Unity for our game engine and wrote in C#
+          </div>
+        );
         cartridge.links = [
           {
             title: "Promo Video",
@@ -103,8 +143,22 @@ class Cartridges extends Component {
       case 3:
         cartridge.icon = SpotifyProjectIcon;
         cartridge.title = "Spotify Search Engine Cloud Service";
-        cartridge.body =
-          "This was a project I built in my CSS 490 Cloud Computing class at University of Washington Bothell. I worked in a team of two to build a cloud service that would utilze 6+ other cloud services. We created a simple Spotify search engine that takes a search input for a song artist, utilizes Spotify's API to get a list of artists with the given search input. From there a user could select an artist and a list of tracks from the selected artist would appear. The user can then select a track and sample lyrics pulled from Musixmatch.com would display. For this project, we used Azure Web Apps, Blob Storage, Table Storage, Application Insights, Spotify API, and MusixMatch.";
+        cartridge.description = (
+          <div>
+            This was a project I built in my CSS 490 Cloud Computing class at
+            University of Washington Bothell. I worked in a team of two to build
+            a cloud service that would utilze 6+ other cloud services. <br />
+            <br /> We created a simple Spotify search engine that takes a search
+            input for a song artist, utilizes Spotify's API to get a list of
+            artists with the given search input. From there a user could select
+            an artist and a list of tracks from the selected artist would
+            appear. The user can then select a track and sample lyrics pulled
+            from Musixmatch.com would display. <br />
+            <br />
+            For this project, we used Azure Web Apps, Blob Storage, Table
+            Storage, Application Insights, Spotify API, and MusixMatch.
+          </div>
+        );
         cartridge.links = [
           {
             title: "GitHub",
@@ -115,8 +169,22 @@ class Cartridges extends Component {
       case 4:
         cartridge.icon = MeIcon;
         cartridge.title = "About Me";
-        cartridge.body =
-          "I'm JJ Abides, a software developer with 2+ years of experience working in the tech industry. I graduated from University of Washington Bothell with a Bachelor of Science in Computer Science and Software Engineering.\nSo far I've worked with the following languages: JavaScript, HTML, CSS, TypeScript, Python, Java, C#, C++.\nI've also worked with the following tools, frameworks, and services: ReactJS, KnockoutJS, Unity, Visual Studio, Azure.";
+        cartridge.description = (
+          <div>
+            I'm JJ Abides, a software developer with 2+ years of experience
+            working in the tech industry. I graduated from University of
+            Washington Bothell with a Bachelor of Science in Computer Science
+            and Software Engineering.
+            <br />
+            <br />
+            So far I've worked with the following languages: JavaScript, HTML,
+            CSS, TypeScript, Python, Java, C#, C++.
+            <br />
+            <br />
+            I've also worked with the following tools, frameworks, and services:
+            ReactJS, KnockoutJS, Unity, Visual Studio, Azure.
+          </div>
+        );
         cartridge.links = [
           {
             title: "LinkedIn",

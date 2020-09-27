@@ -1,0 +1,13 @@
+.tippy-box {
+  background: #eaeaea !important;
+}
+
+.tippy-box .tippy-content div {
+  color: black !important;
+  font-weight: 600;
+}
+
+.tippy-box .tippy-arrow {
+  background: #eaeaea !important;
+  color: #eaeaea !important;
+}
