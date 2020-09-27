@@ -22,9 +22,23 @@ class Gameboy extends Component {
         <div className="game-desc-cont">
           <div className="game-title">{this.props.game.title}</div>
           <div className="game-desc">{this.props.game.description}</div>
+          <div className="links">{this.getLinks()}</div>
         </div>
       </div>
     );
+  };
+
+  getLinks = () => {
+    if (!this.props.game.links) return;
+
+    return this.props.game.links.map((link, index) => (
+      <div className="link-cont" key={index}>
+        <div className="link-title">{link.title}</div>
+        <a className="link" href={link.link}>
+          {link.link}
+        </a>
+      </div>
+    ));
   };
 
   getClasses = () => {

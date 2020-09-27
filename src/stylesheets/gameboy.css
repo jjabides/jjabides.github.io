@@ -132,6 +132,8 @@
   height: 100%;
   padding: 24px;
   overflow: hidden;
+  display: flex;
+  flex-flow: column;
 }
 
 .game-screen-cont .game-desc-cont .game-title {
@@ -162,4 +164,26 @@
 
   animation: game-title-anim 1s forwards;
   animation-delay: 1s;
+}
+
+.game-screen-cont .game-desc-cont .links {
+  font-size: 20px;
+  position: relative;
+  margin: auto 0px 0px 0px;
+  word-wrap: break-word;
+  opacity: 0;
+
+  animation: links-anim 1s forwards;
+  animation-delay: 1.5s;
+}
+
+@keyframes links-anim {
+  0% {
+    opacity: 0;
+    transform: translateX(300px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
 }
