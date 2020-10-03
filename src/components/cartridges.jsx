@@ -25,6 +25,7 @@ class Cartridges extends Component {
           <Cartridge
             class="cartridge"
             selectGame={this.props.selectGame}
+            selectedGame={this.props.game}
             key={cartridge.id}
             game={cartridge}
             id={"cartridge-" + cartridge.id}
@@ -147,7 +148,7 @@ class Cartridges extends Component {
           <div>
             This was a project I built in my CSS 490 Cloud Computing class at
             University of Washington Bothell. I worked in a team of two to build
-            a cloud service that would utilze 6+ other cloud services. <br />
+            a cloud service that would utilize 6+ other cloud services. <br />
             <br /> We created a simple Spotify search engine that takes a search
             input for a song artist, utilizes Spotify's API to get a list of
             artists with the given search input. From there a user could select

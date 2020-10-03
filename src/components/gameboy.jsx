@@ -4,7 +4,7 @@ import "../stylesheets/gameboy.css";
 class Gameboy extends Component {
   state = {
     animationState: 0,
-    animationStateDurations: [0, 1600, 2000, 1000, 1000],
+    animationStateDurations: [0, 1600, 1600, 600, 1000],
   };
 
   render() {
@@ -16,6 +16,9 @@ class Gameboy extends Component {
 
     return (
       <div className="game-screen-cont">
+        <div className="back-btn" onClick={this.navigateBack}>
+          BACK
+        </div>
         <div className="img-cont">
           <img className="game-images" src={this.props.game.icon} />
         </div>
@@ -85,6 +88,11 @@ class Gameboy extends Component {
     setTimeout(() => {
       runAnimation(1);
     }, 0);
+  };
+
+  navigateBack = () => {
+    this.props.unselectGame();
+    this.setState({ animationState: 0 });
   };
 }
 

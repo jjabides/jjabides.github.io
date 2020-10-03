@@ -1,7 +1,31 @@
+@media screen and (max-width: 768px), screen and (max-height: 600px) {
+  :root {
+    --gameboy-width: 192px;
+    --gameboy-height: 96px;
+    --gameboy-border-radius: 32px;
+  }
+}
+
+@media screen and (min-width: 769px) and (min-height: 601px) {
+  :root {
+    --gameboy-width: 256px;
+    --gameboy-height: 128px;
+    --gameboy-border-radius: 48px;
+  }
+}
+
+@media screen and (max-height: 400px) {
+  :root {
+    --gameboy-width: 128px;
+    --gameboy-height: 64px;
+    --gameboy-border-radius: 18px;
+  }
+}
+
 .gameboy {
-  width: 256px;
-  height: 128px;
-  border-radius: 48px;
+  width: var(--gameboy-width);
+  height: var(--gameboy-height);
+  border-radius: var(--gameboy-border-radius);
   background: white;
   margin: auto auto 36px auto;
   cursor: pointer;
@@ -12,12 +36,11 @@
 
 .screen-only {
   width: 100%;
-  height: calc(100% + 66px);
+  height: 100%;
   position: absolute;
-  top: -66px;
   background: red;
 
-  animation: fade-in 1s forwards;
+  animation: fade-in 0.6s forwards;
 }
 
 .gameboy:hover {
@@ -43,41 +66,45 @@
 .zoom-in {
   pointer-events: none;
   position: absolute;
-  animation: zoom-in-anim 1.2s linear forwards;
+  animation: zoom-in-anim 1s linear forwards;
 }
 
 @keyframes gameboy-selected-anim {
   0% {
-    left: calc(50% - 128px);
-    bottom: 36px;
+    left: calc(50% - var(--gameboy-height));
+    top: calc(100% - 36px - var(--gameboy-height));
+  }
+
+  50% {
+    top: calc(50% - (var(--gameboy-height) / 2));
   }
 
   63% {
-    bottom: calc(50% - 96px);
+    top: calc(50% - (var(--gameboy-height) / 2));
   }
 
-  70% {
-    bottom: calc(50% - 160px);
+  69% {
+    top: calc(50% - (var(--gameboy-height) / 16));
   }
 
   100% {
-    left: calc(50% - 128px);
-    bottom: calc(50% - 96px);
+    left: calc(50% - var(--gameboy-height));
+    top: calc(50% - (var(--gameboy-height) / 2));
   }
 }
 
 @keyframes zoom-in-anim {
   0% {
-    left: calc(50% - 128px);
-    bottom: calc(50% - 96px);
+    left: calc(50% - var(--gameboy-height));
+    top: calc(50% - (var(--gameboy-height) / 2));
     pointer-events: none;
 
     transform: scale(1);
   }
 
   100% {
-    left: calc(50% - 128px);
-    bottom: calc(50% - 96px);
+    left: calc(50% - var(--gameboy-height));
+    top: calc(50% - (var(--gameboy-height) / 2));
     pointer-events: none;
 
     transform: scale(11);
@@ -98,6 +125,43 @@
   width: 100%;
   height: 100%;
   display: flex;
+  position: relative;
+}
+
+.back-btn {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  opacity: 0;
+  width: 128px;
+  height: 36px;
+  border-radius: 18px;
+  background: #8499b5;
+  transition: background-color 0.5s, color 0.5s;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  animation: back-btn-anim 1s forwards;
+  animation-delay: 1.6s;
+}
+
+.back-btn:hover {
+  background-color: #eaeaea;
+  color: black;
+}
+
+@keyframes back-btn-anim {
+  0% {
+    opacity: 0;
+    transform: translateY(-300px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .game-screen-cont .img-cont {
@@ -142,7 +206,7 @@
   opacity: 0;
 
   animation: game-title-anim 1s forwards;
-  animation-delay: 0.5s;
+  animation-delay: 0.4s;
 }
 
 @keyframes game-title-anim {
@@ -163,7 +227,7 @@
   opacity: 0;
 
   animation: game-title-anim 1s forwards;
-  animation-delay: 1s;
+  animation-delay: 0.8s;
 }
 
 .game-screen-cont .game-desc-cont .links {
@@ -174,7 +238,7 @@
   opacity: 0;
 
   animation: links-anim 1s forwards;
-  animation-delay: 1.5s;
+  animation-delay: 1.2s;
 }
 
 @keyframes links-anim {
@@ -186,4 +250,8 @@
     opacity: 1;
     transform: translateX(0px);
   }
+}
+
+a:link {
+  color: #8499b5;
 }

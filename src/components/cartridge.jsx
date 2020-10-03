@@ -13,6 +13,8 @@ class Cartridge extends Component {
   }
   game = {};
 
+  cartridgeHeight = 128;
+
   state = {
     selected: false,
     animationState: 0,
@@ -54,19 +56,19 @@ class Cartridge extends Component {
       };
     } else if (state === 2) {
       return {
-        top: "calc(50% - 256px)",
-        left: "calc(50% - 64px)",
+        top: `calc(50% - ${this.cartridgeHeight * 2}px)`,
+        left: `calc(50% - ${this.cartridgeHeight / 2}px)`,
       };
     } else if (state === 3) {
       return {
-        top: "calc(50% - 32px)",
-        left: "calc(50% - 64px)",
+        top: `calc(50% - ${this.cartridgeHeight / 4}px)`,
+        left: `calc(50% - ${this.cartridgeHeight / 2}px)`,
         transition: "all .2s ease-out",
       };
     } else if (state >= 4) {
       return {
-        top: "calc(50% - 98px)",
-        left: "calc(50% - 64px)",
+        top: `calc(50% - ${this.cartridgeHeight / 1.5}px)`,
+        left: `calc(50% - ${this.cartridgeHeight / 2}px)`,
         transition: "all .4s ease",
       };
     }
@@ -90,9 +92,14 @@ class Cartridge extends Component {
     var mainOffset = document
       .getElementsByClassName("main-content")[0]
       .getBoundingClientRect().top;
+
     var cartridgeTop = document
       .getElementById(this.props.id)
       .getBoundingClientRect().top;
+
+    this.cartridgeHeight = document.getElementById(
+      this.props.id
+    ).parentElement.clientHeight;
 
     return cartridgeTop - mainOffset;
   };
@@ -121,6 +128,21 @@ class Cartridge extends Component {
 
     setAnimationState();
   };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      !props.selectedGame &&
+      state.selected &&
+      state.animationState >= state.animationDurations.length
+    ) {
+      return {
+        selected: false,
+        animationState: 0,
+      };
+    }
+
+    return state;
+  }
 }
 
 export default Cartridge;

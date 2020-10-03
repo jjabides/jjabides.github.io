@@ -81,14 +81,25 @@ class App extends Component {
           <Cartridges
             game={this.state.selectedGame}
             selectGame={this.handleSelectGame}
+            unselectGame={this.handleUnselectGame}
           />
-          <Gameboy game={this.state.selectedGame} />
+          <Gameboy
+            game={this.state.selectedGame}
+            unselectGame={this.handleUnselectGame}
+          />
         </div>
       );
   };
 
-  handleSelectGame = (name) => {
-    this.setState({ selectedGame: name });
+  handleSelectGame = (cartridge) => {
+    this.setState({
+      selectedGame: cartridge,
+      cartridgeState: cartridge,
+    });
+  };
+
+  handleUnselectGame = () => {
+    this.setState({ selectedGame: null });
   };
 }
 
