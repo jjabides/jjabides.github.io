@@ -1,24 +1,45 @@
-@media screen and (max-width: 768px), screen and (max-height: 600px) {
+@media only screen and (max-width: 768px), only screen and (max-height: 600px) {
   :root {
     --gameboy-width: 192px;
     --gameboy-height: 96px;
     --gameboy-border-radius: 32px;
   }
+
+  .game-desc div,
+  .links div {
+    font-size: 14px;
+  }
 }
 
-@media screen and (min-width: 769px) and (min-height: 601px) {
+@media only screen and (min-width: 769px) and (min-height: 601px) {
   :root {
     --gameboy-width: 256px;
     --gameboy-height: 128px;
     --gameboy-border-radius: 48px;
   }
+
+  .game-desc div {
+    font-size: 24px;
+  }
 }
 
-@media screen and (max-height: 400px) {
+@media only screen and (max-height: 400px), only screen and (max-width: 500px) {
   :root {
     --gameboy-width: 128px;
     --gameboy-height: 64px;
     --gameboy-border-radius: 18px;
+  }
+
+  .game-desc div,
+  .links div {
+    font-size: 11px;
+  }
+
+  .screen-only .back-btn {
+    font-size: 14px;
+    width: 64px;
+    height: 24px;
+    border-radius: 12px;
   }
 }
 
@@ -132,14 +153,14 @@
   position: absolute;
   top: 24px;
   left: 24px;
-  opacity: 0;
   width: 128px;
   height: 36px;
   border-radius: 18px;
+  font-size: 18px;
+  opacity: 0;
   background: #8499b5;
   transition: background-color 0.5s, color 0.5s;
   cursor: pointer;
-  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -222,9 +243,9 @@
 
 .game-screen-cont .game-desc-cont .game-desc {
   max-height: 60%;
-  font-size: 24px;
   margin-top: 24px;
   opacity: 0;
+  overflow: auto;
 
   animation: game-title-anim 1s forwards;
   animation-delay: 0.8s;
@@ -237,19 +258,8 @@
   word-wrap: break-word;
   opacity: 0;
 
-  animation: links-anim 1s forwards;
+  animation: game-title-anim 1s forwards;
   animation-delay: 1.2s;
-}
-
-@keyframes links-anim {
-  0% {
-    opacity: 0;
-    transform: translateX(300px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0px);
-  }
 }
 
 a:link {

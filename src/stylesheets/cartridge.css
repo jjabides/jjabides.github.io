@@ -1,4 +1,4 @@
-@media screen and (max-width: 768px), screen and (max-height: 600px) {
+@media only screen and (max-width: 768px), only screen and (max-height: 600px) {
   .cartridge-container,
   .cartridge {
     width: 96px;
@@ -10,12 +10,16 @@
   }
 }
 
-@media screen and (max-height: 400px) {
+@media only screen and (max-height: 400px), only screen and (max-width: 500px) {
   .cartridge-container,
   .cartridge {
     width: 64px !important;
     height: 64px !important;
     padding: 4px !important;
+  }
+
+  .cartridge-container {
+    margin: 12px;
   }
 }
 

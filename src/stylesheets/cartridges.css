@@ -1,14 +1,20 @@
 @media only screen and (max-width: 768px), only screen and (max-height: 600px) {
   .cartridges-container {
     padding: 8px !important;
-    margin: 48px auto auto auto !important;
+    margin-top: 48px !important;
+  }
+}
+
+@media only screen and (max-height: 400px) {
+  .cartridges-container {
+    margin-top: 32px !important;
   }
 }
 
 .cartridges-container {
   display: flex;
   width: 100%;
-  margin: 96px auto auto auto;
+  margin-top: 96px;
   padding: 24px;
   flex-wrap: wrap;
   justify-content: space-around;
