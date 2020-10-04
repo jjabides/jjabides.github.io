@@ -54,6 +54,12 @@ div {
   }
 }
 
+@media only screen and (min-width: 768px) and (min-height: 601px) {
+  .hello-splash {
+    font-size: 64px;
+  }
+}
+
 .container {
   height: 100vh;
   max-height: 1250px;

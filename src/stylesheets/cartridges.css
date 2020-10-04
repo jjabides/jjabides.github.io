@@ -5,12 +5,6 @@
   }
 }
 
-@media only screen and (max-height: 400px) {
-  .cartridges-container {
-    margin-top: 32px !important;
-  }
-}
-
 .cartridges-container {
   display: flex;
   width: 100%;

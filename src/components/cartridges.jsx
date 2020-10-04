@@ -44,7 +44,6 @@ class Cartridges extends Component {
   };
 
   setCartridgeData = () => {
-    //test
     var cartridges = [];
 
     for (var i = 0; i < 5; i++) {
