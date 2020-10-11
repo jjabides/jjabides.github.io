@@ -43,6 +43,37 @@
   }
 }
 
+@media screen and (max-width: 500px) and (orientation: portrait) {
+  .game-screen-cont {
+    display: block !important;
+  }
+
+  .game-screen-cont .back-btn {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    margin-top: 16px;
+    margin-left: 16px;
+  }
+
+  .img-cont {
+    width: 100% !important;
+    max-height: 40%;
+    padding: 16px;
+  }
+
+  .img-cont img {
+    width: auto !important;
+    height: 100%;
+  }
+
+  .game-screen-cont .game-desc-cont {
+    width: 100% !important;
+    height: auto;
+    padding: 16px;
+  }
+}
+
 .gameboy {
   width: var(--gameboy-width);
   height: var(--gameboy-height);
@@ -128,7 +159,7 @@
     top: calc(50% - (var(--gameboy-height) / 2));
     pointer-events: none;
 
-    transform: scale(11);
+    transform: scale(12);
   }
 }
 
@@ -185,15 +216,23 @@
   }
 }
 
-.game-screen-cont .img-cont {
+.about-me .img-cont {
   width: 35%;
+}
+
+.about-me .game-desc-cont {
+  width: 65%;
+}
+
+.img-cont {
+  width: 50%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.game-screen-cont .img-cont .game-images {
+.game-images {
   width: calc(100% - 48px);
   border-radius: 18px;
   background: white;
@@ -212,8 +251,8 @@
   }
 }
 
-.game-screen-cont .game-desc-cont {
-  width: 65%;
+.game-desc-cont {
+  width: 50%;
   height: 100%;
   padding: 24px;
   overflow: hidden;
@@ -221,7 +260,7 @@
   flex-flow: column;
 }
 
-.game-screen-cont .game-desc-cont .game-title {
+.game-title {
   display: flex;
   justify-content: center;
   opacity: 0;
@@ -241,9 +280,9 @@
   }
 }
 
-.game-screen-cont .game-desc-cont .game-desc {
+.game-desc {
   max-height: 60%;
-  margin-top: 24px;
+  margin: 24px 0px 18px 0px;
   opacity: 0;
   overflow: auto;
 
@@ -251,7 +290,7 @@
   animation-delay: 0.8s;
 }
 
-.game-screen-cont .game-desc-cont .links {
+.links {
   font-size: 20px;
   position: relative;
   margin: auto 0px 0px 0px;

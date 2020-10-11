@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "../stylesheets/gameboy.css";
+import GameboyScreen from "./gameboyScreen";
 
 class Gameboy extends Component {
   state = {
@@ -15,33 +16,8 @@ class Gameboy extends Component {
     if (this.state.animationState !== 4) return "";
 
     return (
-      <div className="game-screen-cont">
-        <div className="back-btn" onClick={this.navigateBack}>
-          BACK
-        </div>
-        <div className="img-cont">
-          <img className="game-images" src={this.props.game.icon} />
-        </div>
-        <div className="game-desc-cont">
-          <div className="game-title">{this.props.game.title}</div>
-          <div className="game-desc">{this.props.game.description}</div>
-          <div className="links">{this.getLinks()}</div>
-        </div>
-      </div>
+      <GameboyScreen navigateBack={this.navigateBack} game={this.props.game} />
     );
-  };
-
-  getLinks = () => {
-    if (!this.props.game.links) return;
-
-    return this.props.game.links.map((link, index) => (
-      <div className="link-cont" key={index}>
-        <div className="link-title">{link.title}</div>
-        <a className="link" href={link.link}>
-          {link.link}
-        </a>
-      </div>
-    ));
   };
 
   getClasses = () => {
