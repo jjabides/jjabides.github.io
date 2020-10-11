@@ -63,8 +63,10 @@
   }
 
   .img-cont img {
-    width: auto !important;
+    width: 100% !important;
     height: 100%;
+    object-fit: contain;
+    background-color: transparent;
   }
 
   .game-screen-cont .game-desc-cont {
