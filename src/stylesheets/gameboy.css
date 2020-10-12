@@ -71,7 +71,7 @@
 
   .game-screen-cont .game-desc-cont {
     width: 100% !important;
-    height: auto;
+    height: calc(60% - 40px);
     padding: 16px;
   }
 }

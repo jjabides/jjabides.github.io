@@ -137,7 +137,7 @@ div {
 }
 
 .selection-text {
-  padding: 0px 36px;
+  padding: 0px 24px;
   animation: selection-text-anim 2s ease-out 1 forwards;
 }
 
