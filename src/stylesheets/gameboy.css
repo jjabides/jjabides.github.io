@@ -30,8 +30,9 @@
     --gameboy-border-radius: 18px;
   }
 
-  .game-desc-cont .img-cont img {
+  .game-screen-cont .img-cont .game-images {
     height: calc(100% - 112px);
+    object-fit: contain;
   }
 
   .game-desc div,
