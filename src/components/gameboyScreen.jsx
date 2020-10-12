@@ -8,7 +8,11 @@ class GameboyScreen extends Component {
           BACK
         </div>
         <div className="img-cont">
-          <img className="game-images" src={this.props.game.icon} />
+          <img
+            className="game-images"
+            src={this.props.game.icon}
+            style={this.getImageBackground()}
+          />
         </div>
         <div className="game-desc-cont">
           <div className="game-title">{this.props.game.title}</div>
@@ -26,6 +30,12 @@ class GameboyScreen extends Component {
       retVal += " about-me";
 
     return retVal;
+  };
+
+  getImageBackground = () => {
+    return this.props.game.imageBackground
+      ? { backgroundColor: this.props.game.imageBackground }
+      : { backgroundColor: "transparent" };
   };
 
   getLinks = () => {

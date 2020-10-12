@@ -108,6 +108,7 @@ class Cartridges extends Component {
             browser cache.
           </div>
         );
+        cartridge.imageBackground = "white";
         break;
       case 2:
         cartridge.icon = TrackAttackIcon;
@@ -166,6 +167,7 @@ class Cartridges extends Component {
             link: "https://github.com/jabides/CSS490-Final-Project",
           },
         ];
+        cartridge.imageBackground = "white";
         break;
       case 4:
         cartridge.icon = MeIcon;
