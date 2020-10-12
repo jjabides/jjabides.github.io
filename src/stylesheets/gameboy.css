@@ -30,11 +30,6 @@
     --gameboy-border-radius: 18px;
   }
 
-  .game-screen-cont .img-cont .game-images {
-    height: calc(100% - 112px);
-    object-fit: contain;
-  }
-
   .game-desc div,
   .links div {
     font-size: 11px;
@@ -45,6 +40,13 @@
     width: 64px;
     height: 24px;
     border-radius: 12px;
+  }
+}
+
+@media screen and (max-height: 500px) {
+  .game-screen-cont .img-cont .game-images {
+    height: calc(100% - 112px);
+    object-fit: contain;
   }
 }
 
