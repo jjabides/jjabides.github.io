@@ -71,7 +71,7 @@ class Cartridges extends Component {
         cartridge.title = "Sunburst Diagram Project";
         cartridge.description = (
           <div>
-            This is a project I built at River Logic. I was in charge of
+            This is a project I built at River Logic in the Summer of 2020. I was in charge of
             implementing designs for a radial graph that would represent
             customer Job usage.
             <br />
@@ -82,8 +82,7 @@ class Cartridges extends Component {
             a billing cycle.
             <br />
             <br />I wrote the front-end code in HTML, LESS, TypeScript,
-            KnockoutJS, and SVG. I did all the data aggregation on the back-end
-            using C# and pulling from Azure Table Storage.
+            KnockoutJS, and SVG. I did all the data aggregation on the back-end using C#.
           </div>
         );
         break;
@@ -92,19 +91,18 @@ class Cartridges extends Component {
         cartridge.title = "Data Access Layer (DAL) Project";
         cartridge.description = (
           <div>
-            This is a project I built at River Logic. I was in charge of
+            This is a project I built at River Logic in the Summer of 2018. I was in charge of
             implementing a new layer in our system in which data is retrieved
             and cached (in memory and in browser cache).
             <br />
             <br />
             This class acted as an in-memory cache and can be accessed by any
-            class in the system. If the data that class is looking for isn't
-            avaiable in DAL, DAL would make an AJAX call to our back-end to
+            class in the system. If data requested from DAL doesn't exist, DAL would make an AJAX call to our back-end to
             retrieve the data, and later store it in memory.
             <br />
             <br />
             DAL would also listen for Pusher notifications to stay in sync with
-            live updates. DAL also sends messages to Service Worker to update
+            live updates and sends messages to Service Worker to update
             browser cache.
           </div>
         );
@@ -115,11 +113,10 @@ class Cartridges extends Component {
         cartridge.title = "Track Attack Video Game Project";
         cartridge.description = (
           <div>
-            A project from my game development course where I worked in a team
-            of 4 to build a small game within 6 weeks. We built a game called
-            Track Attack, which is a 2D side-scroller that involved dynamic
-            obstacle creation and depended on the pitch and noise of song that
-            was playing.
+            This is a project I built in my game development class at UW Bothell in the Spring of 2017. I worked in a team
+            of four to build a small game within six weeks. We built a game called
+            Track Attack - a 2D side-scroller that involves dynamic
+            obstacle creation that varies depending on the pitch and noise of song that is playing.
             <br />
             <br />I was in charge UI, custom music, sound effects, and obstacle
             design. We used Unity for our game engine and wrote in C#
@@ -147,8 +144,8 @@ class Cartridges extends Component {
         cartridge.title = "Spotify Search Engine Cloud Service";
         cartridge.description = (
           <div>
-            This was a project I built in my CSS 490 Cloud Computing class at
-            University of Washington Bothell. I worked in a team of two to build
+            This is a project I built in my Cloud Computing class at
+            UW Bothell in the Winter of 2018. I worked in a team of two to build
             a cloud service that would utilize 6+ other cloud services. <br />
             <br /> We created a simple Spotify search engine that takes a search
             input for a song artist, utilizes Spotify's API to get a list of
