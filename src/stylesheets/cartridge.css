@@ -39,7 +39,7 @@
 }
 
 .cartridge {
-  background: white;
+  background: rgba(128, 128, 128);
   cursor: pointer;
   border-radius: 12px;
   transform: rotate(25deg);
@@ -51,6 +51,7 @@
 }
 
 .cartridge-icon {
+  background: white;
   height: 100%;
   width: 100%;
   border-radius: 12px;
