@@ -171,7 +171,7 @@
     top: calc(50% - (var(--gameboy-height) / 2));
     pointer-events: none;
 
-    transform: scale(14);
+    transform: scale(16);
   }
 }
 
