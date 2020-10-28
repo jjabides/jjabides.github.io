@@ -73,12 +73,12 @@ class Cartridges extends Component {
           <div>
             This is a project I built at River Logic in the Summer of 2020. I was in charge of
             implementing designs for a radial graph that would represent
-            customer Job usage.
+            customer Jobs usage, where Jobs are entities that run complex problems.
             <br />
             <br />
             Users would be able to manipulate the graph to highlight Job Units
             within a specific week or month. This web app would also calculate
-            metrics like used Job Units, averages, and remaining balance within
+            metrics such as used Job Units, averages, and remaining balance within
             a billing cycle.
             <br />
             <br />I wrote the front-end code in HTML, LESS, TypeScript,
@@ -173,7 +173,7 @@ class Cartridges extends Component {
           <div>
             I'm JJ Abides, a software developer with 2+ years of experience
             working in the tech industry. I graduated from University of
-            Washington Bothell with a Bachelor of Science in Computer Science
+            Washington Bothell in the Summer of 2018 with a Bachelor of Science in Computer Science
             and Software Engineering.
             <br />
             <br />
