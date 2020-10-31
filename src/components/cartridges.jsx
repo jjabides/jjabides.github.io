@@ -131,6 +131,7 @@ class Cartridges extends Component {
             </div>
             In this case, I have to input the x and y values of where the arc ends. This changes based on how many weeks are in the current year, or if a user wants to view units by months instead.
             <br />
+            <br />
             Each arc and sunray get pushed into a KnockoutObservableArray, where KnockoutJS handles the rendering for each of these elements.
             <br />
           </div>
@@ -142,18 +143,18 @@ class Cartridges extends Component {
         cartridge.description = (
           <div>
             This is a project I built at River Logic in the Summer of 2018. I was in charge of
-            implementing a new layer in our system in which data is retrieved
+            implementing a new tool in our system in which data is retrieved
             and cached (in memory and in browser cache).
             <br />
             <br />
-            This class acted as an in-memory cache and can be accessed by any
-            class in the system. If data requested from DAL doesn't exist, DAL would make an AJAX call to our back-end to
+            The Data Access Layer (DAL) is a class that acts as an in-memory cache and can be accessed by any
+            module in the system. If data requested from DAL doesn't exist, DAL would make an AJAX call to our back-end to
             retrieve the data, and later store it in memory.
             <br />
             <br />
             DAL would also listen for Pusher notifications to stay in sync with
             live updates and sends messages to Service Worker to update
-            browser cache.
+            client browser cache.
           </div>
         );
         cartridge.imageBackground = "white";
@@ -168,8 +169,11 @@ class Cartridges extends Component {
             Track Attack - a 2D side-scroller that involves dynamic
             obstacle creation that varies depending on the pitch and noise of song that is playing.
             <br />
-            <br />I was in charge UI, custom music, sound effects, and obstacle
+            <br />I was in charge or UI, custom music, sound effects, and obstacle
             design. We used Unity for our game engine and wrote in C#
+            <br />
+            <br />
+            We used an open source fourier transforms library for C# to interpret the background music.
           </div>
         );
         cartridge.links = [
@@ -181,11 +185,11 @@ class Cartridges extends Component {
           {
             title: "Download Link",
             link:
-              "https://drive.google.com/file/d/0B8v_EAcotjiTSG1tbjVTVUlsNHc/view",
+              "https://drive.google.com/file/d/1jnN2yKuC7CQgsLAKahJ4ogkLZ2n3FsAp/view?usp=sharing",
           },
           {
             title: "GitHub",
-            link: "https://github.com/GregWright/CSS385MP4",
+            link: "https://github.com/GregWright/TrackAttack",
           },
         ];
         break;
