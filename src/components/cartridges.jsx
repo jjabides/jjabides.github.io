@@ -77,12 +77,12 @@ class Cartridges extends Component {
             <br />
             <br />
             Users would be able to manipulate the graph to highlight Job Units
-            within a specific week or month. This web app would also calculate
+            within a specific week or month. This tool would also calculate
             metrics such as used Job Units, averages, and remaining balance within
             a billing cycle.
             <br />
             <br />
-            I approached this project using SVG and KnockoutJS as the key components behind this building this graph. 
+            I approached this project using SVG and KnockoutJS as the key components behind building this graph. 
             I created a class called SunburstDiagramViewModel which would handle all the rendering. It contains a draw() function that draws every SVG in a specific order, using helper functions to contain each task.
             <br />
             <br />
@@ -119,9 +119,20 @@ class Cartridges extends Component {
             'degPerUnit' is the number of degrees to rotate between each unit. It's converted into radians (Math.PI / 180) since the math library only takes radians for sin/cos.
             <br />
             <br />
-            Remembering the SOH CAH TOA trignometry principles, I could derive the x position and y position if I know at least the number of degrees to rotate and radius length.
+            Knowing that sin(deg) = x/r and cos(deg) = y/r, I could derive the x position and y position if I know at least the number of degrees to rotate and radius length.
             <br />
             Note: 'this.cx()' and the number 220 are offsets from the left and top.
+            <br />
+            <br />
+            Drawing the arcs (Y-scale) is achieved in a similar fashion, but using the SVG arc function:
+            <br />
+            <div className="monospaced">
+            {"arcs.push(`M ${x1} ${y1} A ${arcRadius} ${arcRadius} 0 1 1 ${x2} ${y2}`);"}
+            </div>
+            In this case, I have to input the x and y values of where the arc ends. This changes based on how many weeks are in the current year, or if a user wants to view units by months instead.
+            <br />
+            Each arc and sunray get pushed into a KnockoutObservableArray, where KnockoutJS handles the rendering for each of these elements.
+            <br />
           </div>
         );
         break;
