@@ -73,7 +73,7 @@ class Cartridges extends Component {
           <div>
             This is a project I built at River Logic in the Summer of 2020. I was in charge of
             implementing designs for a radial graph that would represent
-            customer Jobs usage, where Jobs are entities that run complex problems.
+            customer Jobs usage, where Jobs are entities that run complex optimization problems for customers.
             <br />
             <br />
             Users would be able to manipulate the graph to highlight Job Units
@@ -81,8 +81,47 @@ class Cartridges extends Component {
             metrics such as used Job Units, averages, and remaining balance within
             a billing cycle.
             <br />
-            <br />I wrote the front-end code in HTML, LESS, TypeScript,
-            KnockoutJS, and SVG. I did all the data aggregation on the back-end using C#.
+            <br />
+            I approached this project using SVG and KnockoutJS as the key components behind this building this graph. 
+            I created a class called SunburstDiagramViewModel which would handle all the rendering. It contains a draw() function that draws every SVG in a specific order, using helper functions to contain each task.
+            <br />
+            <br />
+            To draw each bar (sunray) I needed to accumulate customer job usage per week, then represent it in the graph with a length relative to the values of the Y-scale.
+            I then needed to make an algorithm that would draw the position and length of the sunray within the SVG frame. The draw path formula looked something like this:
+            <br />
+            <div className="monospaced">
+            {"M ${x - 4} ${y}"}
+            <br />
+            {"L ${x - 4} ${y - l}"}
+            <br />
+            {"A 4 4 0 0 1 ${x + 4} ${y - l}"}
+            <br />
+            {"L ${x + 4} ${y}"}
+            <br />
+            {"A 4 4 0 0 1 ${x - 4} ${y}"}
+            </div>
+            <br />
+            Where 'x' and 'y' would be the placement of the sunray within the SVG frame and 'l' is the length of the sunray in pixels.
+            To get the position of each ray, I needed to use a bit of trigonometry:
+            <br />
+            <div className="monospaced">
+            {"var deg = i * degPerUnit * (Math.PI / 180);"}
+            <br />
+            {"var x = this.cx() + radius * Math.sin(deg);"}
+            <br />
+            {"var y = radius - radius * Math.cos(deg) + 220;"}
+            </div>
+            <br />
+            'deg' is the number of degrees to rotate.
+            <br />
+            'i' is the index of the array that holds the weekly job unit accumulations.
+            <br />
+            'degPerUnit' is the number of degrees to rotate between each unit. It's converted into radians (Math.PI / 180) since the math library only takes radians for sin/cos.
+            <br />
+            <br />
+            Remembering the SOH CAH TOA trignometry principles, I could derive the x position and y position if I know at least the number of degrees to rotate and radius length.
+            <br />
+            Note: 'this.cx()' and the number 220 are offsets from the left and top.
           </div>
         );
         break;
@@ -177,12 +216,18 @@ class Cartridges extends Component {
             and Software Engineering.
             <br />
             <br />
+            I'm currently employed at River Logic, where I primarily focus on front-end engineering.
+            <br />
+            <br />
             So far I've worked with the following languages: JavaScript, HTML,
             CSS, TypeScript, Python, Java, C#, C++.
             <br />
             <br />
             I've also worked with the following tools, frameworks, and services:
             ReactJS, KnockoutJS, Unity, Visual Studio, Azure.
+            <br />
+            <br />
+            As for development interests, I'm interested in web development and game development.
           </div>
         );
         cartridge.links = [

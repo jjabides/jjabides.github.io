@@ -291,6 +291,14 @@
   flex-flow: column;
 }
 
+.game-desc-cont.no-links .game-desc {
+  max-height: 100%;
+}
+
+.game-desc-cont.no-linkes .links {
+  display: none;
+}
+
 .game-title {
   display: flex;
   justify-content: center;

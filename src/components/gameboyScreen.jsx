@@ -14,7 +14,7 @@ class GameboyScreen extends Component {
             style={this.getImageBackground()}
           />
         </div>
-        <div className="game-desc-cont">
+        <div className={this.getDescContClassNames()}>
           <div className="game-title">{this.props.game.title}</div>
           <div className="game-desc">{this.props.game.description}</div>
           <div className="links">{this.getLinks()}</div>
@@ -31,6 +31,15 @@ class GameboyScreen extends Component {
 
     return retVal;
   };
+
+  getDescContClassNames = () => {
+    var retVal = "game-desc-cont";
+
+    if (!this.props.game.links || this.props.game.links.length === 0)
+      retVal += " no-links";
+
+    return retVal;
+  }
 
   getImageBackground = () => {
     return this.props.game.imageBackground
