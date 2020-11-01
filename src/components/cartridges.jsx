@@ -101,10 +101,8 @@ class Cartridges extends Component {
             {"A 4 4 0 0 1 ${x - 4} ${y}"}
             </div>
             <br />
-            This formula essentially says "Move to this x and y position, draw a line upward, draw a half circle, draw a line downward, then draw another half circle to complete the shape.
-            <br />
+            This formula essentially says, "Move to this x and y position, draw a line upward, draw a half circle, draw a line downward, then draw another half circle to complete the shape".
             'x' and 'y' would be the placement of the sunray within the SVG frame and 'l' is the length of the sunray in pixels.
-            <br />
             To get the position of each ray, I needed to use a bit of trigonometry:
             <br />
             <div className="monospaced">
