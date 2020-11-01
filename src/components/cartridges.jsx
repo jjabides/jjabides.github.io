@@ -87,7 +87,7 @@ class Cartridges extends Component {
             <br />
             <br />
             To draw each bar (sunray) I needed to accumulate customer job usage per week, then represent it in the graph with a length relative to the values of the Y-scale.
-            I then needed to make an algorithm that would draw the position and length of the sunray within the SVG frame. The the SVG draw path formula looked something like this:
+            I then needed to make an algorithm that would draw the position and length of the sunray within the SVG frame. The SVG draw path formula looked something like this:
             <br />
             <div className="monospaced">
             {"M ${x - 4} ${y}"}
