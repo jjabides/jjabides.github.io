@@ -87,7 +87,7 @@ class Cartridges extends Component {
             <br />
             <br />
             To draw each bar (sunray) I needed to accumulate customer job usage per week, then represent it in the graph with a length relative to the values of the Y-scale.
-            I then needed to make an algorithm that would draw the position and length of the sunray within the SVG frame. The draw path formula looked something like this:
+            I then needed to make an algorithm that would draw the position and length of the sunray within the SVG frame. The the SVG draw path formula looked something like this:
             <br />
             <div className="monospaced">
             {"M ${x - 4} ${y}"}
@@ -101,7 +101,10 @@ class Cartridges extends Component {
             {"A 4 4 0 0 1 ${x - 4} ${y}"}
             </div>
             <br />
-            Where 'x' and 'y' would be the placement of the sunray within the SVG frame and 'l' is the length of the sunray in pixels.
+            This formula essentially says "Move to this x and y position, draw a line upward, draw a half circle, draw a line downward, then draw another half circle to complete the shape.
+            <br />
+            'x' and 'y' would be the placement of the sunray within the SVG frame and 'l' is the length of the sunray in pixels.
+            <br />
             To get the position of each ray, I needed to use a bit of trigonometry:
             <br />
             <div className="monospaced">
@@ -116,7 +119,7 @@ class Cartridges extends Component {
             <br />
             'i' is the index of the array that holds the weekly job unit accumulations.
             <br />
-            'degPerUnit' is the number of degrees to rotate between each unit. It's converted into radians (Math.PI / 180) since the math library only takes radians for sin/cos.
+            'degPerUnit' is the number of degrees to rotate between each unit. It's converted into radians (Math.PI / 180) since the math library only takes radians for sin and cos.
             <br />
             <br />
             Knowing that sin(deg) = x/r and cos(deg) = y/r, I could derive the x position and y position if I know at least the number of degrees to rotate and radius length.
@@ -129,7 +132,9 @@ class Cartridges extends Component {
             <div className="monospaced">
             {"arcs.push(`M ${x1} ${y1} A ${arcRadius} ${arcRadius} 0 1 1 ${x2} ${y2}`);"}
             </div>
+            <br />
             In this case, I have to input the x and y values of where the arc ends. This changes based on how many weeks are in the current year, or if a user wants to view units by months instead.
+            I find x2 and y2 using the same trigonometric strategy as before.
             <br />
             <br />
             Each arc and sunray get pushed into a KnockoutObservableArray, where KnockoutJS handles the rendering for each of these elements.
@@ -179,7 +184,7 @@ class Cartridges extends Component {
             We decided to create 30 event bindings that would activate based on 30 sets of frequency ranges. 
             <br />
             <br />
-            Every few beats the game will check which binding was hit the most and emit an obstacle that represents the most active frequency range.
+            Every few beats the game will check which binding was hit the most and emit an obstacle that represents the most active frequency range at that time.
           </div>
         );
         cartridge.links = [
