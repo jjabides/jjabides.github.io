@@ -153,8 +153,8 @@ class Cartridges extends Component {
             <br />
             <br />
             DAL would also listen for Pusher notifications to stay in sync with
-            live updates and sends messages to Service Worker to update
-            client browser cache.
+            live updates and sends messages to Service Worker to update 
+            browser cache.
           </div>
         );
         cartridge.imageBackground = "white";
@@ -166,14 +166,20 @@ class Cartridges extends Component {
           <div>
             This is a project I built in my game development class at UW Bothell in the Spring of 2017. I worked in a team
             of four to build a small game within six weeks. We built a game called
-            Track Attack - a 2D side-scroller that involves dynamic
-            obstacle creation that varies depending on the pitch and noise of song that is playing.
+            Track Attack - a 2D side-scroller that emits various pre-made obstacles depending on the pitch and noise of song that is playing.
             <br />
-            <br />I was in charge or UI, custom music, sound effects, and obstacle
+            <br />
+            I was in charge or UI, custom music, sound effects, and obstacle
             design. We used Unity for our game engine and wrote in C#
             <br />
             <br />
             We used an open source fourier transforms library for C# to interpret the background music.
+            This library allowed us to capture frequency ranges at certain parts of a song. 
+            <br />
+            We decided to create 30 event bindings that would activate based on 30 sets of frequency ranges. 
+            <br />
+            <br />
+            Every few beats the game will check which binding was hit the most and emit an obstacle that represents the most active frequency range.
           </div>
         );
         cartridge.links = [
@@ -200,13 +206,16 @@ class Cartridges extends Component {
           <div>
             This is a project I built in my Cloud Computing class at
             UW Bothell in the Winter of 2018. I worked in a team of two to build
-            a cloud service that would utilize 6+ other cloud services. <br />
-            <br /> We created a simple Spotify search engine that takes a search
+            a cloud service that would utilize 6+ other cloud services. 
+            <br />
+            <br /> 
+            We created a simple Spotify search engine that takes a search
             input for a song artist, utilizes Spotify's API to get a list of
             artists with the given search input. From there a user could select
             an artist and a list of tracks from the selected artist would
             appear. The user can then select a track and sample lyrics pulled
-            from Musixmatch.com would display. <br />
+            from Musixmatch.com would display. 
+            <br />
             <br />
             For this project, we used Azure Web Apps, Blob Storage, Table
             Storage, Application Insights, Spotify API, and MusixMatch.
@@ -239,7 +248,7 @@ class Cartridges extends Component {
             <br />
             <br />
             I've also worked with the following tools, frameworks, and services:
-            ReactJS, KnockoutJS, Unity, Visual Studio, Azure.
+            ReactJS, KnockoutJS, WebPack, GulpJS, .NET, Unity, Visual Studio, Git, Azure.
             <br />
             <br />
             As for development interests, I'm interested in web development and game development.
