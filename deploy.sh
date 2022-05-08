@@ -14,7 +14,7 @@ git add dist -f
 
 git commit -m 'deploy'
 
-# deploy to subtree 'gh-pages'
+# deploy to subtree 
 git subtree push --prefix dist origin gh-pages
 
 cd -
