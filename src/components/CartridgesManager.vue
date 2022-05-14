@@ -2,8 +2,10 @@
 import { ref, reactive, computed } from 'vue';
 import Cartridge from './Cartridge.vue';
 
+const props = defineProps({ mainBorderWidth: Number })
 const selectedCartridge = ref(null);
 const cartridges = reactive(getCartridges(6));
+const borderWidth = 1;
 
 function click(index) {
     selectedCartridge.value = index;
@@ -11,21 +13,22 @@ function click(index) {
 
     for (var i = 0; i < 6; i++) {
         var cartridgeEl = document.getElementById('cartridge' + i);
-        cartridges[i].top = getTop(cartridgeEl, mainEl);
-        cartridges[i].left = getLeft(cartridgeEl, mainEl);
+        // Set top and left values based on parent element
+        cartridges[i].top = getTop(cartridgeEl.parentElement, mainEl);
+        cartridges[i].left = getLeft(cartridgeEl.parentElement, mainEl);
     }
 }
 
 function getTop(element, relativeEl) {
     var elRect = element.getBoundingClientRect();
     var relativeELRect = relativeEl.getBoundingClientRect();
-    return elRect.top - relativeELRect.top;
+    return elRect.top - relativeELRect.top - props.mainBorderWidth;
 }
 
 function getLeft(element, relativeEl) {
     var elRect = element.getBoundingClientRect();
     var relativeELRect = relativeEl.getBoundingClientRect();
-    return elRect.left - relativeELRect.left;
+    return elRect.left - relativeELRect.left - props.mainBorderWidth;
 }
 
 function getCartridges(count) {

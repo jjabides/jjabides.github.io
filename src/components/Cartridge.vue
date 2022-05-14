@@ -13,14 +13,18 @@ const state = reactive({
     id: 'cartridge' + props.cartridgeId,
 });
 
-const styles = computed(() => {
+const anchorStyles = computed(() => {
     if (props.cartridgeHasBeenSelected)
         return { 
             top: props.top + 'px', 
-            left: props.left + 'px'
+            left: props.left + 'px',
+            position: 'absolute',
+            margin: '0px'
         }
 
-    return {};
+    return { 
+        margin: '0px 50px'
+    };
 });
 
 const classes = computed(() => {
@@ -42,7 +46,9 @@ function isUnselected() {
 </script>
 
 <template>
-<div class="cartridge" @click="click(props.cartridgeId)" v-bind="state" v-bind:style="styles" v-bind:class="classes"></div>
+<div class="cartridge-anchor" :style="anchorStyles">
+    <div class="cartridge" @click="click(props.cartridgeId)" v-bind="state" v-bind:class="classes"></div>
+</div>
 </template>
 
 <style scoped>
@@ -54,19 +60,21 @@ function isUnselected() {
     background: gray;
     cursor: pointer;
     transition: transform .3s;
-    margin: 0px 50px;
+    
 }
 
 .cartridge:hover {
     transform: rotateZ(30deg);
 }
 
+.cartridge-anchor {
+    margin: 0px 50px;
+}
+
 .selected, .not-selected {
     /* animation: spinning .5s linear infinite; */
     position: absolute;
 }
-
-
 
 .fade-out {
     animation: fade-out 1s forwards;

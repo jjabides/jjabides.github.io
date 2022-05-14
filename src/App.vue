@@ -1,12 +1,12 @@
 <script setup>
 import CartridgesManager from "./components/CartridgesManager.vue"
-
+const borderWidth = 1;
 </script>
 
 <template>
 
   <main id="main">
-    <CartridgesManager></CartridgesManager>
+    <CartridgesManager v-bind:mainBorderWidth="borderWidth"></CartridgesManager>
   </main>
 </template>
 
