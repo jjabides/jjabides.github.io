@@ -1,15 +1,51 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import Cartridge from './Cartridge.vue';
 
-const state = reactive({ selectedCartridge: null })
-const cartridges = ref(Array(6));
+const selectedCartridge = ref(null);
+const cartridges = reactive(getCartridges(6));
 
 function click(index) {
-    //selectedCartridge = index;
-    state.selectedCartridge = index;
-    // var cartridgeEL = document.getElementById('cartridge' + index);
-    // cartridgeEL.clientLeft
+    selectedCartridge.value = index;
+    var mainEl = document.getElementById('main');
+
+    for (var i = 0; i < 6; i++) {
+        var cartridgeEl = document.getElementById('cartridge' + i);
+        cartridges[i].top = getTop(cartridgeEl, mainEl);
+        cartridges[i].left = getLeft(cartridgeEl, mainEl);
+    }
+}
+
+function getTop(element, relativeEl) {
+    var elRect = element.getBoundingClientRect();
+    var relativeELRect = relativeEl.getBoundingClientRect();
+    return elRect.top - relativeELRect.top;
+}
+
+function getLeft(element, relativeEl) {
+    var elRect = element.getBoundingClientRect();
+    var relativeELRect = relativeEl.getBoundingClientRect();
+    return elRect.left - relativeELRect.left;
+}
+
+function getCartridges(count) {
+    var cartridges = [];
+
+    for(let i = 0; i < count; i++) {
+        var cartridge = {
+            cartridgeId: i, 
+            isSelected: computed(() => {
+                return selectedCartridge.value === i} ), 
+            fadeOut: computed(() => selectedCartridge.value !== null && selectedCartridge.value !== i), 
+            spinning: false, 
+            top: 0, 
+            left: 0, 
+            cartridgeHasBeenSelected: computed(() => selectedCartridge.value !== null)
+        }
+        cartridges.push(cartridge);
+    }
+
+    return cartridges;
 }
 
 </script>
@@ -18,11 +54,7 @@ function click(index) {
 
 
 <div class="cartridge-cont" v-for="(cartridge, index) in cartridges">
-    <Cartridge v-bind:cartridgeId="index" @click="click(index)" v-bind:isSelected="state.selectedCartridge === index" v-bind:fadeOut="state.selectedCartridge !== null && state.selectedCartridge !== index"/>
-</div>
-
-<div class="cartridge-cont" v-if="state.selectedCartridge !== null">
-    <Cartridge v-bind:cartridgeId="state.selectedCartridge" v-bind:spinning="true"/>
+    <Cartridge v-bind="cartridge" @click="click(index)"/>
 </div>
 
 

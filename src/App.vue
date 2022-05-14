@@ -5,7 +5,7 @@ import CartridgesManager from "./components/CartridgesManager.vue"
 
 <template>
 
-  <main>
+  <main id="main">
     <CartridgesManager></CartridgesManager>
   </main>
 </template>
@@ -24,6 +24,7 @@ main {
   align-items: center;
   justify-content: space-evenly;
   overflow: hidden;
+  position: relative;
 }
 
 </style>

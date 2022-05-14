@@ -1,14 +1,48 @@
 <script setup>
-const props = defineProps({ cartridgeId: Number, isSelected: Boolean, fadeOut: Boolean, spinning: Boolean })
+import { reactive, computed } from "vue";
+const props = defineProps({ 
+    cartridgeId: Number, 
+    isSelected: Boolean, 
+    fadeOut: Boolean, 
+    spinning: Boolean, 
+    top: Number, 
+    left: Number, 
+    cartridgeHasBeenSelected: Boolean });
+
+const state = reactive({
+    id: 'cartridge' + props.cartridgeId,
+});
+
+const styles = computed(() => {
+    if (props.cartridgeHasBeenSelected)
+        return { 
+            top: props.top + 'px', 
+            left: props.left + 'px'
+        }
+
+    return {};
+});
+
+const classes = computed(() => {
+    return { 
+        selected: props.isSelected, 
+        'fade-out': props.fadeOut, 
+        'not-selected': props.cartridgeHasBeenSelected && !props.isSelected
+    }
+});
 
 function click(cartridge) {
     //console.log(cartridge)
 }
 
+function isUnselected() {
+    return props.cartridgeSelected !== null && props.isSelected !== props.cartridgeId
+}
+
 </script>
 
 <template>
-<div class="cartridge" @click="click(props.cartridgeId)" v-bind:id="props.cartridgeId" v-bind:class="{ selected: props.isSelected, 'fade-out': props.fadeOut, spinning: props.spinning }"></div>
+<div class="cartridge" @click="click(props.cartridgeId)" v-bind="state" v-bind:style="styles" v-bind:class="classes"></div>
 </template>
 
 <style scoped>
@@ -27,12 +61,15 @@ function click(cartridge) {
     transform: rotateZ(30deg);
 }
 
-.fade-out {
-    animation: fade-out 1s forwards;
+.selected, .not-selected {
+    /* animation: spinning .5s linear infinite; */
+    position: absolute;
 }
 
-.spinning {
-    animation: spinning .4s linear infinite;
+
+
+.fade-out {
+    animation: fade-out 1s forwards;
 }
 
 @keyframes fade-out {
