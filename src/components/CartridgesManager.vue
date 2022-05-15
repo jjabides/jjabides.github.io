@@ -5,7 +5,6 @@ import Cartridge from './Cartridge.vue';
 const props = defineProps({ mainBorderWidth: Number })
 const selectedCartridge = ref(null);
 const cartridges = reactive(getCartridges(6));
-const borderWidth = 1;
 
 function click(index) {
     selectedCartridge.value = index;
@@ -42,7 +41,7 @@ function getCartridges(count) {
             fadeOut: computed(() => selectedCartridge.value !== null && selectedCartridge.value !== i), 
             spinning: false, 
             top: 0, 
-            left: 0, 
+            left: 0,
             cartridgeHasBeenSelected: computed(() => selectedCartridge.value !== null)
         }
         cartridges.push(cartridge);

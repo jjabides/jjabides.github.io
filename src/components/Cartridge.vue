@@ -1,17 +1,21 @@
 <script setup>
-import { reactive, computed } from "vue";
+import { reactive, computed, watch, ref } from "vue";
+
 const props = defineProps({ 
     cartridgeId: Number, 
     isSelected: Boolean, 
-    fadeOut: Boolean, 
-    spinning: Boolean, 
+    fadeOut: Boolean,
     top: Number, 
     left: Number, 
     cartridgeHasBeenSelected: Boolean });
 
+const isSelected = ref(props.isSelected);
+
 const state = reactive({
     id: 'cartridge' + props.cartridgeId,
 });
+
+const spinning = ref(false);
 
 const anchorStyles = computed(() => {
     if (props.cartridgeHasBeenSelected)
@@ -27,35 +31,91 @@ const anchorStyles = computed(() => {
     };
 });
 
+watch(props, (value) => {
+    if (value.isSelected) {
+        setTimeout(() => {
+            animate();
+        }, 0)
+    }
+});
+
 const classes = computed(() => {
     return { 
         selected: props.isSelected, 
         'fade-out': props.fadeOut, 
-        'not-selected': props.cartridgeHasBeenSelected && !props.isSelected
+        'not-selected': props.cartridgeHasBeenSelected && !props.isSelected,
+        'spinning': spinning.value
     }
 });
 
-function click(cartridge) {
-    //console.log(cartridge)
-}
+function animate() {
+    var mainEl = document.getElementById('main');
+    var cartridgeEl = document.getElementById(state.id);
+    var cartridgeAnchorEl = cartridgeEl.parentElement;
+    spinning.value = true;
 
-function isUnselected() {
-    return props.cartridgeSelected !== null && props.isSelected !== props.cartridgeId
+    var centerTop = (mainEl.clientHeight / 2) - (cartridgeEl.clientWidth / 2);
+    var centerLeft = (mainEl.clientWidth / 2) - (cartridgeEl.clientWidth / 2);
+
+    cartridgeAnchorEl.animate(
+    [
+        { 
+            top: (centerTop - 150) + 'px', 
+            left: centerLeft + 'px',
+        }
+    ],
+    {
+        duration: 500,
+        fill: 'forwards'
+    }).finished.then(() => {
+        console.log('moved to center');
+
+        cartridgeAnchorEl.animate(
+            [
+                { 
+                    top: (centerTop - 25) + 'px', 
+                    left: centerLeft + 'px' }
+            ],
+            {
+                delay: 400,
+                duration: 100,
+                fill: 'forwards'
+            }
+        ).finished.then(() => {
+            console.log("move down");
+
+            cartridgeAnchorEl.animate(
+                [
+                    {
+                        top: (centerTop - 50) + 'px',
+                        left: centerLeft + 'px'
+                    }
+                ],
+                {
+                    duration: 200,
+                    fill: 'forwards',
+                    easing: 'ease-out'
+                }
+            ).finished.then(() => {
+                console.log("bound up");
+            });
+        });
+    })
 }
 
 </script>
 
 <template>
 <div class="cartridge-anchor" :style="anchorStyles">
-    <div class="cartridge" @click="click(props.cartridgeId)" v-bind="state" v-bind:class="classes"></div>
+    <div class="cartridge" v-bind="state" v-bind:class="classes"></div>
 </div>
 </template>
 
 <style scoped>
 
 .cartridge {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     border-radius: 18px;
     background: gray;
     cursor: pointer;
@@ -72,8 +132,13 @@ function isUnselected() {
 }
 
 .selected, .not-selected {
-    /* animation: spinning .5s linear infinite; */
+    
     position: absolute;
+    pointer-events: none;
+}
+
+.spinning {
+    animation: spinning .6s ease-out forwards;
 }
 
 .fade-out {
@@ -97,7 +162,7 @@ function isUnselected() {
     }
 
     100% {
-        transform: rotateZ(360deg);
+        transform: rotateZ(720deg);
     }
 }
 
