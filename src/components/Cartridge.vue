@@ -114,8 +114,8 @@ function animate() {
 <style scoped>
 
 .cartridge {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     border-radius: 18px;
     background: gray;
     cursor: pointer;
