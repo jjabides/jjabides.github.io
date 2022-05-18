@@ -1,10 +1,16 @@
 <script setup>
 import { ref, reactive, computed } from 'vue';
 import Cartridge from './Cartridge.vue';
+import Gameboy from "./Gameboy.vue";
 
 const props = defineProps({ mainBorderWidth: Number })
 const selectedCartridge = ref(null);
 const cartridges = reactive(getCartridges(6));
+const gameboyProps = reactive({
+    cartridgeHasBeenSelected: computed(() => selectedCartridge.value !== null),
+    top: null,
+    left: null
+});
 
 function click(index) {
     selectedCartridge.value = index;
@@ -16,6 +22,10 @@ function click(index) {
         cartridges[i].top = getTop(cartridgeEl.parentElement, mainEl);
         cartridges[i].left = getLeft(cartridgeEl.parentElement, mainEl);
     }
+
+    var gameboyEl = document.getElementById('gameboy');
+    gameboyProps.top = getTop(gameboyEl, mainEl);
+    gameboyProps.left = getLeft(gameboyEl, mainEl);
 }
 
 function getTop(element, relativeEl) {
@@ -56,10 +66,10 @@ function getCartridges(count) {
 
 
 <div class="cartridge-cont" v-for="(cartridge, index) in cartridges">
-    <Cartridge v-bind="cartridge" @click="click(index)"/>
+    <Cartridge v-bind="cartridge" @click="click(index)"></Cartridge>
 </div>
 
-
+<Gameboy v-bind="gameboyProps"></Gameboy>
 </template>
 
 <style scoped>
