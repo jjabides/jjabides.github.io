@@ -64,14 +64,23 @@ function getCartridges(count) {
 
 <template>
 
-
-<div class="cartridge-cont" v-for="(cartridge, index) in cartridges">
-    <Cartridge v-bind="cartridge" @click="click(index)"></Cartridge>
+<div class="cartridge-cont">
+    <div v-for="(cartridge, index) in cartridges">
+        <Cartridge v-bind="cartridge" @click="click(index)"></Cartridge>
+    </div>
 </div>
 
 <Gameboy v-bind="gameboyProps"></Gameboy>
 </template>
 
 <style scoped>
-
+.cartridge-cont {
+    height: 80%;
+    width: 100%;
+    display: flex;
+    flex-flow: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    overflow: hidden;
+}
 </style>

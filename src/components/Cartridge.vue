@@ -1,5 +1,7 @@
 <script setup>
 import { reactive, computed, watch, ref } from "vue";
+import postal from "postal";
+import resources from "./resources";
 
 const props = defineProps({ 
     cartridgeId: Number, 
@@ -16,6 +18,7 @@ const state = reactive({
 });
 
 const spinning = ref(false);
+const animationFinished = ref(false);
 
 const anchorStyles = computed(() => {
     if (props.cartridgeHasBeenSelected)
@@ -44,7 +47,8 @@ const classes = computed(() => {
         selected: props.isSelected, 
         'fade-out': props.fadeOut, 
         'not-selected': props.cartridgeHasBeenSelected && !props.isSelected,
-        'spinning': spinning.value
+        'spinning': spinning.value,
+        'animation-finished': animationFinished.value
     }
 });
 
@@ -93,11 +97,40 @@ function animate() {
                 ],
                 {
                     duration: 200,
+                    endDelay: 500,
                     fill: 'forwards',
                     easing: 'ease-out'
                 }
             ).finished.then(() => {
-                console.log("bound up");
+                console.log("bounce up");
+
+                cartridgeAnchorEl.animate([
+                    {
+                        visibility: 'hidden'
+                    }
+                ],
+                {
+                    duration: 600,
+                    fill: 'forwards'
+                }).finished.then(() => {
+
+                    setTimeout(() => {
+
+                        animationFinished.value = true;
+
+                        var message = {
+                            view: resources.views.gameView,
+                            data: {
+                                image: "",
+                                title: "test",
+                                description: "test description"
+                            }
+                        }
+                        var channel = postal.channel("Notifications");
+                        channel.publish("selectView", message);
+                    }, 600);
+                    
+                })
             });
         });
     })
@@ -135,6 +168,10 @@ function animate() {
     
     position: absolute;
     pointer-events: none;
+}
+
+.animation-finished {
+    /* display: none; */
 }
 
 .spinning {

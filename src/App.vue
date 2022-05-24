@@ -1,13 +1,43 @@
 <script setup>
-import CartridgesManager from "./components/CartridgesManager.vue"
+import CartridgesManager from "./components/CartridgesManager.vue";
+import GameView from "./components/GameView.vue";
+import resources from "./components/resources.js";
+import postal from "postal";
+import { ref } from "vue";
+
+var channel = postal.channel("Notifications");
+channel.subscribe("selectView", selectView);
 const borderWidth = 1;
+
+const currentView = ref(resources.views.cartridgesManager);
+const gameViewProps = ref(null);
+
+function selectView(message) {
+  var views = resources.views;
+
+  switch (message.view) {
+    case views.gameView:
+      currentView.value = message.view;
+      gameViewProps.value = message.data;
+      break;
+    case views.cartridgesManager:
+      currentView.value = message.view;
+      break;
+    default:
+      break;
+  }
+  
+}
+
 </script>
 
 <template>
 
   <main id="main">
-    <CartridgesManager v-bind:mainBorderWidth="borderWidth"></CartridgesManager>
+    <CartridgesManager v-if="currentView === resources.views.cartridgesManager" v-bind:mainBorderWidth="borderWidth"></CartridgesManager>
+    <GameView  v-else-if="currentView === resources.views.gameView" v-bind="gameViewProps"></GameView>
   </main>
+  
 </template>
 
 <style>
@@ -20,9 +50,6 @@ main {
   background: black;
   border: 1px solid white;
   display: flex;
-  flex-flow: wrap;
-  align-items: center;
-  justify-content: space-evenly;
   overflow: hidden;
   position: relative;
 }

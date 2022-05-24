@@ -68,8 +68,39 @@ function animate() {
             ],
             {
                 duration: 200,
+                endDelay: 500,
                 fill: 'forwards',
                 easing: 'ease-out'
+            }).finished.then(() => {
+                var mainWidth = mainEl.clientWidth;
+                var mainHeight = mainEl.clientHeight;
+                var gameboyHeight = gameboyEl.clientHeight;
+                var offsetFromCenter = 25;
+                var scale = Math.max(mainWidth, mainHeight) / (gameboyHeight - offsetFromCenter);
+
+                gameboyEl.animate([
+                    {
+                        transform: `scale(${Math.round(scale)})`
+                    }
+                ],
+                {
+                    duration: 600,
+                    endDelay: 300,
+                    fill: 'forwards',
+                }).finished.then(() => {
+
+                    gameboyEl.animate([
+                        {
+                            opacity: "0"
+                        }
+                    ],
+                    {
+                        duration: 300,
+                        fill: 'forwards'
+                    }).finished.then(() => {
+                        
+                    })
+                })
             })
         });
     });
@@ -89,7 +120,7 @@ function animate() {
     height: 100px;
     left: calc(50% - 100px);
     bottom: 10px;
-    background: purple;
+    background: rgb(82, 81, 81);
     z-index: 1;
     border-radius: 18px;
 }
