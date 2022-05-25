@@ -3,7 +3,8 @@ var cartridgeData = {
     cartridge1: {
         image: "../images/temple.jpg",
         title: "Test",
-        description: "Description"
+        description: "Description",
+        interactiveImg: false
     }
 
 }

@@ -121,9 +121,10 @@ function animate() {
                         var message = {
                             view: resources.views.gameView,
                             data: {
-                                image: "",
-                                title: "test",
-                                description: "test description"
+                                image: "./src/images/temple.jpg",
+                                title: "Test Title",
+                                description: "alskdjf;aslkfj asdlf;kjs dflask jaslfkj as;lfk js;f lkjasf lsadkjfa;slkfj sad;lf as fsdf aslfkjsda;flk jsad;flk jasdf; lkjasdf;laksj ;asldkfj a;sdlkf jads;lf kjasd;lf kjasd;f lkjasdf; lkajsd f;laksjf;lsdakjf ;alskfj ;asdlk fj;asldfk jsda; flkjsd;fl kajsdf;lkdjaf asfdsad fas fasf adsf asd fsadf asfsadf asdfsdfasdf sadfsadf asdf sadfasdf asdf asdf asdfsadfasd fasd fsda asdfsdaf sadf asf sdaf asf asf sdaf asdf sadf sd fsa fasdf asd fasf as fas fasf sadf as dfs fas fas fs fas fsad fas fas fsad fas fsadf asf asdf asdf asf asdf sad fsa df",
+                                interactiveImg: true
                             }
                         }
                         var channel = postal.channel("Notifications");
