@@ -1,3 +1,9 @@
+<template>
+    <div class="cartridge-anchor" :style="anchorStyles">
+        <div class="cartridge" v-bind="state" v-bind:class="classes"></div>
+    </div>
+</template>
+
 <script setup>
 import { reactive, computed, watch, ref } from "vue";
 import postal from "postal";
@@ -9,7 +15,8 @@ const props = defineProps({
     fadeOut: Boolean,
     top: Number, 
     left: Number, 
-    cartridgeHasBeenSelected: Boolean });
+    cartridgeHasBeenSelected: Boolean,
+    data: Object });
 
 const isSelected = ref(props.isSelected);
 
@@ -120,12 +127,7 @@ function animate() {
 
                         var message = {
                             view: resources.views.gameView,
-                            data: {
-                                image: "./src/images/temple.jpg",
-                                title: "Test Title",
-                                description: "alskdjf;aslkfj asdlf;kjs dflask jaslfkj as;lfk js;f lkjasf lsadkjfa;slkfj sad;lf as fsdf aslfkjsda;flk jsad;flk jasdf; lkjasdf;laksj ;asldkfj a;sdlkf jads;lf kjasd;lf kjasd;f lkjasdf; lkajsd f;laksjf;lsdakjf ;alskfj ;asdlk fj;asldfk jsda; flkjsd;fl kajsdf;lkdjaf asfdsad fas fasf adsf asd fsadf asfsadf asdfsdfasdf sadfsadf asdf sadfasdf asdf asdf asdfsadfasd fasd fsda asdfsdaf sadf asf sdaf asf asf sdaf asdf sadf sd fsa fasdf asd fasf as fas fasf sadf as dfs fas fas fs fas fsad fas fas fsad fas fsadf asf asdf asdf asf asdf sad fsa df",
-                                interactiveImg: true
-                            }
+                            data: props.data
                         }
                         var channel = postal.channel("Notifications");
                         channel.publish("selectView", message);
@@ -138,12 +140,6 @@ function animate() {
 }
 
 </script>
-
-<template>
-<div class="cartridge-anchor" :style="anchorStyles">
-    <div class="cartridge" v-bind="state" v-bind:class="classes"></div>
-</div>
-</template>
 
 <style scoped>
 

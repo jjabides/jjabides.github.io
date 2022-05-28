@@ -1,11 +1,22 @@
+<template>
+<div class="cartridge-cont">
+    <div v-for="(cartridge, index) in cartridges">
+        <Cartridge v-bind="cartridge" @click="click(index)"></Cartridge>
+    </div>
+</div>
+
+<Gameboy v-bind="gameboyProps"></Gameboy>
+</template>
+
 <script setup>
 import { ref, reactive, computed } from 'vue';
 import Cartridge from './Cartridge.vue';
 import Gameboy from "./Gameboy.vue";
+import CartridgeData from "./cartridgeData";
 
 const props = defineProps({ mainBorderWidth: Number })
 const selectedCartridge = ref(null);
-const cartridges = reactive(getCartridges(6));
+const cartridges = reactive(getCartridges());
 const gameboyProps = reactive({
     cartridgeHasBeenSelected: computed(() => selectedCartridge.value !== null),
     top: null,
@@ -16,11 +27,15 @@ function click(index) {
     selectedCartridge.value = index;
     var mainEl = document.getElementById('main');
 
-    for (var i = 0; i < 6; i++) {
+    var index = 0;
+    for (var cartridge of cartridges) {
+        let i = index;
         var cartridgeEl = document.getElementById('cartridge' + i);
         // Set top and left values based on parent element
-        cartridges[i].top = getTop(cartridgeEl.parentElement, mainEl);
-        cartridges[i].left = getLeft(cartridgeEl.parentElement, mainEl);
+        cartridge.top = getTop(cartridgeEl.parentElement, mainEl);
+        cartridge.left = getLeft(cartridgeEl.parentElement, mainEl);
+
+        i++;
     }
 
     var gameboyEl = document.getElementById('gameboy');
@@ -40,20 +55,28 @@ function getLeft(element, relativeEl) {
     return elRect.left - relativeELRect.left - props.mainBorderWidth;
 }
 
-function getCartridges(count) {
+function getCartridges() {
     var cartridges = [];
+    var index = 0;
+    var keys = Object.keys(CartridgeData);
 
-    for(let i = 0; i < count; i++) {
+    for (var key of keys) {
+        let i = index;
+        var data = CartridgeData[key];
         var cartridge = {
-            cartridgeId: i, 
+            cartridgeId: i,
             isSelected: computed(() => {
-                return selectedCartridge.value === i} ), 
-            fadeOut: computed(() => selectedCartridge.value !== null && selectedCartridge.value !== i), 
-            spinning: false, 
+                return selectedCartridge.value === i
+                } ),
+            fadeOut: computed(() => selectedCartridge.value !== null && selectedCartridge.value !== i),
             top: 0, 
             left: 0,
-            cartridgeHasBeenSelected: computed(() => selectedCartridge.value !== null)
+            cartridgeHasBeenSelected: computed(() => selectedCartridge.value !== null),
+            data: data
         }
+
+        index++;
+
         cartridges.push(cartridge);
     }
 
@@ -61,17 +84,6 @@ function getCartridges(count) {
 }
 
 </script>
-
-<template>
-
-<div class="cartridge-cont">
-    <div v-for="(cartridge, index) in cartridges">
-        <Cartridge v-bind="cartridge" @click="click(index)"></Cartridge>
-    </div>
-</div>
-
-<Gameboy v-bind="gameboyProps"></Gameboy>
-</template>
 
 <style scoped>
 .cartridge-cont {

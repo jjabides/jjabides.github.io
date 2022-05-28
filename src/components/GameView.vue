@@ -2,16 +2,28 @@
 import { computed, ref } from "vue";
 import resources from "./resources";
 import postal from "postal";
+import $ from "jquery";
 
 var props = defineProps({
     image: String,
     title: String,
-    description: String,
-    interactiveImg: Boolean
+    descriptionUrl: String,
+    interactiveImg: Boolean,
+    
 })
 
+var description = ref("");
 const fullscreen = ref(false);
 
+// Get description file
+$.ajax({
+    async: false,
+    url: props.descriptionUrl,
+    dataType: 'text',
+    success: (text) => {
+        description.value = text;
+    }
+})
 
 function back() {
     var message = {
@@ -41,7 +53,7 @@ function topLeftCornerClick() {
                 <div class="back-btn" @click="back">BACK</div>
             </div>
         </div>
-        <div class="description"> {{ props.description }}</div>
+        <div class="description"> {{ description }}</div>
     </div>
 </div>
 </template>
