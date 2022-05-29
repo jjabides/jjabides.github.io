@@ -18,8 +18,6 @@ const props = defineProps({
     cartridgeHasBeenSelected: Boolean,
     data: Object });
 
-const isSelected = ref(props.isSelected);
-
 const state = reactive({
     id: 'cartridge' + props.cartridgeId,
 });
