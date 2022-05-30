@@ -4,11 +4,19 @@
             <img v-bind:src="props.images[state.index]"/>
         </div>
         <div class="carousel-mode" v-else>
-            <div class="navigate-left" @click="(e) => navigate(e, 'left')"></div>
+            <div class="navigate-left" @click="(e) => navigate(e, 'left')" :style="{ visibility: navLeftActive ? 'visible' : 'hidden'}">
+                <svg class="left-arrow" width="100%" viewBox="0 0 100 100">
+                    <path d="M75 100 L25 50 L75 0" style="stroke:white; stroke-width:1; fill:none;"></path>
+                </svg>
+            </div>
             <div class="images-cont" id="images-cont">
                 <img v-for="image in props.images" v-bind:src="image" :style="{ transform: translateX }"/>
             </div>
-            <div class="navigate-right" @click="(e) => navigate(e, 'right')"></div>
+            <div class="navigate-right" @click="(e) => navigate(e, 'right')" :style="{ visibility: navRightActive ? 'visible' : 'hidden'}">
+            <svg class="right-arrow" width="100%" viewBox="0 0 100 100">
+                    <path d="M25 100 L75 50 L25 0" style="stroke:white; stroke-width:1; fill:none;"></path>
+            </svg>
+            </div>
         </div>
     </div>
 </template>
@@ -25,6 +33,8 @@ const props = defineProps({
 const state = reactive({ index: 0 });
 const carouselMode = ref(false);
 const translateX = ref('');
+const navRightActive = computed(() => state.index < props.images.length - 1);
+const navLeftActive = computed(() => state.index > 0);
 
 watch(props, (value) => {
     if (value.fullscreen) {
@@ -121,10 +131,12 @@ window.addEventListener('resize', () => {
     position: relative;
     background-color: black;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    transition: background-color .2s;
 }
 
 .navigate-left:hover, .navigate-right:hover {
-    background: gray;
-    
+    background: rgba(255, 255, 255, 0.5);
 }
 </style>
