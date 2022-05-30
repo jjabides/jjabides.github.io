@@ -1,7 +1,14 @@
 <template>
-    <div class="carousel" v-bind:style="{ width: imgContWidth }">
-        <div class="img-cont" v-for="(item, index) in imgItems" v-bind:style="{ left: item.left }">
-            <img v-bind:src="item.image" />
+    <div class="carousel">
+        <div class="img-cont" v-if="!carouselMode">
+            <img v-bind:src="props.images[state.index]"/>
+        </div>
+        <div class="carousel-mode" v-else>
+            <div class="navigate-left" @click="(e) => navigate(e, 'left')"></div>
+            <div class="images-cont" id="images-cont">
+                <img v-for="image in props.images" v-bind:src="image" :style="{ transform: translateX }"/>
+            </div>
+            <div class="navigate-right" @click="(e) => navigate(e, 'right')"></div>
         </div>
     </div>
 </template>
@@ -16,39 +23,108 @@ const props = defineProps({
 })
 
 const state = reactive({ index: 0 });
-const imgContWidth = "300%";
-const topLeftCornerEl = ref(0);
-const imgMargins = 16;
+const carouselMode = ref(false);
+const translateX = ref('');
 
-// TODO: Why isn't 'left' getting updated?
-var imgItems = ref(props.images
-.map((x, index) => { 
-    return {
-        image: x, 
-        left: computed(() => { 
-            if (!topLeftCornerEl.value)
-                return '';
+watch(props, (value) => {
+    if (value.fullscreen) {
+        setTimeout(() => {
+            carouselMode.value = true;
 
-                console.log("trigger");
-
-            return (topLeftCornerEl.value.clientWidth * index)  + 'px' }) 
+            setTimeout(() => {
+                updatePositioning();
+            }, 0)
+        }, 400);
+    } else {
+        carouselMode.value = false;
     }
-}))
-
-onMounted(() => {
-    topLeftCornerEl.value = document.getElementById(props.topLeftCornerId);
 });
 
+function navigate(event, direction) {
+    event.stopPropagation();
+
+    if (direction === 'right') {
+        state.index = state.index < props.images.length - 1 ? state.index + 1 : state.index;
+    } else {
+        state.index = state.index > 0 ? state.index - 1 : state.index;
+    }
+
+    updatePositioning();
+}
+
+function updatePositioning() {
+    if (!props.fullscreen)
+        return;
+    var imagesCont = document.getElementById('images-cont')
+    translateX.value = `translateX(${(-imagesCont.clientWidth) * state.index}px)`
+}
+
+window.addEventListener('resize', () => {
+    updatePositioning();
+})
 </script>
 
 <style scoped>
 .carousel {
     height: 100%;
+    width: 100%;
+    position: absolute;
 }
 
 .img-cont {
-    position: absolute;
-    height: 100%;
     width: 100%;
+    height: 100%;
+}
+
+.img-cont img {
+    width: 80%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.carousel-mode {
+    display: flex;
+    animation: fade-in .5s forwards;
+    width: 100%;
+    height: 100%;
+}
+
+.images-cont {
+    display: flex;
+    width: 80%;
+    pointer-events: auto;
+}
+
+.images-cont img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: relative;
+    transition: transform .4s ease-in-out;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.navigate-left, .navigate-right {
+    width: 10%;
+    height: 100%;
+    cursor: pointer;
+    pointer-events: auto;
+    position: relative;
+    background-color: black;
+    z-index: 1;
+}
+
+.navigate-left:hover, .navigate-right:hover {
+    background: gray;
+    
 }
 </style>

@@ -103,6 +103,7 @@ function shiftLeft() {
 .top-left-corner.fullscreen {
     width: 100%;
     height: 100%;
+    pointer-events: none;
 }
 
 .top-left-corner-space {
