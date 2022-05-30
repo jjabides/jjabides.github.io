@@ -34,7 +34,7 @@ function click(index) {
         cartridge.top = getTop(cartridgeEl.parentElement, mainEl);
         cartridge.left = getLeft(cartridgeEl.parentElement, mainEl);
 
-        i++;
+        index++;
     }
 
     var gameboyEl = document.getElementById('gameboy');

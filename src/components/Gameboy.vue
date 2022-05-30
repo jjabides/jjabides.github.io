@@ -123,6 +123,17 @@ function animate() {
     background: rgb(82, 81, 81);
     z-index: 1;
     border-radius: 18px;
+    animation: fade-in .3s forwards;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 .selected {

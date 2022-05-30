@@ -2,8 +2,6 @@ import CartridgeData from "./CartridgeData";
 import { computed } from "vue";
 
 class CartridgeFactory {
-    
-    
     constructor({ selectedCartridge }) {
         this.selectedCartridge = selectedCartridge;
     }
@@ -18,7 +16,7 @@ class CartridgeFactory {
         for (var key of keys) {
             let i = index;
             var data = CartridgeData[key];
-            var cartridge = {
+            let cartridge = {
                 cartridgeId: i,
                 isSelected: computed(() => {
                     return selectedCartridge.value === i

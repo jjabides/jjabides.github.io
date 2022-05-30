@@ -1,19 +1,26 @@
 <script setup>
-import { computed, ref } from "vue";
+import {  ref, reactive, computed } from "vue";
 import resources from "./resources";
+import ImageCarousel from "./ImageCarousel.vue";
 import postal from "postal";
 import $ from "jquery";
 
 var props = defineProps({
-    image: String,
+    images: Array,
     title: String,
     descriptionUrl: String,
-    interactiveImg: Boolean,
-    
+    interactiveImg: Boolean
 })
 
-var description = ref("");
+const description = ref("");
 const fullscreen = ref(false);
+const topLeftCornerId = "top-left-corner";
+
+const imageCarouselProps = reactive({
+    images: props.images,
+    topLeftCornerId,
+    fullscreen,
+})
 
 // Get description file
 $.ajax({
@@ -38,12 +45,20 @@ function topLeftCornerClick() {
     fullscreen.value = !fullscreen.value;
 }
 
+function shiftRight() {
+
+}
+
+function shiftLeft() {
+
+}
+
 </script>
 
 <template>
 <div class="game-view">
-    <div class="top-left-corner" v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }" @click="topLeftCornerClick">
-        <img v-bind:src="props.image"/>
+    <div class="top-left-corner" v-bind:id="topLeftCornerId" v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }" @click="topLeftCornerClick">
+        <ImageCarousel v-bind="imageCarouselProps"></ImageCarousel>
     </div>
     <div class="main-content">
         <div class="top-left-corner-space"></div>
@@ -53,7 +68,7 @@ function topLeftCornerClick() {
                 <div class="back-btn" @click="back">BACK</div>
             </div>
         </div>
-        <div class="description"> {{ description }}</div>
+        <div class="description" v-html="description"></div>
     </div>
 </div>
 </template>
@@ -76,7 +91,10 @@ function topLeftCornerClick() {
     position: absolute;
     background-color: black;
     transition: width .3s, height .3s;
+    overflow: hidden;
 }
+
+
 
 .top-left-corner.interactive {
     cursor: pointer;
@@ -101,6 +119,7 @@ function topLeftCornerClick() {
 
 .main-content {
     overflow-y: auto;
+    width: 100%;
 }
 
 .main-content .header {

@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { reactive, computed, watch, ref } from "vue";
+import { reactive, computed, watch } from "vue";
 import postal from "postal";
 import resources from "./resources";
 
@@ -20,10 +20,22 @@ const props = defineProps({
 
 const state = reactive({
     id: 'cartridge' + props.cartridgeId,
+    spinning: false,
+    animating: false,
+    animationFinished: false
 });
 
-const spinning = ref(false);
-const animationFinished = ref(false);
+const classes = computed(() => {
+    var { isSelected, fadeOut, cartridgeHasBeenSelected } = props;
+    var { spinning, animationFinished } = state;
+    return { 
+        selected: isSelected, 
+        'fade-out': fadeOut, 
+        'not-selected': cartridgeHasBeenSelected && !isSelected,
+        'spinning': spinning,
+        'animation-finished': animationFinished
+    }
+});
 
 const anchorStyles = computed(() => {
     if (props.cartridgeHasBeenSelected)
@@ -47,21 +59,14 @@ watch(props, (value) => {
     }
 });
 
-const classes = computed(() => {
-    return { 
-        selected: props.isSelected, 
-        'fade-out': props.fadeOut, 
-        'not-selected': props.cartridgeHasBeenSelected && !props.isSelected,
-        'spinning': spinning.value,
-        'animation-finished': animationFinished.value
-    }
-});
+
 
 function animate() {
     var mainEl = document.getElementById('main');
     var cartridgeEl = document.getElementById(state.id);
     var cartridgeAnchorEl = cartridgeEl.parentElement;
-    spinning.value = true;
+    state.spinning = true;
+    state.animating = true;
 
     var centerTop = (mainEl.clientHeight / 2) - (cartridgeEl.clientWidth / 2);
     var centerLeft = (mainEl.clientWidth / 2) - (cartridgeEl.clientWidth / 2);
@@ -120,8 +125,8 @@ function animate() {
                 }).finished.then(() => {
 
                     setTimeout(() => {
-
-                        animationFinished.value = true;
+                        state.animating = false;
+                        state.animationFinished = true;
 
                         var message = {
                             view: resources.views.gameView,
@@ -147,8 +152,18 @@ function animate() {
     border-radius: 18px;
     background: gray;
     cursor: pointer;
-    transition: transform .3s;
-    
+    transition: transform .3s, opacity .3s;
+    animation: fade-in .3s forwards;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 .cartridge:hover {
@@ -163,10 +178,6 @@ function animate() {
     
     position: absolute;
     pointer-events: none;
-}
-
-.animation-finished {
-    /* display: none; */
 }
 
 .spinning {
