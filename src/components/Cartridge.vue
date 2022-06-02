@@ -1,13 +1,20 @@
 <template>
     <div class="cartridge-anchor" :style="anchorStyles">
-        <div class="cartridge" v-bind="state" v-bind:class="classes"></div>
+        <div class="cartridge" v-bind="state" v-bind:class="classes">
+            <img v-bind:src="data.icon"/>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { reactive, computed, watch } from "vue";
+import { reactive, computed, watch, onMounted } from "vue";
 import postal from "postal";
 import resources from "./resources";
+import tippy, { animateFill, roundArrow } from "tippy.js";
+import 'tippy.js/themes/light.css'
+import 'tippy.js/dist/backdrop.css';
+import 'tippy.js/animations/shift-away.css';
+import 'tippy.js/dist/svg-arrow.css';
 
 const props = defineProps({ 
     cartridgeId: Number, 
@@ -59,8 +66,6 @@ watch(props, (value) => {
     }
 });
 
-
-
 function animate() {
     var mainEl = document.getElementById('main');
     var cartridgeEl = document.getElementById(state.id);
@@ -82,7 +87,6 @@ function animate() {
         duration: 500,
         fill: 'forwards'
     }).finished.then(() => {
-        console.log('moved to center');
 
         cartridgeAnchorEl.animate(
             [
@@ -96,7 +100,6 @@ function animate() {
                 fill: 'forwards'
             }
         ).finished.then(() => {
-            console.log("move down");
 
             cartridgeAnchorEl.animate(
                 [
@@ -112,7 +115,6 @@ function animate() {
                     easing: 'ease-out'
                 }
             ).finished.then(() => {
-                console.log("bounce up");
 
                 cartridgeAnchorEl.animate([
                     {
@@ -142,6 +144,18 @@ function animate() {
     })
 }
 
+onMounted(() => {
+    tippy('#' + state.id, {
+        content: props.data.title,
+        placement: 'bottom',
+        animation: 'shift-away',
+        theme: 'custom',
+        arrow: roundArrow,
+        offset: [0, 20],
+        showOnCreate: false // Set to true on mobile
+    })
+})
+
 </script>
 
 <style scoped>
@@ -154,16 +168,7 @@ function animate() {
     cursor: pointer;
     transition: transform .3s, opacity .3s;
     animation: fade-in .3s forwards;
-}
-
-@keyframes fade-in {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
+    padding: 14px;
 }
 
 .cartridge:hover {
@@ -184,17 +189,24 @@ function animate() {
     animation: spinning .6s ease-out forwards;
 }
 
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .fade-out {
     animation: fade-out 1s forwards;
 }
 
 @keyframes fade-out {
     0% {
-
+        opacity: 1;
     }
 
     100% {
-        background: transparent;
+        opacity: 0;
         display: none;
     }
 }
@@ -208,5 +220,7 @@ function animate() {
         transform: rotateZ(720deg);
     }
 }
+
+
 
 </style>

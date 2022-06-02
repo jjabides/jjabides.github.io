@@ -9,7 +9,8 @@ var props = defineProps({
     images: Array,
     title: String,
     descriptionUrl: String,
-    interactiveImg: Boolean
+    interactiveImg: Boolean,
+    links: Array
 })
 
 const description = ref("");
@@ -45,14 +46,6 @@ function topLeftCornerClick() {
     fullscreen.value = !fullscreen.value;
 }
 
-function shiftRight() {
-
-}
-
-function shiftLeft() {
-
-}
-
 </script>
 
 <template>
@@ -64,8 +57,12 @@ function shiftLeft() {
         <div class="top-left-corner-space"></div>
         <div class="header">
             <div class="row-1">
-                <div class="title">{{ props.title }}</div>
+                <div class="title header-text">{{ props.title }}</div>
                 <div class="back-btn" @click="back">BACK</div>
+            </div>
+            <div v-if="props.links" v-for="(item, index) in props.links" v-bind:class="'row-' + (index + 2)">
+                <div class="link-title header-text">{{ item.title }}</div>
+                <a class="link header-text" v-bind:href="item.link">{{ item.link }}</a>
             </div>
         </div>
         <div class="description" v-html="description"></div>
@@ -74,12 +71,14 @@ function shiftLeft() {
 </template>
 
 <style scoped>
+@import "../assets/base.css";
 
 .game-view {
     width: 100%;
     height: 100%;
     display: flex;
     position: relative;
+    animation: fade-in .3s forwards;
 }
 
 .top-left-corner {
@@ -93,8 +92,6 @@ function shiftLeft() {
     transition: width .3s, height .3s;
     overflow: hidden;
 }
-
-
 
 .top-left-corner.interactive {
     cursor: pointer;
@@ -128,11 +125,13 @@ function shiftLeft() {
     display: inline-block;
     width: 60%;
     height: 30%;
+    overflow: hidden;
+    padding: 0px 32px;
 }
 
 .row-1 {
     display: flex;
-    padding: 16px;
+    padding: 16px 0px;
 }
 
 .row-1 .title {
@@ -178,6 +177,18 @@ function shiftLeft() {
 
 ::-webkit-scrollbar-thumb:hover {
     background-color:#464646;
+}
+
+.link-title, .link {
+    overflow-wrap: break-word;
+}
+
+.header-text {
+    font-size: 18px;
+}
+
+.title {
+    font-size: 26px;
 }
 
 </style>

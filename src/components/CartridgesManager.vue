@@ -14,6 +14,7 @@ import Cartridge from './Cartridge.vue';
 import Gameboy from "./Gameboy.vue";
 import CartridgeFactory from "./CartridgeFactory";
 import GameboyFactory from "./GameboyFactory";
+import postal from "postal";
 
 const props = defineProps({ mainBorderWidth: Number })
 const selectedCartridge = ref(null);
@@ -24,6 +25,8 @@ const gameboyProps = reactive(gameboyFactory.getGameboyProps());
 
 function click(index) {
     selectedCartridge.value = index;
+    var channel = postal.channel("Notifications");
+    channel.publish("cartridgeSelected", true);
     var mainEl = document.getElementById('main');
 
     var index = 0;
