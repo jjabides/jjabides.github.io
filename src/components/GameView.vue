@@ -58,14 +58,16 @@ function topLeftCornerClick() {
         <div class="header">
             <div class="row-1">
                 <div class="title header-text">{{ props.title }}</div>
-                <div class="back-btn" @click="back">BACK</div>
+                <div class="back-btn" :class="{ 'fullscreen': fullscreen }" @click="back">BACK</div>
             </div>
-            <div v-if="props.links" v-for="(item, index) in props.links" v-bind:class="'row-' + (index + 2)">
+        </div>
+        <div class="description" v-html="description"></div>
+        <div class="links">
+            <div v-if="props.links" v-for="(item, index) in props.links">
                 <div class="link-title header-text">{{ item.title }}</div>
                 <a class="link header-text" v-bind:href="item.link">{{ item.link }}</a>
             </div>
         </div>
-        <div class="description" v-html="description"></div>
     </div>
 </div>
 </template>
@@ -82,11 +84,10 @@ function topLeftCornerClick() {
 }
 
 .top-left-corner {
-    width: 40%;
+    width: 100%;
     height: 30%;
     top: 0px;
     left: 0px;
-    border: 1px solid white;
     position: absolute;
     background-color: black;
     transition: width .3s, height .3s;
@@ -104,7 +105,7 @@ function topLeftCornerClick() {
 }
 
 .top-left-corner-space {
-    width: 40%;
+    width: 100%;
     height: 30%;
     display: inline-block;
 }
@@ -123,15 +124,14 @@ function topLeftCornerClick() {
 .main-content .header {
     vertical-align: top;
     display: inline-block;
-    width: 60%;
-    height: 30%;
+    width: 100%;
     overflow: hidden;
-    padding: 0px 32px;
+    padding: 0px 16px;
 }
 
 .row-1 {
     display: flex;
-    padding: 16px 0px;
+    padding: 8px 0px;
 }
 
 .row-1 .title {
@@ -153,6 +153,13 @@ function topLeftCornerClick() {
     cursor: pointer;
     color: white;
     transition: background-color .2s, color .2s;
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+}
+
+.back-btn.fullscreen {
+    display: none;
 }
 
 .header .back-btn:hover {
@@ -163,6 +170,7 @@ function topLeftCornerClick() {
 .main-content .description {
     font-size: 24px;
     padding: 16px;
+    font-size: 18px;
 }
 
 ::-webkit-scrollbar {
@@ -172,7 +180,7 @@ function topLeftCornerClick() {
 ::-webkit-scrollbar-thumb {
     background-color: #7c7c7c;
     border-radius: 4px;
-    
+    display: none;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -184,11 +192,17 @@ function topLeftCornerClick() {
 }
 
 .header-text {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .title {
-    font-size: 26px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.links {
+    padding: 16px;
+    padding-bottom: 64px;
 }
 
 </style>

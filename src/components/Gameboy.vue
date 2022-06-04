@@ -6,7 +6,8 @@ var props = defineProps({
    left: Number
 });
 
-var spinning = ref(false);
+const spinning = ref(false);
+const turnOnScreen = ref(false);
 
 const styles = computed(() => {
     if (props.cartridgeHasBeenSelected) {
@@ -59,6 +60,8 @@ function animate() {
             fill: 'forwards'
         }).finished.then(() => {
 
+            setTimeout(() => turnOnScreen.value = true, 200);
+
             gameboyEl.animate([
 
                 {
@@ -109,18 +112,21 @@ function animate() {
 </script>
 
 <template>
-<div class="gameboy" id="gameboy" v-bind:class="{ 'spinning': spinning, 'selected': props.cartridgeHasBeenSelected }" :style="styles"></div>
+<svg class="gameboy" id="gameboy" viewBox="0 0 200 100" v-bind:class="{ 'spinning': spinning, 'selected': props.cartridgeHasBeenSelected }" :style="styles">
+    <rect rx="20" ry="20" width="200" height="100" style="fill:rgb(82, 81, 81);"></rect>
+    <rect class="screen" v-bind:class="{ 'turnon': turnOnScreen }" x="37.5" y="10" rx="8" ry="8" width="125" height="80" style="fill: black"></rect>
+    
+</svg>
 </template>
 
 <style scoped>
 
 .gameboy {
     position: absolute;
-    width: 200px;
-    height: 100px;
-    left: calc(50% - 100px);
+    width: 176px;
+    height: 76px;
+    left: calc(50% - 88px);
     bottom: 10px;
-    background: rgb(82, 81, 81);
     z-index: 1;
     border-radius: 18px;
     animation: fade-in .3s forwards;
@@ -143,6 +149,28 @@ function animate() {
 
 .spinning {
     animation: spinning .6s ease-out forwards;
+}
+
+.gameboy .screen.turnon {
+    animation: flashing .2s forwards;
+}
+
+@keyframes flashing {
+    0% {
+        fill: black;
+    }
+
+    25% {
+        fill: rgba(255, 255, 255, 0.7);
+    }
+
+    75% {
+        fill: black;
+    }
+
+    100% {
+        fill: rgba(255, 255, 255, 0.7);
+    }
 }
 
 </style>

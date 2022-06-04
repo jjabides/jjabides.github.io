@@ -54,8 +54,7 @@ function setCartridgeSelection(message) {
 @import "./assets/base.css";
 
 main {
-  margin: 0px 15%;
-  width: 70%;
+  width: 100%;
   height: 100%;
   background: black;
   border: 1px solid white;
@@ -79,7 +78,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 42px;
+  font-size: 32px;
   opacity: 0;
   
   animation: title-animation 2s forwards;

@@ -53,9 +53,7 @@ const anchorStyles = computed(() => {
             margin: '0px'
         }
 
-    return { 
-        margin: '0px 50px'
-    };
+    return {};
 });
 
 watch(props, (value) => {
@@ -145,15 +143,18 @@ function animate() {
 }
 
 onMounted(() => {
-    tippy('#' + state.id, {
-        content: props.data.title,
-        placement: 'bottom',
-        animation: 'shift-away',
-        theme: 'custom',
-        arrow: roundArrow,
-        offset: [0, 20],
-        showOnCreate: false // Set to true on mobile
-    })
+    const isTouchScreen = true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+
+    if (!isTouchScreen) {
+        tippy('#' + state.id, {
+            content: props.data.title,
+            placement: 'bottom',
+            animation: 'shift-away',
+            theme: 'custom',
+            arrow: roundArrow,
+            offset: [0, 20]
+        })
+    }
 })
 
 </script>
@@ -161,22 +162,18 @@ onMounted(() => {
 <style scoped>
 
 .cartridge {
-    width: 120px;
-    height: 120px;
+    width: 96px;
+    height: 96px;
+    padding: 12px;
     border-radius: 18px;
     background: gray;
     cursor: pointer;
     transition: transform .3s, opacity .3s;
     animation: fade-in .3s forwards;
-    padding: 14px;
 }
 
 .cartridge:hover {
     transform: rotateZ(30deg);
-}
-
-.cartridge-anchor {
-    margin: 0px 50px;
 }
 
 .selected, .not-selected {
@@ -220,7 +217,5 @@ img {
         transform: rotateZ(720deg);
     }
 }
-
-
 
 </style>
