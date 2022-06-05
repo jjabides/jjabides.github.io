@@ -1,5 +1,23 @@
+<template>
+    <svg class="gameboy" id="gameboy" viewBox="0 0 200 100" v-bind:class="{ 'spinning': spinning, 'selected': props.cartridgeHasBeenSelected }" :style="styles">
+        <rect rx="20" ry="20" width="200" height="100" style="fill:rgb(82, 81, 81);"></rect>
+        <rect class="screen" v-bind:class="{ 'turnon': turnOnScreen }" x="37.5" y="10" rx="8" ry="8" width="125" height="80" style="fill: black"></rect>
+        <g class="buttons" transform="translate(0, 28)">
+            <circle cx="183" cy="0" r="4" fill="blue"></circle>
+            <circle cx="175" cy="8" r="4" fill="green"></circle>
+            <circle cx="191" cy="8" r="4" fill="red"></circle>
+            <circle cx="183" cy="16" r="4" fill="yellow"></circle>
+        </g>
+        <g class="d-pad" fill="rgb(62, 62, 62)" transform="translate(8, 24)">
+            <rect y="8" width="24" height="8"></rect>
+            <rect x="8" width="8" height="24"></rect>
+        </g>
+    </svg>
+</template>
+
 <script setup>
 import { watch, ref, computed } from "vue";
+import { getTop } from "../../utilities/utilities";
 var props = defineProps({
    cartridgeHasBeenSelected: Boolean,
    top: Number,
@@ -34,13 +52,12 @@ function animate() {
     spinning.value = true;
 
     var centerTop = (mainEl.clientHeight / 2) - (gameboyEl.clientHeight / 2);
-    var centerLeft = (mainEl.clientWidth / 2) - (gameboyEl.clientWidth / 2);
+    var dy = centerTop - getTop(gameboyEl, mainEl);
 
     gameboyEl.animate(
         [
             {
-                top: (centerTop - 25) + 'px',
-                left: centerLeft + 'px'
+                transform: `translateY(${dy - 25}px)`
             }
         ],
         {
@@ -50,8 +67,7 @@ function animate() {
     ).finished.then(() => {
         gameboyEl.animate([
             {
-                top: (centerTop) + 'px',
-                left: centerLeft + 'px'
+                transform: `translateY(${dy}px)`
             }
         ],
         {
@@ -65,8 +81,7 @@ function animate() {
             gameboyEl.animate([
 
                 {
-                    top: (centerTop - 25) + 'px',
-                    left: centerLeft + 'px'
+                    transform: `translateY(${dy - 25}px)`
                 }
             ],
             {
@@ -83,7 +98,7 @@ function animate() {
 
                 gameboyEl.animate([
                     {
-                        transform: `scale(${Math.round(scale)})`
+                        transform: `translateY(${dy - 25}px) scale(${Math.round(scale)})`
                     }
                 ],
                 {
@@ -110,14 +125,6 @@ function animate() {
 }
 
 </script>
-
-<template>
-<svg class="gameboy" id="gameboy" viewBox="0 0 200 100" v-bind:class="{ 'spinning': spinning, 'selected': props.cartridgeHasBeenSelected }" :style="styles">
-    <rect rx="20" ry="20" width="200" height="100" style="fill:rgb(82, 81, 81);"></rect>
-    <rect class="screen" v-bind:class="{ 'turnon': turnOnScreen }" x="37.5" y="10" rx="8" ry="8" width="125" height="80" style="fill: black"></rect>
-    
-</svg>
-</template>
 
 <style scoped>
 
@@ -172,5 +179,16 @@ function animate() {
         fill: rgba(255, 255, 255, 0.7);
     }
 }
+
+/* --- Media Queries ---*/
+@media screen and (min-width: 768px) {
+
+    .gameboy {
+        width: 200px;
+        height: 100px;
+        left: calc(50% - 100px);
+    }
+}
+/* --- End Media Queries ---*/
 
 </style>

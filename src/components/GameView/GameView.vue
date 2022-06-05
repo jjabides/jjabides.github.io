@@ -1,6 +1,6 @@
 <script setup>
 import {  ref, reactive, computed } from "vue";
-import resources from "./resources";
+import resources from "../utilities/resources";
 import ImageCarousel from "./ImageCarousel.vue";
 import postal from "postal";
 import $ from "jquery";
@@ -50,47 +50,51 @@ function topLeftCornerClick() {
 
 <template>
 <div class="game-view">
-    <div class="top-left-corner" v-bind:id="topLeftCornerId" v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }" @click="topLeftCornerClick">
+    <div class="content">
+        <div class="top-left-corner" v-bind:id="topLeftCornerId" v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }" @click="topLeftCornerClick">
         <ImageCarousel v-bind="imageCarouselProps"></ImageCarousel>
     </div>
     <div class="main-content">
         <div class="top-left-corner-space"></div>
         <div class="header">
             <div class="row-1">
-                <div class="title header-text">{{ props.title }}</div>
+                <div class="title">{{ props.title }}</div>
                 <div class="back-btn" :class="{ 'fullscreen': fullscreen }" @click="back">BACK</div>
             </div>
         </div>
-        <div class="description" v-html="description"></div>
-        <div class="links">
+        <div class="description body-text" v-html="description"></div>
+        <div class="links body-text">
             <div v-if="props.links" v-for="(item, index) in props.links">
-                <div class="link-title header-text">{{ item.title }}</div>
-                <a class="link header-text" v-bind:href="item.link">{{ item.link }}</a>
+                <div class="link-title">{{ item.title }}</div>
+                <a class="link" v-bind:href="item.link">{{ item.link }}</a>
             </div>
         </div>
     </div>
+    </div>
+    
 </div>
 </template>
 
 <style scoped>
-@import "../assets/base.css";
 
 .game-view {
     width: 100%;
     height: 100%;
-    display: flex;
     position: relative;
     animation: fade-in .3s forwards;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
 }
 
 .top-left-corner {
     width: 100%;
     height: 30%;
-    top: 0px;
-    left: 0px;
-    position: absolute;
+    position: relative;
     background-color: black;
-    transition: width .3s, height .3s;
     overflow: hidden;
 }
 
@@ -99,15 +103,26 @@ function topLeftCornerClick() {
 }
 
 .top-left-corner.fullscreen {
-    width: 100%;
-    height: 100%;
     pointer-events: none;
+    position: absolute;
+    animation: fullscreen-anim .3s forwards;
+}
+
+@keyframes fullscreen-anim {
+    0% {
+        width: 100%;
+        height: 30%;
+    }
+    100% {
+        width: 100%;
+        height: 100%;
+    }
 }
 
 .top-left-corner-space {
     width: 100%;
     height: 30%;
-    display: inline-block;
+    display: none;
 }
 
 .top-left-corner img {
@@ -117,7 +132,6 @@ function topLeftCornerClick() {
 }
 
 .main-content {
-    overflow-y: auto;
     width: 100%;
 }
 
@@ -168,13 +182,12 @@ function topLeftCornerClick() {
 }
 
 .main-content .description {
-    font-size: 24px;
     padding: 16px;
     font-size: 18px;
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 0px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -191,10 +204,6 @@ function topLeftCornerClick() {
     overflow-wrap: break-word;
 }
 
-.header-text {
-    font-size: 16px;
-}
-
 .title {
     font-size: 24px;
     font-weight: bold;
@@ -204,5 +213,27 @@ function topLeftCornerClick() {
     padding: 16px;
     padding-bottom: 64px;
 }
+
+/* --- Media Queries ---*/
+@media screen and (min-width: 768px) {
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        display: block;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .title {
+        font-size: 32px;
+    }
+
+    .body-text {
+        font-size: 24px !important;
+    }
+}
+/* --- End Media Queries ---*/
 
 </style>

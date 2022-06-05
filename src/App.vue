@@ -1,7 +1,7 @@
 <script setup>
-import CartridgesManager from "./components/CartridgesManager.vue";
-import GameView from "./components/GameView.vue";
-import resources from "./components/resources.js";
+import CartridgesManager from "./components/CartridgesManager/CartridgesManager.vue";
+import GameView from "./components/GameView/GameView.vue";
+import resources from "./components/utilities/resources";
 import postal from "postal";
 import { ref } from "vue";
 
@@ -11,6 +11,7 @@ channel.subscribe("cartridgeSelected", (message) => setCartridgeSelection(messag
 const borderWidth = 1;
 
 const views = resources.views;
+const displayView = ref(false);
 const currentView = ref(resources.views.cartridgesManager);
 const gameViewProps = ref(null);
 const cartridgeSelected = ref(false);
@@ -37,12 +38,17 @@ function setCartridgeSelection(message) {
   cartridgeSelected.value = message;
 }
 
+// Wait for 'Select Cartridge' title to float to top
+setTimeout(() => {
+  displayView.value = true;
+}, 1800)
+
 </script>
 
 <template>
   <main id="main">
     <div class="select-cartridge-title" v-bind:class="{ 'selected': cartridgeSelected }">Select a Cartridge</div>
-    <div class="views-cont">
+    <div class="views-cont" v-bind:style="{ 'display': displayView ? 'flex' : 'none' }">
       <CartridgesManager v-if="currentView === views.cartridgesManager" v-bind:mainBorderWidth="borderWidth"></CartridgesManager>
       <GameView  v-else-if="currentView === views.gameView" v-bind="gameViewProps"></GameView>
     </div>
@@ -68,7 +74,7 @@ main {
   width: 100%;
   height: 100%;
   opacity: 0;
-  animation: fade-in .3s forwards 1.8s;
+  animation: fade-in .3s forwards;
 }
 
 .select-cartridge-title {
@@ -88,6 +94,19 @@ main {
 .selected {
   color: transparent;
 }
+
+/* --- Key Frames ---*/
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* --- End Key Frames ---*/
 
 @keyframes title-animation {
   0% {
@@ -109,4 +128,19 @@ main {
     top: 0px;
   }
 }
+
+/* --- Media Queries ---*/
+@media screen and (min-width: 768px) {
+  .select-cartridge-title {
+    font-size: 3rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  main {
+    width: 80%;
+    margin: 0px 10%;
+  }
+}
+/*--- End Media Queries ---*/
 </style>

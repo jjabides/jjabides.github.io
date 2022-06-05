@@ -9,8 +9,9 @@
 <script setup>
 import { reactive, computed, watch, onMounted } from "vue";
 import postal from "postal";
-import resources from "./resources";
+import resources from "../../utilities/resources";
 import tippy, { animateFill, roundArrow } from "tippy.js";
+import { getTop, getLeft } from "../../utilities/utilities";
 import 'tippy.js/themes/light.css'
 import 'tippy.js/dist/backdrop.css';
 import 'tippy.js/animations/shift-away.css';
@@ -73,24 +74,24 @@ function animate() {
 
     var centerTop = (mainEl.clientHeight / 2) - (cartridgeEl.clientWidth / 2);
     var centerLeft = (mainEl.clientWidth / 2) - (cartridgeEl.clientWidth / 2);
-
+    var dx = centerLeft - getLeft(cartridgeAnchorEl, mainEl);
+    var dy = centerTop - getTop(cartridgeAnchorEl, mainEl);
+    
     cartridgeAnchorEl.animate(
     [
         { 
-            top: (centerTop - 150) + 'px', 
-            left: centerLeft + 'px',
+            transform: `translate(${dx}px, ${dy - 150}px)`
         }
     ],
     {
         duration: 500,
         fill: 'forwards'
     }).finished.then(() => {
-
         cartridgeAnchorEl.animate(
             [
                 { 
-                    top: (centerTop - 25) + 'px', 
-                    left: centerLeft + 'px' }
+                    transform: `translate(${dx}px, ${dy - 25}px)`
+                }
             ],
             {
                 delay: 400,
@@ -102,8 +103,7 @@ function animate() {
             cartridgeAnchorEl.animate(
                 [
                     {
-                        top: (centerTop - 50) + 'px',
-                        left: centerLeft + 'px'
+                        transform: `translate(${dx}px, ${dy - 50}px)`
                     }
                 ],
                 {
@@ -161,6 +161,9 @@ onMounted(() => {
 
 <style scoped>
 
+
+
+
 .cartridge {
     width: 96px;
     height: 96px;
@@ -217,5 +220,14 @@ img {
         transform: rotateZ(720deg);
     }
 }
+
+/* --- Media Queries ---*/
+@media screen and (min-width: 768px) {
+    .cartridge {
+        width: 120px;
+        height: 120px;
+    }
+}
+/* --- End Media Queries ---*/
 
 </style>

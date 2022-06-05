@@ -10,10 +10,11 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
-import Cartridge from './Cartridge.vue';
-import Gameboy from "./Gameboy.vue";
-import CartridgeFactory from "./CartridgeFactory";
-import GameboyFactory from "./GameboyFactory";
+import Cartridge from './Cartridge/Cartridge.vue';
+import { getTop, getLeft } from '../utilities/utilities';
+import Gameboy from "./Gameboy/Gameboy.vue";
+import CartridgeFactory from "./Cartridge/CartridgeFactory";
+import GameboyFactory from "./Gameboy/GameboyFactory";
 import postal from "postal";
 
 const props = defineProps({ mainBorderWidth: Number })
@@ -43,18 +44,6 @@ function click(index) {
     var gameboyEl = document.getElementById('gameboy');
     gameboyProps.top = getTop(gameboyEl, mainEl);
     gameboyProps.left = getLeft(gameboyEl, mainEl);
-
-    function getTop(element, relativeEl) {
-        var elRect = element.getBoundingClientRect();
-        var relativeELRect = relativeEl.getBoundingClientRect();
-        return elRect.top - relativeELRect.top - props.mainBorderWidth;
-    }
-
-    function getLeft(element, relativeEl) {
-        var elRect = element.getBoundingClientRect();
-        var relativeELRect = relativeEl.getBoundingClientRect();
-        return elRect.left - relativeELRect.left - props.mainBorderWidth;
-    }
 }
 </script>
 
