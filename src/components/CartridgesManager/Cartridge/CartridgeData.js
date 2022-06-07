@@ -12,8 +12,8 @@ const cartridgeData = {
     },
     cartridge2: {
         images: [
-            `${imagesPath}Track_Attack_Preview1.PNG`,
-            `${imagesPath}Track_Attack_Preview2.PNG`, 
+            `${imagesPath}Track_Attack_Gameplay.gif`,
+            `${imagesPath}Track_Attack_Preview1.PNG`, 
             `${imagesPath}Track_Attack_Preview3.PNG`
         ],
         icon: `${imagesPath}Track_Attack_Preview1.PNG`,
@@ -30,7 +30,17 @@ const cartridgeData = {
                 link: "https://drive.google.com/file/d/1jnN2yKuC7CQgsLAKahJ4ogkLZ2n3FsAp/view?usp=sharing"
             }
         ]
-    }
+    },
+    cartridge3: {
+        images: [
+            `${imagesPath}AbsentChess_Gameplay.gif`,
+            `${imagesPath}AbsentChess_Preview1.PNG`
+        ],
+        icon: `${imagesPath}AbsentChess_Preview1.PNG`,
+        title: "Absent Chess",
+        descriptionUrl: `${descriptionPath}testFile.txt`,
+        interactiveImg: true
+    },
 
 }
 

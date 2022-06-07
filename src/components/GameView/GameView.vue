@@ -82,6 +82,7 @@ function topLeftCornerClick() {
     height: 100%;
     position: relative;
     animation: fade-in .3s forwards;
+    color: white;
 }
 
 .content {

@@ -10,7 +10,9 @@
                 </svg>
             </div>
             <div class="images-cont" id="images-cont">
-                <img v-for="image in props.images" v-bind:src="image" :style="{ transform: translateX }"/>
+                <div class="image-cont" v-for="image in props.images" :style="{ transform: translateX }">
+                    <img v-bind:src="image" />
+                </div>
             </div>
             <div class="navigate-right" @click="(e) => navigate(e, 'right')" :style="{ visibility: navRightActive ? 'visible' : 'hidden'}">
             <svg class="right-arrow" width="100%" viewBox="0 0 100 100">
@@ -105,12 +107,19 @@ window.addEventListener('resize', () => {
     pointer-events: auto;
 }
 
-.images-cont img {
+.images-cont .image-cont {
     width: 100%;
     height: 100%;
     object-fit: contain;
     position: relative;
     transition: transform .4s ease-in-out;
+}
+
+.images-cont .image-cont img {
+
+width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 @keyframes fade-in {
