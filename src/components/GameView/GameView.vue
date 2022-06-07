@@ -1,5 +1,5 @@
 <script setup>
-import {  ref, reactive, computed } from "vue";
+import { ref, reactive, computed } from "vue";
 import resources from "../utilities/resources";
 import ImageCarousel from "./ImageCarousel.vue";
 import postal from "postal";
@@ -15,11 +15,11 @@ var props = defineProps({
 
 const description = ref("");
 const fullscreen = ref(false);
-const topLeftCornerId = "top-left-corner";
+const gamePreviewId = "game-preview";
 
 const imageCarouselProps = reactive({
     images: props.images,
-    topLeftCornerId,
+    gamePreviewId,
     fullscreen,
 })
 
@@ -49,34 +49,33 @@ function topLeftCornerClick() {
 </script>
 
 <template>
-<div class="game-view">
-    <div class="content">
-        <div class="top-left-corner" v-bind:id="topLeftCornerId" v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }" @click="topLeftCornerClick">
-        <ImageCarousel v-bind="imageCarouselProps"></ImageCarousel>
-    </div>
-    <div class="main-content">
-        <div class="top-left-corner-space"></div>
-        <div class="header">
-            <div class="row-1">
-                <div class="title">{{ props.title }}</div>
-                <div class="back-btn" :class="{ 'fullscreen': fullscreen }" @click="back">BACK</div>
+    <div class="game-view">
+        <div class="preview-cont">
+            <div class="game-preview" v-bind:id="gamePreviewId"
+                v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }"
+                @click="topLeftCornerClick">
+                <ImageCarousel v-bind="imageCarouselProps"></ImageCarousel>
+            </div>
+            <div class="main-content" :style="{ 'margin-top': fullscreen ? '30%' : '0'}">
+                <div class="header">
+                    <div class="row-1">
+                        <div class="title">{{ props.title }}</div>
+                        <div class="back-btn" :class="{ 'fullscreen': fullscreen }" @click="back">BACK</div>
+                    </div>
+                </div>
+                <div class="description body-text" v-html="description"></div>
+                <div class="links body-text">
+                    <div v-if="props.links" v-for="(item, index) in props.links">
+                        <div class="link-title">{{ item.title }}</div>
+                        <a class="link" v-bind:href="item.link">{{ item.link }}</a>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="description body-text" v-html="description"></div>
-        <div class="links body-text">
-            <div v-if="props.links" v-for="(item, index) in props.links">
-                <div class="link-title">{{ item.title }}</div>
-                <a class="link" v-bind:href="item.link">{{ item.link }}</a>
-            </div>
-        </div>
     </div>
-    </div>
-    
-</div>
 </template>
 
 <style scoped>
-
 .game-view {
     width: 100%;
     height: 100%;
@@ -85,48 +84,34 @@ function topLeftCornerClick() {
     color: white;
 }
 
-.content {
+.preview-cont {
     width: 100%;
     height: 100%;
     overflow-y: auto;
 }
 
-.top-left-corner {
+.game-preview {
     width: 100%;
     height: 30%;
     position: relative;
     background-color: black;
     overflow: hidden;
+    transition: width .3s, height .3s;
 }
 
-.top-left-corner.interactive {
+.game-preview.interactive {
     cursor: pointer;
 }
 
-.top-left-corner.fullscreen {
+.game-preview.fullscreen {
+    top: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     position: absolute;
-    animation: fullscreen-anim .3s forwards;
 }
 
-@keyframes fullscreen-anim {
-    0% {
-        width: 100%;
-        height: 30%;
-    }
-    100% {
-        width: 100%;
-        height: 100%;
-    }
-}
-
-.top-left-corner-space {
-    width: 100%;
-    height: 30%;
-    display: none;
-}
-
-.top-left-corner img {
+.game-preview img {
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -134,6 +119,7 @@ function topLeftCornerClick() {
 
 .main-content {
     width: 100%;
+    transition: height .3s;
 }
 
 .main-content .header {
@@ -198,10 +184,11 @@ function topLeftCornerClick() {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color:#464646;
+    background-color: #464646;
 }
 
-.link-title, .link {
+.link-title,
+.link {
     overflow-wrap: break-word;
 }
 
@@ -235,6 +222,6 @@ function topLeftCornerClick() {
         font-size: 24px !important;
     }
 }
-/* --- End Media Queries ---*/
 
+/* --- End Media Queries ---*/
 </style>

@@ -3,10 +3,10 @@
         <rect rx="20" ry="20" width="200" height="100" style="fill:rgb(82, 81, 81);"></rect>
         <rect class="screen" v-bind:class="{ 'turnon': turnOnScreen }" x="37.5" y="10" rx="8" ry="8" width="125" height="80" style="fill: black"></rect>
         <g class="buttons" transform="translate(0, 28)">
-            <circle cx="183" cy="0" r="4" fill="blue"></circle>
-            <circle cx="175" cy="8" r="4" fill="green"></circle>
-            <circle cx="191" cy="8" r="4" fill="red"></circle>
-            <circle cx="183" cy="16" r="4" fill="yellow"></circle>
+            <circle cx="183" cy="0" r="4" fill="rgb(83, 83, 208)"></circle>
+            <circle cx="175" cy="8" r="4" fill="rgb(83, 83, 208)"></circle>
+            <circle cx="191" cy="8" r="4" fill="rgb(83, 83, 208)"></circle>
+            <circle cx="183" cy="16" r="4" fill="rgb(83, 83, 208)"></circle>
         </g>
         <g class="d-pad" fill="rgb(62, 62, 62)" transform="translate(8, 24)">
             <rect y="8" width="24" height="8"></rect>

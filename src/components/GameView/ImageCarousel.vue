@@ -103,21 +103,20 @@ window.addEventListener('resize', () => {
 
 .images-cont {
     display: flex;
-    width: 80%;
+    width: 100%;
     pointer-events: auto;
 }
 
 .images-cont .image-cont {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    flex-shrink: 0;
     position: relative;
     transition: transform .4s ease-in-out;
 }
 
 .images-cont .image-cont img {
-
-width: 100%;
+    width: 100%;
     height: 100%;
     object-fit: contain;
 }

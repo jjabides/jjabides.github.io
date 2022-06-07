@@ -161,7 +161,9 @@ onMounted(() => {
 
 <style scoped>
 
-
+.cartridge-anchor {
+    margin: 0px 16px;
+}
 
 
 .cartridge {
@@ -226,6 +228,7 @@ img {
     .cartridge {
         width: 120px;
         height: 120px;
+        padding: 10px;
     }
 }
 /* --- End Media Queries ---*/
