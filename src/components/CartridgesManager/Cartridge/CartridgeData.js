@@ -42,7 +42,30 @@ const cartridgeData = {
         descriptionUrl: `${descriptionPath}absentChess.txt`,
         interactiveImg: true
     },
-
+    cartridge4: {
+        images: [
+            `${imagesPath}Me.jpg`,
+        ],
+        icon: `${imagesPath}Me.jpg`,
+        title: "About Me",
+        descriptionUrl: `${descriptionPath}aboutMe.txt`,
+        interactiveImg: false,
+        links: [
+            {
+                title: "Contact:",
+                link: "jj.abides@gmail.com",
+                email: true
+            },
+            {
+                title: "LinkedIn:",
+                link: "https://www.linkedin.com/in/jjabides/",
+            },
+            {
+                title: "GitHub:",
+                link: "https://github.com/jjabides"
+            }
+        ]
+    },
 }
 
 

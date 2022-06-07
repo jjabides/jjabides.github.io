@@ -42,7 +42,9 @@ function back() {
     channel.publish("selectView", message);
 }
 
-function topLeftCornerClick() {
+function gamePreviewClick() {
+    if (!props.interactiveImg)
+        return;
     fullscreen.value = !fullscreen.value;
 }
 
@@ -53,7 +55,7 @@ function topLeftCornerClick() {
         <div class="preview-cont">
             <div class="game-preview" v-bind:id="gamePreviewId"
                 v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }"
-                @click="topLeftCornerClick">
+                @click="gamePreviewClick">
                 <ImageCarousel v-bind="imageCarouselProps"></ImageCarousel>
             </div>
             <div class="main-content" :style="{ 'margin-top': fullscreen ? '30%' : '0'}">
@@ -67,7 +69,7 @@ function topLeftCornerClick() {
                 <div class="links body-text">
                     <div v-if="props.links" v-for="(item, index) in props.links">
                         <div class="link-title">{{ item.title }}</div>
-                        <a class="link" v-bind:href="item.link">{{ item.link }}</a>
+                        <a class="link" v-bind:href="item.email ? `mailto: ${item.link}` : item.link">{{ item.link }}</a>
                     </div>
                 </div>
             </div>
@@ -173,13 +175,12 @@ function topLeftCornerClick() {
 }
 
 ::-webkit-scrollbar {
-    width: 0px;
+    width: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: #7c7c7c;
     border-radius: 4px;
-    display: none;
 }
 
 ::-webkit-scrollbar-thumb:hover {

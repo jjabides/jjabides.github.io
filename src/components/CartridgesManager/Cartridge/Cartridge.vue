@@ -169,7 +169,7 @@ onMounted(() => {
 .cartridge {
     width: 96px;
     height: 96px;
-    padding: 12px;
+    padding: 10px;
     border-radius: 18px;
     background: gray;
     cursor: pointer;
