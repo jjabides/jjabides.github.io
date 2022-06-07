@@ -1,0 +1,10 @@
+Absent Chess is a small game I am currently working on. It is a variant of Chess where you and the opponent start off with a King and summon pieces each turn.
+<br/>
+<br/>
+Rather than waiting for your turn to move your own pieces, you and your opponent may choose to move your pieces in the same turn or delay the movement of a piece for another turn. This allows you to create elaborate setups where several of your own pieces coordinate to attack enemy King.
+<br/>
+<br/>
+Because pieces can collide in the same turn, I established a priority system where certain pieces will win over other pieces in a collision. For example, if a moving Pawn collides with a moving Rook, the Rook will beat the Pawn because the Rook has higher priority.
+<br/>
+<br/>
+However, when a moving piece collides with a stationary piece (i.e. delayed movement), the stationary piece will always lose. So when delaying the movement of your pieces, you risk having your stationary pieces get knocked out by moving pieces.

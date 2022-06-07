@@ -81,7 +81,6 @@ function topLeftCornerClick() {
     height: 100%;
     position: relative;
     animation: fade-in .3s forwards;
-    color: white;
 }
 
 .preview-cont {
@@ -195,6 +194,7 @@ function topLeftCornerClick() {
 .title {
     font-size: 24px;
     font-weight: bold;
+    color: white;
 }
 
 .links {

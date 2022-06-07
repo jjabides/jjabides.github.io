@@ -34,11 +34,12 @@ const cartridgeData = {
     cartridge3: {
         images: [
             `${imagesPath}AbsentChess_Gameplay.gif`,
+            `${imagesPath}AbsentChess_Gameplay2.gif`,
             `${imagesPath}AbsentChess_Preview1.PNG`
         ],
         icon: `${imagesPath}AbsentChess_Preview1.PNG`,
         title: "Absent Chess",
-        descriptionUrl: `${descriptionPath}testFile.txt`,
+        descriptionUrl: `${descriptionPath}absentChess.txt`,
         interactiveImg: true
     },
 
