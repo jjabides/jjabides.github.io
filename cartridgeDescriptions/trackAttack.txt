@@ -1,0 +1,17 @@
+Track Attack is a side-scrolling platformer where obstacles are generated based on a given song.
+<br/>
+While Track Attack provides its own soundtrack to work with, players can provide their own music files. Our algorithm, using the Fast Fourier Transforms library to read soundtracks, will generate obstacles at certain time intervals and at certain pitch ranges.
+<br/>
+<br/>
+Me and 3 other people developed this game over the course of 6 weeks for an introduction Game Development class. I was in charge of UI, music, sound effects, and obstacle design.
+
+<br/>
+<br/>
+<br/>
+Tools Used:
+<br/>
+- Unity
+<br/>
+- Fast Fourier Transforms (C# library)
+<br/>
+- LMMS
