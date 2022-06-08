@@ -1,5 +1,5 @@
-const descriptionPath = "public/cartridgeDescriptions/";
-const imagesPath = "public/images/";
+const descriptionPath = "cartridgeDescriptions/";
+const imagesPath = "images/";
 
 const cartridgeData = {
 
