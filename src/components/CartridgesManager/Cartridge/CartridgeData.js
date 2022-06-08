@@ -1,11 +1,11 @@
-const descriptionPath = "./src/assets/cartridgeDescriptions/";
-const imagesPath = "./src/assets/images/"
+const descriptionPath = "public/cartridgeDescriptions/";
+const imagesPath = "public/images/";
 
 const cartridgeData = {
 
     cartridge1: {
-        images: ["./src/assets/images/temple.jpg"],
-        icon: "./src/assets/images/temple.jpg",
+        images: [`${imagesPath}temple.jpg`],
+        icon: `${imagesPath}temple.jpg`,
         title: "Test",
         descriptionUrl: `${descriptionPath}testFile.txt`,
         interactiveImg: true
