@@ -1,21 +1,26 @@
 const descriptionPath = "cartridgeDescriptions/";
 const imagesPath = "images/";
 
-const cartridgeData = {
+export const types = {
+    Carousel: "Carousel",
+    Demo: "Demo",
+}
 
+const cartridgeData = {
     cartridge1: {
-        images: [`${imagesPath}temple.jpg`],
-        icon: `${imagesPath}temple.jpg`,
-        title: "Test",
-        descriptionUrl: `${descriptionPath}testFile.txt`,
-        interactiveImg: true
+        type: types.Demo,
+        icon: `${imagesPath}Track_Attack_Preview1.PNG`,
+        title: "Track Attack",
+        descriptionUrl: `${descriptionPath}trackAttack.txt`,
+        interactiveImg: true,
     },
     cartridge2: {
         images: [
             `${imagesPath}Track_Attack_Gameplay.gif`,
-            `${imagesPath}Track_Attack_Preview1.PNG`, 
+            `${imagesPath}Track_Attack_Preview1.PNG`,
             `${imagesPath}Track_Attack_Preview3.PNG`
         ],
+        type: types.Carousel,
         icon: `${imagesPath}Track_Attack_Preview1.PNG`,
         title: "Track Attack",
         descriptionUrl: `${descriptionPath}trackAttack.txt`,
@@ -37,6 +42,7 @@ const cartridgeData = {
             `${imagesPath}AbsentChess_Gameplay2.gif`,
             `${imagesPath}AbsentChess_Preview1.PNG`
         ],
+        type: types.Carousel,
         icon: `${imagesPath}AbsentChess_Preview1.PNG`,
         title: "Absent Chess",
         descriptionUrl: `${descriptionPath}absentChess.txt`,
@@ -46,6 +52,7 @@ const cartridgeData = {
         images: [
             `${imagesPath}Me.jpg`,
         ],
+        type: types.Carousel,
         icon: `${imagesPath}Me.jpg`,
         title: "About Me",
         descriptionUrl: `${descriptionPath}aboutMe.txt`,

@@ -4,13 +4,16 @@ import resources from "../utilities/resources";
 import ImageCarousel from "./ImageCarousel.vue";
 import postal from "postal";
 import $ from "jquery";
+import { types } from "../CartridgesManager/Cartridge/CartridgeData.js";
+import Demo from "./Demo.vue";
 
 var props = defineProps({
     images: Array,
     title: String,
     descriptionUrl: String,
     interactiveImg: Boolean,
-    links: Array
+    links: Array,
+    type: String
 })
 
 const description = ref("");
@@ -56,7 +59,8 @@ function gamePreviewClick() {
             <div class="game-preview" v-bind:id="gamePreviewId"
                 v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }"
                 @click="gamePreviewClick">
-                <ImageCarousel v-bind="imageCarouselProps"></ImageCarousel>
+                <ImageCarousel v-if="props.type === types.Carousel" v-bind="imageCarouselProps"></ImageCarousel>
+                <Demo v-else></Demo>
             </div>
             <div class="main-content" :style="{ 'margin-top': fullscreen ? '30%' : '0'}">
                 <div class="header">
