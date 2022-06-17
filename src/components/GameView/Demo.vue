@@ -1,5 +1,5 @@
 <template>
-    <svg viewBox="0 0 632 632" height="100%" style="background-color: white;" :key="componentKey">
+    <svg viewBox="0 0 632 632" height="100%" width="100%" style="background-color: white;" :key="componentKey">
         <!-- grid lines -->
         <g>
             <path class="arc" id="arc-1" v-for="arc in arcs" v-bind:d="arc.d"
@@ -7,15 +7,28 @@
             stroke-width="1" fill="none"></path>
         </g>
 
-        <!-- units -->
+        <!-- end lines -->
+        <line opacity="0" class="start-line" v-bind="startLineCoordinates">
+            <animate attributeType="CSS" attributeName="opacity" from="0" to="1" dur=".5s" fill="freeze" ></animate>
+        </line>
+        <line opacity="0" class="end-line" v-bind="endLineCoordinates">
+            <animate attributeType="CSS" attributeName="opacity" from="0" to="1" begin="2s" dur=".2s" fill="freeze" ></animate>
+        </line>
+
+        <!-- sun rays -->
         <g v-for="ray in sunRays">
-            <!-- <path class="sun-ray" v-bind="{ d: ray.d, transform: ray.rotation, fill: ray.fill}"></path> -->
-            <!-- <circle v-bind="{ r: 4, cx: ray.cx, cy: ray.cy, transform: ray.rotation }"></circle> -->
-            <rect class="sun-ray" height="8" v-bind="{ x: ray.cx, y: ray.cy, transform: ray.rotation, fill: ray.fill }">
-                <animate attributeType="CSS" attributeName="width" v-bind="{ from: '0', to: `${ray.units}`, begin: `${ray.animationDelay}s`}" dur="2s" fill="freeze"></animate>
-                <animate attributeType="CSS" attributeName="opacity" v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s`}" dur="2s" fill="freeze"></animate>
+            <rect class="sun-ray" height="8" v-bind="{ x: ray.cx - 4, y: ray.cy - 4, transform: ray.rotation, fill: ray.fill, rx: 4 }">
+                <animate attributeType="CSS" attributeName="width" v-bind="{ from: '0', to: `${ray.units}`, begin: `${ray.animationDelay}s`}" dur="1s" fill="freeze"></animate>
+                <animate attributeType="CSS" attributeName="opacity" v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s`}" dur="1s" fill="freeze"></animate>
+                
             </rect>
+            <circle r="4" opacity="0" fill="black" v-bind="{ cx: ray.cx, cy: ray.cy, transform: ray.rotation }">
+                <animate attributeType="CSS" attributeName="cx" v-bind="{ from: ray.cx, to: `${ray.cx + ray.units - 8}`, begin: `${ray.animationDelay}s`}" dur="1s" fill="freeze"></animate>
+                <animate attributeType="CSS" attributeName="opacity" v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s`}" dur="1s" fill="freeze"></animate>
+            </circle>
         </g>
+
+        
     </svg>
 </template>
 
@@ -28,6 +41,8 @@ const state = reactive({
 const arcs = ref([]);
 const sunRays = ref([]);
 const componentKey = ref(0);
+const endLineCoordinates = ref(null);
+const startLineCoordinates = ref(null);
 
 const jobTrackStates = {
     animating: "animating",
@@ -37,6 +52,7 @@ const jobTrackStates = {
 onMounted(() => {
     drawArc();
     drawRays();
+    drawEndLine();
 })
 
 function redraw() {
@@ -103,34 +119,54 @@ function drawRays() {
     var y;
     var l;
     var radius = 96; // Distance from center of circle. Should make radius of largest circle a global and derive from there...
+    var delayStagger = 0;
 
-    for (var i = 0; i < totalSlots; i++) {
+    for (var i = 0; i < weeks; i++) {
         var deg = i * degPerUnit * (Math.PI / 180); // Number of degrees to rotate, then converted to radians
         x = center + radius * Math.sin(deg); // x offset
         y = radius - radius * Math.cos(deg) + 220; // 220 = Y offset
 
-        l = Math.random() * 100;
+        l = Math.random() * 175;
         var delay = deg / degToLastUnit;
-        console.log(delay);
 
         var ray = {
-            d: `M ${x - rayRadius} ${y}
-                L ${x - rayRadius} ${y - l}
-                A 4 4 0 0 1 ${x + rayRadius} ${y - l}
-                L ${x + rayRadius} ${y}
-                A 4 4 0 0 1 ${x - rayRadius} ${y}`,
             rotation: `rotate(${i * degPerUnit - 90} ${x} ${y})`,
             cx: x,
             cy: y,
-            fill: 'gray',
-            units: l,
-            animationDelay: delay
+            fill: '#c1c1c1',
+            units: l < 8 ? 8 : l,
+            animationDelay: delay + delayStagger
         }
+
+        delayStagger += 0.01;
 
         rays.push(ray);
     }
 
     sunRays.value = rays;
+}
+
+function drawEndLine() {
+    const outerArcRadius = 256;
+    const innerArcRadius = 128;
+    const center = 316;
+
+    var degPerUnit;
+    var degToEndLinePosition;
+
+     // Get the number of degrees we need to rotate to get to the final week, if 60 units are split between 360 degrees
+    var weeks = getWeeksInYear(2022);
+    degPerUnit = 360 / 60;
+    degToEndLinePosition = (degPerUnit * (weeks - 1)) * (Math.PI / 180); // In radians
+
+    var x1 = center + outerArcRadius * Math.sin(degToEndLinePosition);
+    var y1 = outerArcRadius - (outerArcRadius * Math.cos(degToEndLinePosition)) + 60; // 60 = Y offset
+
+    var x2 = center + innerArcRadius * Math.sin(degToEndLinePosition);
+    var y2 = innerArcRadius - (innerArcRadius * Math.cos(degToEndLinePosition)) + 188;
+
+    startLineCoordinates.value = { x1: center, y1: 60, x2: center, y2: 188 }
+    endLineCoordinates.value = { x1: x1, y1: y1, x2: x2, y2: y2 };
 }
 
 function getWeeksInYear(year) {
@@ -180,13 +216,13 @@ class JobTrackState {
 </script>
 
 <style scoped>
-svg .arc {
-    animation: draw 2s forwards linear;
-}
 
-/* .animate {
-    animation: draw 1s forwards ease-in-out;
-} */
+.arc, .start-line, .end-line {
+    stroke: #bcbcbc;
+}
+.arc {
+    animation: draw 2s forwards ease-in-out;
+}
 
 @keyframes draw {
     to {
@@ -194,7 +230,14 @@ svg .arc {
     }
 }
 
+
+
 svg g .sun-ray {
+    transition: fill .3s;
+    pointer-events: auto;
+}
+svg g .sun-ray:hover {
+    fill: #fe6c00 !important;
 }
 
 
