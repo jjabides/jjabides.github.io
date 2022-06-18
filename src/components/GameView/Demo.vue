@@ -1,43 +1,78 @@
 <template>
-    <svg viewBox="0 0 632 632" height="100%" width="100%" style="background-color: white;" :key="componentKey">
-        <!-- grid lines -->
-        <g>
-            <path class="arc" id="arc-1" v-for="arc in arcs" v-bind:d="arc.d"
-            :style="{ 'stroke-dasharray': arc.strokeDashArray, 'stroke-dashoffset': arc.strokeDashOffset }" stroke="black"
-            stroke-width="1" fill="none"></path>
-        </g>
+    <div class="demo-cont">
+        <div class="side-panel">
+            <div class="filter-panel">
+                <div class="title">FILTER BY</div>
+                <div class="selection-cont selection-1">
+                    <div class="selection-color-cont">
+                        <div class="selection-color"></div>
+                    </div>
+                    <div class="selection-btn"></div>
+                </div>
+                <div class="selection-cont selection-2">
+                    <div class="selection-color-cont">
+                        <div class="selection-color"></div>
+                    </div>
+                    <div class="selection-btn"></div>
+                </div>
+                <div class="selection-cont selection-3">
+                    <div class="selection-color-cont">
+                        <div class="selection-color"></div>
+                    </div>
+                    <div class="selection-btn"></div>
+                </div>
+            </div>
+            <div class="reset-anim-btn" @click="exitFullscreen"></div>
+        </div>
+        <svg viewBox="0 0 632 632" height="100%" width="100%" class="sun-burst-svg" :key="componentKey">
+            <!-- grid lines -->
+            <g>
+                <path class="arc" id="arc-1" v-for="arc in arcs" v-bind:d="arc.d"
+                    :style="{ 'stroke-dasharray': arc.strokeDashArray, 'stroke-dashoffset': arc.strokeDashOffset }"
+                    stroke="black" stroke-width="1" fill="none"></path>
+            </g>
 
-        <!-- end lines -->
-        <line opacity="0" class="start-line" v-bind="startLineCoordinates">
-            <animate attributeType="CSS" attributeName="opacity" from="0" to="1" dur=".5s" fill="freeze" ></animate>
-        </line>
-        <line opacity="0" class="end-line" v-bind="endLineCoordinates">
-            <animate attributeType="CSS" attributeName="opacity" from="0" to="1" begin="2s" dur=".2s" fill="freeze" ></animate>
-        </line>
+            <!-- end lines -->
+            <line opacity="0" class="start-line" v-bind="startLineCoordinates">
+                <animate attributeType="CSS" attributeName="opacity" from="0" to="1" dur=".5s" fill="freeze"></animate>
+            </line>
+            <line opacity="0" class="end-line" v-bind="endLineCoordinates">
+                <animate attributeType="CSS" attributeName="opacity" from="0" to="1" begin="2s" dur=".2s" fill="freeze">
+                </animate>
+            </line>
 
-        <!-- sun rays -->
-        <g v-for="ray in sunRays">
-            <rect class="sun-ray" height="8" v-bind="{ x: ray.cx - 4, y: ray.cy - 4, transform: ray.rotation, fill: ray.fill, rx: 4 }">
-                <animate attributeType="CSS" attributeName="width" v-bind="{ from: '0', to: `${ray.units}`, begin: `${ray.animationDelay}s`}" dur="1s" fill="freeze"></animate>
-                <animate attributeType="CSS" attributeName="opacity" v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s`}" dur="1s" fill="freeze"></animate>
-                
-            </rect>
-            <circle r="4" opacity="0" fill="black" v-bind="{ cx: ray.cx, cy: ray.cy, transform: ray.rotation }">
-                <animate attributeType="CSS" attributeName="cx" v-bind="{ from: ray.cx, to: `${ray.cx + ray.units - 8}`, begin: `${ray.animationDelay}s`}" dur="1s" fill="freeze"></animate>
-                <animate attributeType="CSS" attributeName="opacity" v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s`}" dur="1s" fill="freeze"></animate>
-            </circle>
-        </g>
+            <!-- sun rays -->
+            <g v-for="ray in sunRays">
+                <rect class="sun-ray" height="8"
+                    v-bind="{ x: ray.cx - 4, y: ray.cy - 4, transform: ray.rotation, fill: ray.fill, rx: 4 }">
+                    <animate attributeType="CSS" attributeName="width"
+                        v-bind="{ from: '0', to: `${ray.units}`, begin: `${ray.animationDelay}s` }" dur="1s"
+                        fill="freeze"></animate>
+                    <animate attributeType="CSS" attributeName="opacity"
+                        v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s` }" dur="1s" fill="freeze"></animate>
 
-        
-    </svg>
+                </rect>
+                <circle r="4" opacity="0" fill="black" v-bind="{ cx: ray.cx, cy: ray.cy, transform: ray.rotation }">
+                    <animate attributeType="CSS" attributeName="cx"
+                        v-bind="{ from: ray.cx, to: `${ray.cx + ray.units - 8}`, begin: `${ray.animationDelay}s` }"
+                        dur="1s" fill="freeze"></animate>
+                    <animate attributeType="CSS" attributeName="opacity"
+                        v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s` }" dur="1s" fill="freeze"></animate>
+                </circle>
+            </g>
+        </svg>
+    </div>
+
 </template>
 
 <script setup>
 import { onMounted, reactive, ref } from "vue";
+import postal from "postal";
 const state = reactive({
     demoState: null
 })
 
+const channel = postal.channel("Notifications");
 const arcs = ref([]);
 const sunRays = ref([]);
 const componentKey = ref(0);
@@ -59,8 +94,8 @@ function redraw() {
     componentKey.value = componentKey.value + 1;
 
     setTimeout(() => {
-    redraw();
-}, 5000)
+        redraw();
+    }, 5000)
 }
 
 setTimeout(() => {
@@ -154,7 +189,7 @@ function drawEndLine() {
     var degPerUnit;
     var degToEndLinePosition;
 
-     // Get the number of degrees we need to rotate to get to the final week, if 60 units are split between 360 degrees
+    // Get the number of degrees we need to rotate to get to the final week, if 60 units are split between 360 degrees
     var weeks = getWeeksInYear(2022);
     degPerUnit = 360 / 60;
     degToEndLinePosition = (degPerUnit * (weeks - 1)) * (Math.PI / 180); // In radians
@@ -210,16 +245,104 @@ class JobTrackState {
     }
 }
 
-
+function exitFullscreen() {
+    setTimeout(() => {
+        channel.publish("exitFullscreen");
+    }, 0)
+}
 
 
 </script>
 
 <style scoped>
 
-.arc, .start-line, .end-line {
+.demo-cont {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+/* --- start side-panel --- */
+
+.side-panel {
+    width: 300px;
+    height: 100%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-panel .filter-panel {
+    width: 160px;
+    height: 208px;
+    border-radius: 18px;
+    background: #e1e1e1;
+    margin: 36px 0px 0px 36px;
+    padding: 16px;
+}
+
+.filter-panel .title {
+    color: black;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 24px;
+}
+
+.filter-panel .selection-cont {
+    display: flex;
+    height: 32px;
+    margin-bottom: 16px;
+}
+
+.selection-cont .selection-color-cont {
+    height: 32px;
+    width: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.selection-color-cont .selection-color {
+    height: 8px;
+    width: 8px;
+    border-radius: 4px;
+}
+
+.selection-cont .selection-btn {
+    width: 116px;
+    height: 32px;
+    border-radius: 18px;
+    background-color: white;
+}
+
+.selection-1 .selection-color {
+    background-color: #c1c1c1;
+}
+
+.side-panel .reset-anim-btn {
+    width: 100px;
+    height: 36px;
+    background: orange;
+    border-radius: 18px;
+    margin: auto 0px 36px 36px;
+    cursor: pointer;
+}
+
+/* --- end side panel --- */
+
+/* --- start sun burst diagram  */
+.sun-burst-svg {
+    background: white;
+}
+
+.arc,
+.start-line,
+.end-line {
     stroke: #bcbcbc;
 }
+
 .arc {
     animation: draw 2s forwards ease-in-out;
 }
@@ -230,16 +353,15 @@ class JobTrackState {
     }
 }
 
-
-
 svg g .sun-ray {
     transition: fill .3s;
     pointer-events: auto;
 }
+
 svg g .sun-ray:hover {
     fill: #fe6c00 !important;
 }
 
-
+/* --- end sun burst diagram --- */
 
 </style>

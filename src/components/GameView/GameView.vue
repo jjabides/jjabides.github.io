@@ -19,11 +19,25 @@ var props = defineProps({
 const description = ref("");
 const fullscreen = ref(false);
 const gamePreviewId = "game-preview";
+const channel = postal.channel("Notifications");
 
+// --- Subscriptions --- //
+channel.subscribe("exitFullscreen", exitFullscreen);
+
+// To do: create props dynamically
 const imageCarouselProps = reactive({
     images: props.images,
     gamePreviewId,
     fullscreen,
+})
+
+const demoProps = reactive({
+    gamePreviewId,
+    fullscreen,
+})
+
+const interactiveImage = computed(() => {
+    return props.type === types.Demo || props.images
 })
 
 // Get description file
@@ -41,16 +55,19 @@ function back() {
         view: resources.views.cartridgesManager,
     }
 
-    var channel = postal.channel("Notifications");
+    
     channel.publish("selectView", message);
 }
 
-function gamePreviewClick() {
-    if (!props.interactiveImg)
-        return;
-    fullscreen.value = !fullscreen.value;
+function enterFullscreen() {
+    if (!fullscreen.value)
+        fullscreen.value = true;
 }
 
+function exitFullscreen() {
+    if (fullscreen.value)
+        fullscreen.value = false;
+}
 </script>
 
 <template>
@@ -58,9 +75,9 @@ function gamePreviewClick() {
         <div class="preview-cont">
             <div class="game-preview" v-bind:id="gamePreviewId"
                 v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }"
-                @click="gamePreviewClick">
+                @click="enterFullscreen">
                 <ImageCarousel v-if="props.type === types.Carousel" v-bind="imageCarouselProps"></ImageCarousel>
-                <Demo v-else></Demo>
+                <Demo v-else v-bind=""></Demo>
             </div>
             <div class="main-content" :style="{ 'margin-top': fullscreen ? '30%' : '0'}">
                 <div class="header">
@@ -112,8 +129,8 @@ function gamePreviewClick() {
     top: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none;
     position: absolute;
+    cursor: initial;
 }
 
 .game-preview img {

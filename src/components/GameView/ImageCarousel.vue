@@ -9,7 +9,7 @@
                     <path d="M75 100 L25 50 L75 0" style="stroke:white; stroke-width:1; fill:none;"></path>
                 </svg>
             </div>
-            <div class="images-cont" id="images-cont">
+            <div class="images-cont" id="images-cont" @click="exitFullscreen">
                 <div class="image-cont" v-for="image in props.images" :style="{ transform: translateX }">
                     <img v-bind:src="image" />
                 </div>
@@ -25,6 +25,7 @@
 
 <script setup>
 import { reactive, computed, onMounted , ref, watch} from "vue"
+import postal from "postal";
 
 const props = defineProps({
     images: Array,
@@ -32,6 +33,9 @@ const props = defineProps({
     fullscreen: Boolean
 })
 
+const channel = postal.channel("Notifications");
+
+// To Do: move all properties to "state"?
 const state = reactive({ index: 0 });
 const carouselMode = ref(false);
 const translateX = ref('');
@@ -74,6 +78,12 @@ function updatePositioning() {
 window.addEventListener('resize', () => {
     updatePositioning();
 })
+
+function exitFullscreen() {
+    setTimeout(() => {
+        channel.publish("exitFullscreen");
+    }, 0)
+}
 </script>
 
 <style scoped>
@@ -104,7 +114,7 @@ window.addEventListener('resize', () => {
 .images-cont {
     display: flex;
     width: 100%;
-    pointer-events: auto;
+    cursor: pointer;
 }
 
 .images-cont .image-cont {
