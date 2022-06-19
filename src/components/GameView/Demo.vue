@@ -27,7 +27,9 @@
                 <g v-for="line in legendLines">
                     <line class="legend-line" v-bind="{ x1: line.x1, x2: line.x2, y1: line.y, y2: line.y }"></line>
                     <circle v-bind="{ cx: line.x1, cy: line.y, r: 3 }"></circle>
-                    <text dominant-baseline="middle" text-anchor="end" v-bind="{ x: line.x1 - 8, y: line.y }">{{ line.text }}</text>
+                    <text dominant-baseline="middle" text-anchor="end" v-bind="{ x: line.x1 - 8, y: line.y }">{{
+                            line.text
+                    }}</text>
                 </g>
             </g>
 
@@ -36,19 +38,61 @@
                 <rect class="sun-ray" height="8"
                     v-bind="{ x: ray.cx - 4, y: ray.cy - 4, transform: ray.rotation, fill: ray.fill, rx: 4 }">
                     <animate attributeType="CSS" attributeName="width"
-                        v-bind="{ from: '0', to: `${ray.units}`, begin: `${ray.animationDelay}s` }" dur=".5s"
-                        fill="freeze"></animate>
+                        v-bind="{ from: '0', to: `${ray.l}`, begin: `${ray.animationDelay}s` }" dur=".5s" fill="freeze">
+                    </animate>
                     <animate attributeType="CSS" attributeName="opacity"
                         v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s` }" dur=".5s" fill="freeze"></animate>
 
                 </rect>
                 <circle r="4" opacity="0" fill="black" v-bind="{ cx: ray.cx, cy: ray.cy, transform: ray.rotation }">
                     <animate attributeType="CSS" attributeName="cx"
-                        v-bind="{ from: ray.cx, to: `${ray.cx + ray.units - 8}`, begin: `${ray.animationDelay}s` }"
+                        v-bind="{ from: ray.cx, to: `${ray.cx + ray.l - 8}`, begin: `${ray.animationDelay}s` }"
                         dur=".5s" fill="freeze"></animate>
                     <animate attributeType="CSS" attributeName="opacity"
                         v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s` }" dur=".5s" fill="freeze"></animate>
                 </circle>
+            </g>
+
+            <!-- center text -->
+            <g class="center-text" v-if="centerText">
+                <animate attributeType="CSS" attributeName="opacity" from="0" to="1" dur="1.5s" fill="freeze"></animate>
+
+
+                <path id="upper-curve" v-bind="{ d: centerText.topTextPath }" fill="none"></path>
+                <path id="lower-curve" v-bind="{ d: centerText.bottomTextPath }" fill="none"></path>
+                <text>
+                    <textPath text-anchor="middle" startOffset="50%" xlink:href="#upper-curve">{{ centerText.topText }}
+                    </textPath>
+                    <textPath dominant-baseline="hanging" text-anchor="middle" startOffset="50%"
+                        xlink:href="#lower-curve">
+                        <tspan class="ju-used">{{ `${JUUsed} JU USED OF ${1000 * 52}` }}</tspan>
+                    </textPath>
+
+
+                </text>
+
+                <g class="ju-used-cont">
+                    <g class="selected-unit-1" v-if="centerText.text1">
+                        <circle class="selected-unit-color" r="4"
+                            v-bind="{ cx: centerText.cx, cy: centerText.cy1, fill: centerText.fill1 }"></circle>
+                        <text>
+                            <tspan class="center" dominant-baseline="middle" text-anchor="end"
+                                v-bind="{ x: centerText.cx + 76, y: centerText.cy1 }">{{ centerText.text1 }}</tspan>
+                            <tspan class="units" dominante-baseline="middle"
+                                v-bind="{ x: centerText.cx + 82, y: centerText.cy1 }">JU</tspan>
+                        </text>
+                    </g>
+                    <g class="selected-unit-2" v-if="centerText.text2">
+                        <circle class="selected-unit-color" r="4"
+                            v-bind="{ cx: centerText.cx, cy: centerText.cy2, fill: centerText.fill2 }"></circle>
+                        <text>
+                            <tspan class="center" dominant-baseline="middle" text-anchor="end"
+                                v-bind="{ x: centerText.cx + 76, y: centerText.cy2 }">{{ centerText.text2 }}</tspan>
+                            <tspan class="units" dominante-baseline="middle"
+                                v-bind="{ x: centerText.cx + 82, y: centerText.cy2 }">JU</tspan>
+                        </text>
+                    </g>
+                </g>
             </g>
         </svg>
     </div>
@@ -72,14 +116,18 @@ channel.subscribe("selectWeek", ({ week, weekSelector }) => selectWeek(week, wee
 const arcs = ref([]);
 const sunRays = ref([]);
 const legendLines = ref([]);
+const centerText = ref(null);
 const componentKey = ref(0);
 const endLineCoordinates = ref(null);
 const startLineCoordinates = ref(null);
 const selectedYear = ref((new Date()).getFullYear());
+const yearCount = 3;
 const currentWeek = ref(getWeekNumber(new Date()));
 const selectedWeek1 = ref(currentWeek.value);
 const selectedWeek2 = ref();
 const maxJobUnitLine = 1000;
+const jusPerYear = ref(getJUsPerYear());
+const JUUsed = ref(Math.floor(jusPerYear.value[selectedYear.value].reduce((sum, a) => sum + a, 0)));
 
 // --- positioning --- //
 const offsetFromTop = 60;
@@ -96,6 +144,8 @@ const filterPanelParams = reactive({
     selectedWeek2: selectedWeek2,
     currentWeek: currentWeek,
 
+    jusPerYear: jusPerYear,
+
     accentBlue: accentBlue,
     accentOrange: accentOrange,
     gray: gray
@@ -110,6 +160,7 @@ function draw() {
     drawRays();
     drawEndLine();
     drawLegendLines();
+    drawCenterText();
 }
 
 function redraw() {
@@ -158,8 +209,9 @@ function drawRays() {
     const totalSlots = 60;
     const degPerUnit = 360 / totalSlots;
     const rayRadius = 4;
-    const weeks = getWeeksInYear(selectedYear.value);
-    const degToLastUnit = (degPerUnit * (weeks - 1)) * (Math.PI / 180); // In radians
+    const weekCount = selectedYear.value === (new Date()).getFullYear() ? currentWeek.value : getWeeksInYear(selectedYear.value);
+    const degToLastUnit = (degPerUnit * (weekCount)) * (Math.PI / 180); // In radians
+    const maxLength = 32 * 5;
 
     var x;
     var y;
@@ -167,14 +219,17 @@ function drawRays() {
     var radius = 96; // Distance from center of circle. Should make radius of largest circle a global and derive from there...
     var delayStagger = 0;
 
-    for (var i = 0; i < weeks; i++) {
+    for (var i = 0; i < weekCount; i++) {
         var deg = i * degPerUnit * (Math.PI / 180); // Number of degrees to rotate, then converted to radians
         x = center + radius * Math.sin(deg); // x offset
         y = radius - radius * Math.cos(deg) + 220; // 220 = Y offset
 
-        l = Math.random() * 175;
+        const jobUnit = jusPerYear.value[selectedYear.value][i]
+        l = (jobUnit / maxJobUnitLine) * maxLength;
+
         var delay = deg / degToLastUnit;
 
+        // Note: weeks start from 1, index i starts from 0
         const fill = selectedWeek1.value === i + 1 ? accentOrange :
             selectedWeek2.value === i + 1 ? accentBlue : gray;
 
@@ -183,7 +238,8 @@ function drawRays() {
             cx: x,
             cy: y,
             fill: ref(fill),
-            units: l < 8 ? 8 : l,
+            l: l < 8 ? 8 : l,
+            units: l,
             animationDelay: delay + delayStagger
         }
 
@@ -229,12 +285,65 @@ function drawLegendLines() {
                 width: lineWidth,
                 x1: center - lineWidth,
                 x2: center,
-                y: offsetFromTop + distanceToNextLine * i, 
+                y: offsetFromTop + distanceToNextLine * i,
                 text: "" + (maxJobUnitLine - lineDistance * i)
             });
     }
 
     legendLines.value = lines;
+}
+
+function drawCenterText() {
+    var x;
+    var y;
+    var x2;
+    var r = 78;
+    var radians = 54 * (Math.PI / 180);
+
+    var topTextPath;
+    var bottomTextPath;
+    var topText = "WEEKLY JOB UNITS USAGE";
+
+    x = center - (r * Math.sin(radians));
+    y = r - (r * Math.cos(radians)) + 238; // 238 = offset from the top
+    x2 = center + (r * Math.sin(radians));
+
+    // Top text
+    topTextPath = `M ${x} ${y} A ${r} ${r} 0 0 1 ${x2} ${y}`;
+
+    // Bottom text
+    y = 394 - (r - (r * Math.cos(radians))); // 394 = offset from the top, starting at the bottom of the circle
+    bottomTextPath = `M ${x} ${y} A ${r} ${r} 0 0 0 ${x2} ${y}`;
+
+    // Get placement for circles and middle text
+    var cx = center - 60;
+    var cy1;
+    var cy2;
+
+    if (selectedWeek1.value && selectedWeek2.value) {
+        cy1 = center - 15;
+        cy2 = center + 15;
+    } else if (selectedWeek1.value) {
+        cy1 = center;
+    } else if (selectedWeek2.value) {
+        cy2 = center;
+    }
+
+    const selectedWeek1JUs = jusPerYear.value[selectedYear.value][selectedWeek1.value - 1];
+    const selectedWeek2JUs = jusPerYear.value[selectedYear.value][selectedWeek2.value - 1];
+
+    centerText.value = {
+        topText: topText,
+        topTextPath: topTextPath,
+        bottomTextPath: bottomTextPath,
+        cx: cx,
+        cy1: ref(cy1),
+        cy2: ref(cy2),
+        fill1: accentOrange,
+        fill2: accentBlue,
+        text1: ref(selectedWeek1JUs ? Math.floor(selectedWeek1JUs) : null),
+        text2: ref(selectedWeek2JUs ? Math.floor(selectedWeek2JUs) : null)
+    };
 }
 
 function getWeeksInYear(year) {
@@ -269,23 +378,81 @@ function selectYear(year) {
 }
 
 function selectWeek(week, weekSelector) {
-    if (weekSelector === 1) {
-        const currentRay = sunRays.value[selectedWeek1.value - 1];
-        const selectedRay = sunRays.value[week - 1];
-        selectedWeek1.value = week;
+    const selectedWeekRef = weekSelector === 1 ? selectedWeek1 : selectedWeek2;
+    const fillColor = weekSelector === 1 ? accentOrange : accentBlue;
 
+    if (!week) {
+        if (!selectedWeekRef.value)
+            return;
+
+        const currentRay = sunRays.value[selectedWeekRef.value - 1];
         currentRay.fill = gray;
-        selectedRay.fill = accentOrange;
-    }
-    else if (weekSelector === 2) {
-        const currentRay = sunRays.value[selectedWeek2.value - 1];
+        selectedWeekRef.value = null;
+
+    } else {
+        const currentRay = sunRays.value[selectedWeekRef.value - 1];
         const selectedRay = sunRays.value[week - 1];
-        selectedWeek2.value = week;
+        selectedWeekRef.value = week;
 
         if (currentRay)
             currentRay.fill = gray;
-        selectedRay.fill = accentBlue;
+        selectedRay.fill = fillColor;
     }
+
+    updateCenterText(week, weekSelector);
+}
+
+function updateCenterText(week, weekSelector) {
+    const jobUnits = jusPerYear.value[selectedYear.value][week - 1];
+    var cy1;
+    var cy2;
+
+    if (selectedWeek1.value && selectedWeek2.value) {
+        cy1 = center - 15;
+        cy2 = center + 15;
+    } else if (selectedWeek1.value) {
+        cy1 = center;
+    } else if (selectedWeek2.value) {
+        cy2 = center;
+    }
+
+    if (!week) {
+        if (weekSelector === 1) {
+            centerText.value.text1 = null;
+
+        } else {
+            centerText.value.text2 = null;
+        }
+    } else {
+        if (weekSelector === 1) {
+            centerText.value.text1 = Math.floor(jobUnits);
+        } else {
+            centerText.value.text2 = Math.floor(jobUnits);
+        }
+    }
+
+    centerText.value.cy1 = cy1;
+    centerText.value.cy2 = cy2;
+}
+
+function getJUsPerYear() {
+    var retVal = {};
+    for (var year = selectedYear.value; year > selectedYear.value - 3; year--) {
+        retVal[year] = generateJUs(year)
+    }
+
+    return retVal;
+}
+
+function generateJUs(year) {
+    var retVal = [];
+    const weekCount = year === (new Date()).getFullYear() ? currentWeek.value : getWeeksInYear(year);
+
+    for (var i = 0; i < weekCount; i++) {
+        retVal.push(Math.random() * maxJobUnitLine);
+    }
+
+    return retVal;
 }
 
 </script>
@@ -363,8 +530,16 @@ svg g .sun-ray:hover {
 }
 
 .legend-lines text {
-    font-size: 14px;
+    font-size: 12px;
     fill: #bcbcbc;
+}
+
+.center-text text {
+    font-size: 10px;
+}
+
+.center-text .ju-used-cont text {
+    font-size: 20px;
 }
 
 /* --- end sun burst diagram --- */

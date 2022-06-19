@@ -87,6 +87,8 @@ const props = defineProps({
     selectedWeek2: Number,
     currentWeek: Number,
 
+    jusPerYear: Object,
+
     accentBlue: String,
     accentOrange: String,
     gray: String
@@ -121,14 +123,7 @@ onMounted(() => {
 })
 
 function setYearOptions() {
-    let currentYear = props.selectedYear;
-    var retVal = [];
-    for (var i = 0; i < 3; i++) {
-        retVal.push(currentYear);
-        currentYear--;
-    }
-
-    return retVal;
+    return Object.keys(props.jusPerYear).reverse().map((x) => Number.parseInt(x));
 }
 
 function toggleSelectionWindow(num) {
@@ -153,12 +148,14 @@ function selectWeek(week, weekSelector) {
         currentSelectedWeek.activeColor = null;
     }
 
-    selectedWeek.selected = true;
+    if (selectedWeek.value) {
+        selectedWeek.selected = true;
 
-    if (weekSelector === 1) {
-        selectedWeek.activeColor = props.accentOrange;
-    } else {
-        selectedWeek.activeColor = props.accentBlue;
+        if (weekSelector === 1) {
+            selectedWeek.activeColor = props.accentOrange;
+        } else {
+            selectedWeek.activeColor = props.accentBlue;
+        }
     }
 
     channel.publish("selectWeek", { week: week, weekSelector: weekSelector });
