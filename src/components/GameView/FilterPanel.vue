@@ -19,6 +19,7 @@
                 <div class="item-row-cont">
                     <div class="item-row" v-for="item in state.selectionWindow1Items"
                         :class="{ 'selected': item === props.selectedYear }" @click="selectYear(item)">{{ item }}
+                        <div class="dot"></div>
                     </div>
                 </div>
             </div>
@@ -42,7 +43,9 @@
                     <div class="item-row" v-for="item in state.selectionWindow2Items" @click="selectWeek(item.value, 1)"
                         v-bind:class="{ selected: item.selected }">{{
                                 item.display
-                        }}</div>
+                        }}
+                        <div class="dot" :style="{ background: item.activeColor }"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,7 +67,9 @@
                     <div class="item-row" v-for="item in state.selectionWindow3Items" @click="selectWeek(item.value, 2)"
                         v-bind:class="{ selected: item.selected }">{{
                                 item.display
-                        }}</div>
+                        }}
+                        <div class="dot" :style="{ background: item.activeColor }"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -80,7 +85,11 @@ const props = defineProps({
     selectedYear: Number,
     selectedWeek1: Number,
     selectedWeek2: Number,
-    currentWeek: Number
+    currentWeek: Number,
+
+    accentBlue: String,
+    accentOrange: String,
+    gray: String
 })
 
 const state = reactive({
@@ -139,9 +148,18 @@ function selectWeek(week, weekSelector) {
     const currentSelectedWeek = weeks.find((x) => x.value === weekNum);
     const selectedWeek = weeks.find((x) => x.value === week);
 
-    if (currentSelectedWeek)
+    if (currentSelectedWeek) {
         currentSelectedWeek.selected = false;
+        currentSelectedWeek.activeColor = null;
+    }
+
     selectedWeek.selected = true;
+
+    if (weekSelector === 1) {
+        selectedWeek.activeColor = props.accentOrange;
+    } else {
+        selectedWeek.activeColor = props.accentBlue;
+    }
 
     channel.publish("selectWeek", { week: week, weekSelector: weekSelector });
 }
@@ -153,7 +171,7 @@ function setByWeekOptions() {
     var currentWeekDate = new Date();
     var currentWeekNum = getWeekNumber(currentWeekDate);
 
-    avOps.push({ display: "NOT SPECIFIED", selected: ref(false), activeColor: null, value: null });
+    avOps.push({ display: "NOT SPECIFIED", selected: ref(false), activeColor: ref(null), value: null });
 
     var currentYear = (new Date()).getFullYear();
     var weeks;
@@ -171,10 +189,10 @@ function setByWeekOptions() {
         avOps.push(
             {
                 display: `THIS WEEK ${startOfWeek} - ${endOfWeek}`,
-                activeColor: null,
+                activeColor: ref(selectedWeek1 === currentWeekNum ? props.accentOrange : null),
                 buttonDisplay: `WEEK ${currentWeekNum}`,
                 value: currentWeekNum,
-                selected: ref(selectedWeek1 === currentWeekNum || selectedWeek2 === currentWeekNum)
+                selected: ref(selectedWeek1 === currentWeekNum)
             });
         weeks = currentWeekNum - 1;
     } else {
@@ -200,9 +218,9 @@ function setByWeekOptions() {
 
         avOps.push({
             display: `WEEK ${padWithZeros(weekNum, 2)} ${startOfWeek} - ${endOfWeek}`,
-            activeColor: null,
+            activeColor: ref(null),
             value: weekNum,
-            selected: ref(selectedWeek1 === weekNum || selectedWeek2 === currentWeekNum)
+            selected: ref(selectedWeek1 === weekNum)
         });
 
         // Increment date to next week
@@ -417,6 +435,33 @@ onUnmounted(() => {
 .item-row:hover,
 .item-row.selected {
     color: white;
+}
+
+.item-row .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    background: white;
+    margin: 0px 16px 0px auto;
+    display: none;
+}
+
+.item-row:hover .dot {
+    display: block;
+    opacity: .5;
+}
+
+.selection-2 .selection-window .item-row:hover .dot {
+    background: #ffb401;
+}
+
+.selection-3 .selection-window .item-row:hover .dot {
+    background: #00cbfd;
+}
+
+.item-row.selected .dot {
+    display: block;
+    opacity: 1;
 }
 
 .item-row.selected {

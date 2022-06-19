@@ -22,6 +22,15 @@
                 </animate>
             </line>
 
+            <!-- legend lines -->
+            <g class="legend-lines">
+                <g v-for="line in legendLines">
+                    <line class="legend-line" v-bind="{ x1: line.x1, x2: line.x2, y1: line.y, y2: line.y }"></line>
+                    <circle v-bind="{ cx: line.x1, cy: line.y, r: 3 }"></circle>
+                    <text dominant-baseline="middle" text-anchor="end" v-bind="{ x: line.x1 - 8, y: line.y }">{{ line.text }}</text>
+                </g>
+            </g>
+
             <!-- sun rays -->
             <g v-for="(ray, index) in sunRays">
                 <rect class="sun-ray" height="8"
@@ -62,6 +71,7 @@ channel.subscribe("selectWeek", ({ week, weekSelector }) => selectWeek(week, wee
 
 const arcs = ref([]);
 const sunRays = ref([]);
+const legendLines = ref([]);
 const componentKey = ref(0);
 const endLineCoordinates = ref(null);
 const startLineCoordinates = ref(null);
@@ -69,7 +79,13 @@ const selectedYear = ref((new Date()).getFullYear());
 const currentWeek = ref(getWeekNumber(new Date()));
 const selectedWeek1 = ref(currentWeek.value);
 const selectedWeek2 = ref();
-const currentMonth = ref();
+const maxJobUnitLine = 1000;
+
+// --- positioning --- //
+const offsetFromTop = 60;
+const center = 316;
+
+// --- colors --- //
 const accentBlue = '#00cbfd';
 const accentOrange = '#ffb401';
 const gray = '#c1c1c1';
@@ -78,13 +94,12 @@ const filterPanelParams = reactive({
     selectedYear: selectedYear,
     selectedWeek1: selectedWeek1,
     selectedWeek2: selectedWeek2,
-    currentWeek: currentWeek
-})
+    currentWeek: currentWeek,
 
-const jobTrackStates = {
-    animating: "animating",
-    interactive: "interactive"
-}
+    accentBlue: accentBlue,
+    accentOrange: accentOrange,
+    gray: gray
+})
 
 onMounted(() => {
     draw();
@@ -94,22 +109,12 @@ function draw() {
     drawArc();
     drawRays();
     drawEndLine();
+    drawLegendLines();
 }
 
 function redraw() {
     componentKey.value = componentKey.value + 1;
-
-    // setTimeout(() => {
-    //     redraw();
-    // }, 5000)
 }
-
-setTimeout(() => {
-    //redraw();
-}, 5000)
-
-
-
 
 function drawArc() {
     arcs.value = [];
@@ -149,11 +154,9 @@ function drawArc() {
 
 function drawRays() {
     sunRays.value = [];
-    const offsetFromTop = 60;
     var rays = [];
     const totalSlots = 60;
     const degPerUnit = 360 / totalSlots;
-    const center = 316;
     const rayRadius = 4;
     const weeks = getWeeksInYear(selectedYear.value);
     const degToLastUnit = (degPerUnit * (weeks - 1)) * (Math.PI / 180); // In radians
@@ -172,8 +175,8 @@ function drawRays() {
         l = Math.random() * 175;
         var delay = deg / degToLastUnit;
 
-        const fill = selectedWeek1.value === i + 1 ? accentOrange : 
-                    selectedWeek2.value === i + 1 ? accentBlue : gray;
+        const fill = selectedWeek1.value === i + 1 ? accentOrange :
+            selectedWeek2.value === i + 1 ? accentBlue : gray;
 
         var ray = {
             rotation: `rotate(${i * degPerUnit - 90} ${x} ${y})`,
@@ -195,7 +198,6 @@ function drawRays() {
 function drawEndLine() {
     const outerArcRadius = 256;
     const innerArcRadius = 128;
-    const center = 316;
 
     var degPerUnit;
     var degToEndLinePosition;
@@ -215,6 +217,26 @@ function drawEndLine() {
     endLineCoordinates.value = { x1: x1, y1: y1, x2: x2, y2: y2 };
 }
 
+function drawLegendLines() {
+    var lines = [];
+    var lineDistance = maxJobUnitLine / 5;
+    const distanceToNextLine = 32;
+    const lineWidth = 280;
+
+    for (var i = 0; i < 5; i++) {
+        lines.push(
+            {
+                width: lineWidth,
+                x1: center - lineWidth,
+                x2: center,
+                y: offsetFromTop + distanceToNextLine * i, 
+                text: "" + (maxJobUnitLine - lineDistance * i)
+            });
+    }
+
+    legendLines.value = lines;
+}
+
 function getWeeksInYear(year) {
     var d = new Date(year, 11, 31);
     var week = getWeekNumber(d);
@@ -232,28 +254,6 @@ function getWeekNumber(date) {
     // Adjust to Thursday in week 1 and count number of weeks from date to week1.
     return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000
         - 3 + (week1.getDay() + 6) % 7) / 7);
-}
-
-class JobTrackState {
-    constructor(state) {
-        this.state = state;
-    }
-
-    stateStart() {
-        this[start]()
-    }
-
-    stateEnd() {
-
-    }
-
-    animating() {
-        this.stateEnd();
-    }
-
-    interactive() {
-        this.stateEnd();
-    }
 }
 
 function exitFullscreen() {
@@ -334,7 +334,8 @@ function selectWeek(week, weekSelector) {
 
 .arc,
 .start-line,
-.end-line {
+.end-line,
+.legend-line {
     stroke: #bcbcbc;
 }
 
@@ -355,6 +356,15 @@ svg g .sun-ray {
 
 svg g .sun-ray:hover {
     fill: #fe6c00 !important;
+}
+
+.legend-lines circle {
+    fill: #bcbcbc;
+}
+
+.legend-lines text {
+    font-size: 14px;
+    fill: #bcbcbc;
 }
 
 /* --- end sun burst diagram --- */
