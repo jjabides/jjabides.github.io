@@ -1,27 +1,7 @@
 <template>
     <div class="demo-cont">
         <div class="side-panel">
-            <div class="filter-panel">
-                <div class="title">FILTER BY</div>
-                <div class="selection-cont selection-1">
-                    <div class="selection-color-cont">
-                        <div class="selection-color"></div>
-                    </div>
-                    <div class="selection-btn"></div>
-                </div>
-                <div class="selection-cont selection-2">
-                    <div class="selection-color-cont">
-                        <div class="selection-color"></div>
-                    </div>
-                    <div class="selection-btn"></div>
-                </div>
-                <div class="selection-cont selection-3">
-                    <div class="selection-color-cont">
-                        <div class="selection-color"></div>
-                    </div>
-                    <div class="selection-btn"></div>
-                </div>
-            </div>
+            <FilterPanel v-bind="filterPanelParams"></FilterPanel>
             <div class="reset-anim-btn" @click="exitFullscreen"></div>
         </div>
         <svg viewBox="0 0 632 632" height="100%" width="100%" class="sun-burst-svg" :key="componentKey">
@@ -37,27 +17,28 @@
                 <animate attributeType="CSS" attributeName="opacity" from="0" to="1" dur=".5s" fill="freeze"></animate>
             </line>
             <line opacity="0" class="end-line" v-bind="endLineCoordinates">
-                <animate attributeType="CSS" attributeName="opacity" from="0" to="1" begin="2s" dur=".2s" fill="freeze">
+                <animate attributeType="CSS" attributeName="opacity" from="0" to="1" begin="1.5s" dur=".2s"
+                    fill="freeze">
                 </animate>
             </line>
 
             <!-- sun rays -->
-            <g v-for="ray in sunRays">
+            <g v-for="(ray, index) in sunRays">
                 <rect class="sun-ray" height="8"
-                    v-bind="{ x: ray.cx - 4, y: ray.cy - 4, transform: ray.rotation, fill: ray.fill, rx: 4 }">
+                    v-bind="{ x: ray.cx - 4, y: ray.cy - 4, transform: ray.rotation, fill: ray.fill, rx: 4 }" v-bind:class="{ selected: selectedWeek1 === index }">
                     <animate attributeType="CSS" attributeName="width"
-                        v-bind="{ from: '0', to: `${ray.units}`, begin: `${ray.animationDelay}s` }" dur="1s"
+                        v-bind="{ from: '0', to: `${ray.units}`, begin: `${ray.animationDelay}s` }" dur=".5s"
                         fill="freeze"></animate>
                     <animate attributeType="CSS" attributeName="opacity"
-                        v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s` }" dur="1s" fill="freeze"></animate>
+                        v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s` }" dur=".5s" fill="freeze"></animate>
 
                 </rect>
                 <circle r="4" opacity="0" fill="black" v-bind="{ cx: ray.cx, cy: ray.cy, transform: ray.rotation }">
                     <animate attributeType="CSS" attributeName="cx"
                         v-bind="{ from: ray.cx, to: `${ray.cx + ray.units - 8}`, begin: `${ray.animationDelay}s` }"
-                        dur="1s" fill="freeze"></animate>
+                        dur=".5s" fill="freeze"></animate>
                     <animate attributeType="CSS" attributeName="opacity"
-                        v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s` }" dur="1s" fill="freeze"></animate>
+                        v-bind="{ from: 0, to: 1, begin: `${ray.animationDelay}s` }" dur=".5s" fill="freeze"></animate>
                 </circle>
             </g>
         </svg>
@@ -66,18 +47,36 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, computed } from "vue";
 import postal from "postal";
+import FilterPanel from "./FilterPanel.vue";
 const state = reactive({
     demoState: null
 })
 
+// --- start subscriptions --- //
 const channel = postal.channel("Notifications");
+channel.subscribe("selectYear", (year) => selectYear(year));
+channel.subscribe("selectWeek", ({ week, weekSelector }) => selectWeek(week, weekSelector));
+// --- end subscriptions --- //
+
 const arcs = ref([]);
 const sunRays = ref([]);
 const componentKey = ref(0);
 const endLineCoordinates = ref(null);
 const startLineCoordinates = ref(null);
+const selectedYear = ref((new Date()).getFullYear());
+const currentWeek = ref(getWeekNumber(new Date()));
+const selectedWeek1 = ref(currentWeek.value);
+const selectedWeek2 = ref();
+const currentMonth = ref();
+
+const filterPanelParams = reactive({
+    selectedYear: selectedYear,
+    selectedWeek1: selectedWeek1,
+    selectedWeek2: selectedWeek2,
+    currentWeek: currentWeek
+})
 
 const jobTrackStates = {
     animating: "animating",
@@ -85,22 +84,28 @@ const jobTrackStates = {
 }
 
 onMounted(() => {
+    draw();
+})
+
+function draw() {
     drawArc();
     drawRays();
     drawEndLine();
-})
+}
 
 function redraw() {
     componentKey.value = componentKey.value + 1;
 
-    setTimeout(() => {
-        redraw();
-    }, 5000)
+    // setTimeout(() => {
+    //     redraw();
+    // }, 5000)
 }
 
 setTimeout(() => {
-    redraw();
+    //redraw();
 }, 5000)
+
+
 
 
 function drawArc() {
@@ -113,7 +118,7 @@ function drawArc() {
     const x1 = 316;
     var y1 = 60;
     var r = 256;
-    const weeks = getWeeksInYear(2022);
+    const weeks = getWeeksInYear(selectedYear.value);
 
     for (var i = arcCount; i > 0; i--) {
         const degPerUnit = 360 / 60;
@@ -147,7 +152,7 @@ function drawRays() {
     const degPerUnit = 360 / totalSlots;
     const center = 316;
     const rayRadius = 4;
-    const weeks = getWeeksInYear(2022);
+    const weeks = getWeeksInYear(selectedYear.value);
     const degToLastUnit = (degPerUnit * (weeks - 1)) * (Math.PI / 180); // In radians
 
     var x;
@@ -170,10 +175,11 @@ function drawRays() {
             cy: y,
             fill: '#c1c1c1',
             units: l < 8 ? 8 : l,
+            selected: computed(() => selectedWeek1.value === i + 1),
             animationDelay: delay + delayStagger
         }
 
-        delayStagger += 0.01;
+        delayStagger += 0.001;
 
         rays.push(ray);
     }
@@ -190,7 +196,7 @@ function drawEndLine() {
     var degToEndLinePosition;
 
     // Get the number of degrees we need to rotate to get to the final week, if 60 units are split between 360 degrees
-    var weeks = getWeeksInYear(2022);
+    var weeks = getWeeksInYear(selectedYear.value);
     degPerUnit = 360 / 60;
     degToEndLinePosition = (degPerUnit * (weeks - 1)) * (Math.PI / 180); // In radians
 
@@ -251,11 +257,22 @@ function exitFullscreen() {
     }, 0)
 }
 
+function selectYear(year) {
+    selectedYear.value = year;
+    draw();
+    redraw();
+}
+
+function selectWeek(week, weekSelector) {
+    if (weekSelector === 1)
+        selectedWeek1.value = week;
+    else if (weekSelector === 2)
+        selectedWeek2.value = week;
+}
 
 </script>
 
 <style scoped>
-
 .demo-cont {
     width: 100%;
     height: 100%;
@@ -270,55 +287,6 @@ function exitFullscreen() {
     background: white;
     display: flex;
     flex-direction: column;
-}
-
-.side-panel .filter-panel {
-    width: 160px;
-    height: 208px;
-    border-radius: 18px;
-    background: #e1e1e1;
-    margin: 36px 0px 0px 36px;
-    padding: 16px;
-}
-
-.filter-panel .title {
-    color: black;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    margin-left: 24px;
-}
-
-.filter-panel .selection-cont {
-    display: flex;
-    height: 32px;
-    margin-bottom: 16px;
-}
-
-.selection-cont .selection-color-cont {
-    height: 32px;
-    width: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.selection-color-cont .selection-color {
-    height: 8px;
-    width: 8px;
-    border-radius: 4px;
-}
-
-.selection-cont .selection-btn {
-    width: 116px;
-    height: 32px;
-    border-radius: 18px;
-    background-color: white;
-}
-
-.selection-1 .selection-color {
-    background-color: #c1c1c1;
 }
 
 .side-panel .reset-anim-btn {
@@ -344,7 +312,7 @@ function exitFullscreen() {
 }
 
 .arc {
-    animation: draw 2s forwards ease-in-out;
+    animation: draw 1.5s forwards ease-in-out;
 }
 
 @keyframes draw {
@@ -358,10 +326,13 @@ svg g .sun-ray {
     pointer-events: auto;
 }
 
+svg g .sun-ray.selected {
+    fill: #ffb401 !important;
+}
+
 svg g .sun-ray:hover {
     fill: #fe6c00 !important;
 }
 
 /* --- end sun burst diagram --- */
-
 </style>

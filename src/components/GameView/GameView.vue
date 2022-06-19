@@ -195,6 +195,7 @@ function exitFullscreen() {
     font-size: 18px;
 }
 
+/* --- start scrollbar --- */
 ::-webkit-scrollbar {
     width: 4px;
 }
@@ -207,6 +208,8 @@ function exitFullscreen() {
 ::-webkit-scrollbar-thumb:hover {
     background-color: #464646;
 }
+
+/* --- end scrollbar --- */
 
 .link-title,
 .link {
