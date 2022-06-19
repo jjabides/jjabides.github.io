@@ -1,7 +1,7 @@
 <template>
     <div class="filter-panel">
         <div class="title">FILTER BY</div>
-        <div class="selection-cont selection-1">
+        <div class="selection-cont selection-1" id="selection-1">
             <div class="selection-color-cont">
                 <div class="selection-color"></div>
             </div>
@@ -10,11 +10,20 @@
                 <div class="selection-text">YEAR {{ props.selectedYear }}</div>
             </div>
             <div class="selection-window" v-bind:class="{ open: state.selectionWindow1Open }">
-                <div class="item-row" v-for="item in state.selectionWindow1Items" @click="selectYear(item)">{{ item }}
+                <div class="close-btn" @click="toggleSelectionWindow(1)">
+                    <svg width="100%" height="100%" viewBox="0 0 100 100">
+                        <line x1="0" y1="0" x2="100" y2="100"></line>
+                        <line x1="100" y1="0" x2="0" y2="100"></line>
+                    </svg>
+                </div>
+                <div class="item-row-cont">
+                    <div class="item-row" v-for="item in state.selectionWindow1Items"
+                        :class="{ 'selected': item === props.selectedYear }" @click="selectYear(item)">{{ item }}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="selection-cont selection-2">
+        <div class="selection-cont selection-2" id="selection-2">
             <div class="selection-color-cont">
                 <div class="selection-color"></div>
             </div>
@@ -23,25 +32,47 @@
                 <div class="selection-text">{{ selectedWeek1Text }}</div>
             </div>
             <div class="selection-window" v-bind:class="{ open: state.selectionWindow2Open }">
+                <div class="close-btn" @click="toggleSelectionWindow(2)">
+                    <svg width="100%" height="100%" viewBox="0 0 100 100">
+                        <line x1="0" y1="0" x2="100" y2="100"></line>
+                        <line x1="100" y1="0" x2="0" y2="100"></line>
+                    </svg>
+                </div>
                 <div class="item-row-cont">
                     <div class="item-row" v-for="item in state.selectionWindow2Items" @click="selectWeek(item.value, 1)"
-                        v-bind:class="{ selected: item.value === props.selectedWeek1 }">{{
+                        v-bind:class="{ selected: item.selected }">{{
                                 item.display
                         }}</div>
                 </div>
             </div>
         </div>
-        <div class="selection-cont selection-3">
+        <div class="selection-cont selection-3" id="selection-3">
             <div class="selection-color-cont">
                 <div class="selection-color"></div>
             </div>
-            <div class="selection-btn"></div>
+            <div class="selection-btn" @click="toggleSelectionWindow(3)">
+                <div class="selection-text">{{ selectedWeek2Text }}</div>
+            </div>
+            <div class="selection-window" v-bind:class="{ open: state.selectionWindow3Open }">
+                <div class="close-btn" @click="toggleSelectionWindow(3)">
+                    <svg width="100%" height="100%" viewBox="0 0 100 100">
+                        <line x1="0" y1="0" x2="100" y2="100"></line>
+                        <line x1="100" y1="0" x2="0" y2="100"></line>
+                    </svg>
+                </div>
+                <div class="item-row-cont">
+                    <div class="item-row" v-for="item in state.selectionWindow3Items" @click="selectWeek(item.value, 2)"
+                        v-bind:class="{ selected: item.selected }">{{
+                                item.display
+                        }}</div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, computed } from "vue";
+import { reactive, ref, onMounted, computed, onUnmounted } from "vue";
 import postal from "postal";
 
 const channel = postal.channel("Notifications");
@@ -58,11 +89,26 @@ const state = reactive({
     selectionWindow3Open: false,
 
     selectionWindow1Items: setYearOptions(),
-    selectionWindow2Items: setByWeekOptions()
+    selectionWindow2Items: [],
+    selectionWindow3Items: []
 })
 
+const selectionItems = setByWeekOptions();
+state.selectionWindow2Items = selectionItems;
+state.selectionWindow3Items = selectionItems;
+
 const selectedWeek1Text = computed(() => {
-    return props.selectedWeek1 ? 'WEEK ' + padWithZeros(props.selectedWeek1 , 2): '';
+    return props.selectedWeek1 ? 'WEEK ' + padWithZeros(props.selectedWeek1, 2) : '';
+})
+
+const selectedWeek2Text = computed(() => {
+    return props.selectedWeek2 ? 'WEEK ' + padWithZeros(props.selectedWeek2, 2) : '';
+})
+
+
+
+onMounted(() => {
+    setOffClickEvents();
 })
 
 function setYearOptions() {
@@ -86,6 +132,17 @@ function selectYear(year) {
 }
 
 function selectWeek(week, weekSelector) {
+    const weeks = state.selectionWindow2Items;
+
+    const weekNum = weekSelector === 1 ? props.selectedWeek1 : props.selectedWeek2;
+
+    const currentSelectedWeek = weeks.find((x) => x.value === weekNum);
+    const selectedWeek = weeks.find((x) => x.value === week);
+
+    if (currentSelectedWeek)
+        currentSelectedWeek.selected = false;
+    selectedWeek.selected = true;
+
     channel.publish("selectWeek", { week: week, weekSelector: weekSelector });
 }
 
@@ -96,7 +153,7 @@ function setByWeekOptions() {
     var currentWeekDate = new Date();
     var currentWeekNum = getWeekNumber(currentWeekDate);
 
-    avOps.push({ display: "NOT SPECIFIED", selected: false, activeColor: null, value: null });
+    avOps.push({ display: "NOT SPECIFIED", selected: ref(false), activeColor: null, value: null });
 
     var currentYear = (new Date()).getFullYear();
     var weeks;
@@ -116,7 +173,8 @@ function setByWeekOptions() {
                 display: `THIS WEEK ${startOfWeek} - ${endOfWeek}`,
                 activeColor: null,
                 buttonDisplay: `WEEK ${currentWeekNum}`,
-                value: currentWeekNum
+                value: currentWeekNum,
+                selected: ref(selectedWeek1 === currentWeekNum || selectedWeek2 === currentWeekNum)
             });
         weeks = currentWeekNum - 1;
     } else {
@@ -143,7 +201,8 @@ function setByWeekOptions() {
         avOps.push({
             display: `WEEK ${padWithZeros(weekNum, 2)} ${startOfWeek} - ${endOfWeek}`,
             activeColor: null,
-            value: weekNum
+            value: weekNum,
+            selected: ref(selectedWeek1 === weekNum || selectedWeek2 === currentWeekNum)
         });
 
         // Increment date to next week
@@ -191,6 +250,34 @@ function padWithZeros(num, digits) {
     while (s.length < digits) s = "0" + s;
     return s;
 }
+
+function setOffClickEvents() {
+    const selection1El = document.getElementById('selection-1');
+    const selection2El = document.getElementById('selection-2');
+    const selection3El = document.getElementById('selection-3');
+
+    document.addEventListener('click', function (event) {
+        const isClickInside1 = selection1El.contains(event.target);
+        const isClickInside2 = selection2El.contains(event.target);
+        const isClickInside3 = selection3El.contains(event.target);
+
+        if (!isClickInside1) {
+            state.selectionWindow1Open = false;
+        }
+
+        if (!isClickInside2) {
+            state.selectionWindow2Open = false;
+        }
+
+        if (!isClickInside3) {
+            state.selectionWindow3Open = false;
+        }
+    })
+}
+
+onUnmounted(() => {
+    // Dispose Click events
+})
 
 </script>
 
@@ -273,8 +360,6 @@ function padWithZeros(num, digits) {
     background-color: #00cbfd;
 }
 
-
-
 .selection-window {
     position: absolute;
     border-radius: 18px;
@@ -282,7 +367,23 @@ function padWithZeros(num, digits) {
     left: 160px;
     transition: transform .2s;
     z-index: 1;
-    padding: 16px 8px 16px 26px;
+    padding: 8px 8px 16px 26px;
+    display: flex;
+    flex-flow: column;
+}
+
+.selection-window .close-btn {
+    width: 16px;
+    height: 16px;
+    stroke: white;
+    stroke-width: 8px;
+    margin: 0px 8px 8px auto;
+    opacity: .5;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    opacity: 1;
 }
 
 .selection-1 .selection-window {
@@ -290,7 +391,8 @@ function padWithZeros(num, digits) {
     transform: translate(-176px, -52px) scale(0);
 }
 
-.selection-2 .selection-window {
+.selection-2 .selection-window,
+.selection-3 .selection-window {
     width: 300px;
     transform: translate(-176px, -150px) scale(0);
 }
@@ -315,6 +417,10 @@ function padWithZeros(num, digits) {
 .item-row:hover,
 .item-row.selected {
     color: white;
+}
+
+.item-row.selected {
+    pointer-events: none;
 }
 
 ::-webkit-scrollbar {

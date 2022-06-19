@@ -2,7 +2,7 @@
     <div class="demo-cont">
         <div class="side-panel">
             <FilterPanel v-bind="filterPanelParams"></FilterPanel>
-            <div class="reset-anim-btn" @click="exitFullscreen"></div>
+            <div class="back-btn" @click="exitFullscreen">BACK</div>
         </div>
         <svg viewBox="0 0 632 632" height="100%" width="100%" class="sun-burst-svg" :key="componentKey">
             <!-- grid lines -->
@@ -25,7 +25,7 @@
             <!-- sun rays -->
             <g v-for="(ray, index) in sunRays">
                 <rect class="sun-ray" height="8"
-                    v-bind="{ x: ray.cx - 4, y: ray.cy - 4, transform: ray.rotation, fill: ray.fill, rx: 4 }" v-bind:class="{ selected: selectedWeek1 === index }">
+                    v-bind="{ x: ray.cx - 4, y: ray.cy - 4, transform: ray.rotation, fill: ray.fill, rx: 4 }">
                     <animate attributeType="CSS" attributeName="width"
                         v-bind="{ from: '0', to: `${ray.units}`, begin: `${ray.animationDelay}s` }" dur=".5s"
                         fill="freeze"></animate>
@@ -70,6 +70,9 @@ const currentWeek = ref(getWeekNumber(new Date()));
 const selectedWeek1 = ref(currentWeek.value);
 const selectedWeek2 = ref();
 const currentMonth = ref();
+const accentBlue = '#00cbfd';
+const accentOrange = '#ffb401';
+const gray = '#c1c1c1';
 
 const filterPanelParams = reactive({
     selectedYear: selectedYear,
@@ -169,13 +172,15 @@ function drawRays() {
         l = Math.random() * 175;
         var delay = deg / degToLastUnit;
 
+        const fill = selectedWeek1.value === i + 1 ? accentOrange : 
+                    selectedWeek2.value === i + 1 ? accentBlue : gray;
+
         var ray = {
             rotation: `rotate(${i * degPerUnit - 90} ${x} ${y})`,
             cx: x,
             cy: y,
-            fill: '#c1c1c1',
+            fill: ref(fill),
             units: l < 8 ? 8 : l,
-            selected: computed(() => selectedWeek1.value === i + 1),
             animationDelay: delay + delayStagger
         }
 
@@ -264,10 +269,23 @@ function selectYear(year) {
 }
 
 function selectWeek(week, weekSelector) {
-    if (weekSelector === 1)
+    if (weekSelector === 1) {
+        const currentRay = sunRays.value[selectedWeek1.value - 1];
+        const selectedRay = sunRays.value[week - 1];
         selectedWeek1.value = week;
-    else if (weekSelector === 2)
+
+        currentRay.fill = gray;
+        selectedRay.fill = accentOrange;
+    }
+    else if (weekSelector === 2) {
+        const currentRay = sunRays.value[selectedWeek2.value - 1];
+        const selectedRay = sunRays.value[week - 1];
         selectedWeek2.value = week;
+
+        if (currentRay)
+            currentRay.fill = gray;
+        selectedRay.fill = accentBlue;
+    }
 }
 
 </script>
@@ -289,13 +307,22 @@ function selectWeek(week, weekSelector) {
     flex-direction: column;
 }
 
-.side-panel .reset-anim-btn {
+.side-panel .back-btn {
     width: 100px;
     height: 36px;
-    background: orange;
+    background: #fe6c00;
     border-radius: 18px;
     margin: auto 0px 36px 36px;
     cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color .2s;
+}
+
+.back-btn:hover {
+    background: black;
 }
 
 /* --- end side panel --- */
@@ -324,10 +351,6 @@ function selectWeek(week, weekSelector) {
 svg g .sun-ray {
     transition: fill .3s;
     pointer-events: auto;
-}
-
-svg g .sun-ray.selected {
-    fill: #ffb401 !important;
 }
 
 svg g .sun-ray:hover {
