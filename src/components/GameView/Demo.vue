@@ -1,6 +1,6 @@
 <template>
     <div class="demo-cont">
-        <div class="side-panel">
+        <div class="side-panel" :class="{ 'display': props.fullscreen }">
             <FilterPanel v-bind="filterPanelParams"></FilterPanel>
             <div class="back-btn" @click="exitFullscreen">BACK</div>
         </div>
@@ -21,6 +21,15 @@
                     fill="freeze">
                 </animate>
             </line>
+
+            <!-- time units -->
+            <g class="time-units">
+                <text dominant-basiline="middle" text-anchor="middle" style="opacity: 0;" v-for="{ x, y, rotation, text, animationDelay } in timeUnits"
+                    v-bind="{ x: x, y: y, transform: rotation }">{{ text }}
+                    <animate attributeType="CSS" attributeName="opacity" from="0" to="1" v-bind="{ begin: animationDelay }" dur=".5s" fill="freeze">
+                    </animate>
+                </text>
+            </g>
 
             <!-- legend lines -->
             <g class="legend-lines">
@@ -67,8 +76,6 @@
                         xlink:href="#lower-curve">
                         <tspan class="ju-used">{{ `${JUUsed} JU USED OF ${1000 * 52}` }}</tspan>
                     </textPath>
-
-
                 </text>
 
                 <g class="ju-used-cont">
@@ -78,7 +85,7 @@
                         <text>
                             <tspan class="center" dominant-baseline="middle" text-anchor="end"
                                 v-bind="{ x: centerText.cx + 76, y: centerText.cy1 }">{{ centerText.text1 }}</tspan>
-                            <tspan class="units" dominante-baseline="middle"
+                            <tspan class="units" dominant-baseline="middle"
                                 v-bind="{ x: centerText.cx + 82, y: centerText.cy1 }">JU</tspan>
                         </text>
                     </g>
@@ -88,7 +95,7 @@
                         <text>
                             <tspan class="center" dominant-baseline="middle" text-anchor="end"
                                 v-bind="{ x: centerText.cx + 76, y: centerText.cy2 }">{{ centerText.text2 }}</tspan>
-                            <tspan class="units" dominante-baseline="middle"
+                            <tspan class="units" dominant-baseline="middle"
                                 v-bind="{ x: centerText.cx + 82, y: centerText.cy2 }">JU</tspan>
                         </text>
                     </g>
@@ -103,6 +110,10 @@
 import { onMounted, reactive, ref, computed } from "vue";
 import postal from "postal";
 import FilterPanel from "./FilterPanel.vue";
+
+const props = defineProps({
+    fullscreen: Boolean
+})
 const state = reactive({
     demoState: null
 })
@@ -128,6 +139,7 @@ const selectedWeek2 = ref();
 const maxJobUnitLine = 1000;
 const jusPerYear = ref(getJUsPerYear());
 const JUUsed = ref(Math.floor(jusPerYear.value[selectedYear.value].reduce((sum, a) => sum + a, 0)));
+const timeUnits = ref();
 
 // --- positioning --- //
 const offsetFromTop = 60;
@@ -158,6 +170,7 @@ onMounted(() => {
 function draw() {
     drawArc();
     drawRays();
+    drawTimeUnits();
     drawEndLine();
     drawLegendLines();
     drawCenterText();
@@ -346,6 +359,50 @@ function drawCenterText() {
     };
 }
 
+function drawTimeUnits() {
+    var units = [];
+    var x = center;
+    var y = 28;
+    var rotation = 0; // in degrees
+    var radius = 288;
+    var degPerUnit;
+    var text;
+
+    // Get the number of degrees we need to rotate to get to the final week, if 60 units are split between 360 degrees
+    var weeks = getWeeksInYear(selectedYear.value);
+    degPerUnit = 360 / 60;
+    const degToLastUnit = (degPerUnit * (weeks)) * (Math.PI / 180); // In radians
+    var delayStagger = 0;
+    for (var i = 0; i < weeks;) {
+        if (i === 51 && weeks === 53)
+            i = 52;
+
+        text = `WEEK ${('0' + (i + 1)).slice(-2)}`;
+
+        // Update values for next unit label
+        rotation = degPerUnit * i;
+        x = center + radius * Math.sin(rotation * Math.PI / 180);
+        y = radius - radius * Math.cos(rotation * Math.PI / 180) + 28;
+
+        var delay = (rotation * (Math.PI / 180))/ degToLastUnit;
+
+        var textRotation = `rotate(${rotation >= 180 ? rotation + 90 : rotation - 90} ${x},${y})`;
+        units.push(
+            {
+                x: x,
+                y: y,
+                rotation: textRotation,
+                text: text,
+                animationDelay: delay + delayStagger
+            });
+
+        i += 3;
+        delayStagger += 0.015;
+    }
+
+    timeUnits.value = units;
+}
+
 function getWeeksInYear(year) {
     var d = new Date(year, 11, 31);
     var week = getWeekNumber(d);
@@ -449,7 +506,8 @@ function generateJUs(year) {
     const weekCount = year === (new Date()).getFullYear() ? currentWeek.value : getWeeksInYear(year);
 
     for (var i = 0; i < weekCount; i++) {
-        retVal.push(Math.random() * maxJobUnitLine);
+        var val = Math.random() * maxJobUnitLine
+        retVal.push(val < 100 ? 100 : val);
     }
 
     return retVal;
@@ -467,11 +525,29 @@ function generateJUs(year) {
 /* --- start side-panel --- */
 
 .side-panel {
-    width: 300px;
+    width: 0px;
     height: 100%;
     background: white;
     display: flex;
     flex-direction: column;
+    display: none;
+    overflow: hidden;
+}
+
+.side-panel.display {
+    display: flex;
+    animation: side-panel-anim .4s forwards .2s;
+}
+
+@keyframes side-panel-anim {
+    from {
+        width: 0px;
+    }
+
+    to {
+        width: 300px;
+        overflow: visible;
+    }
 }
 
 .side-panel .back-btn {
@@ -536,10 +612,17 @@ svg g .sun-ray:hover {
 
 .center-text text {
     font-size: 10px;
+    fill: #acacac;
 }
 
 .center-text .ju-used-cont text {
     font-size: 20px;
+    fill: black;
+}
+
+.time-units text {
+    font-size: 12px;
+    fill: #acacac;
 }
 
 /* --- end sun burst diagram --- */

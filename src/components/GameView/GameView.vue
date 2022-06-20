@@ -77,7 +77,7 @@ function exitFullscreen() {
                 v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }"
                 @click="enterFullscreen">
                 <ImageCarousel v-if="props.type === types.Carousel" v-bind="imageCarouselProps"></ImageCarousel>
-                <Demo v-else v-bind=""></Demo>
+                <Demo v-else v-bind="{ fullscreen: fullscreen}"></Demo>
             </div>
             <div class="main-content" :style="{ 'margin-top': fullscreen ? '30%' : '0'}">
                 <div class="header">
