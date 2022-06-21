@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, computed, onUnmounted } from "vue";
+import { reactive, ref, onMounted, computed, onUnmounted, watch } from "vue";
 import postal from "postal";
 
 const channel = postal.channel("Notifications");
@@ -94,6 +94,8 @@ const props = defineProps({
     gray: String
 })
 
+var prevYear = props.selectedYear;
+
 const state = reactive({
     selectionWindow1Open: false,
     selectionWindow2Open: false,
@@ -104,7 +106,7 @@ const state = reactive({
     selectionWindow3Items: []
 })
 
-const selectionItems = setByWeekOptions();
+var selectionItems = setByWeekOptions();
 state.selectionWindow2Items = selectionItems;
 state.selectionWindow3Items = selectionItems;
 
@@ -117,10 +119,21 @@ const selectedWeek2Text = computed(() => {
 })
 
 
-
 onMounted(() => {
     setOffClickEvents();
 })
+
+watch(props, (newProps) => {
+    // Update week options if selected year has changed
+    if (newProps.selectedYear !== prevYear) {
+        selectionItems = setByWeekOptions();
+
+        state.selectionWindow2Items = selectionItems;
+        state.selectionWindow3Items = selectionItems;
+
+        prevYear = newProps.selectedYear;
+    }
+});
 
 function setYearOptions() {
     return Object.keys(props.jusPerYear).reverse().map((x) => Number.parseInt(x));
@@ -162,13 +175,13 @@ function selectWeek(week, weekSelector) {
 }
 
 function setByWeekOptions() {
-    var avOps = [];
+    let avOps = [];
     const { selectedYear, selectedWeek1, selectedWeek2 } = props;
 
     var currentWeekDate = new Date();
     var currentWeekNum = getWeekNumber(currentWeekDate);
 
-    avOps.push({ display: "NOT SPECIFIED", selected: ref(false), activeColor: ref(null), value: null });
+    avOps.push({ display: "NOT SPECIFIED", selected: false, activeColor: null, value: null });
 
     var currentYear = (new Date()).getFullYear();
     var weeks;
@@ -186,21 +199,21 @@ function setByWeekOptions() {
         avOps.push(
             {
                 display: `THIS WEEK ${startOfWeek} - ${endOfWeek}`,
-                activeColor: ref(selectedWeek1 === currentWeekNum ? props.accentOrange : null),
+                activeColor: selectedWeek1 === currentWeekNum ? props.accentOrange : null,
                 buttonDisplay: `WEEK ${currentWeekNum}`,
                 value: currentWeekNum,
-                selected: ref(selectedWeek1 === currentWeekNum)
+                selected: selectedWeek1 === currentWeekNum
             });
         weeks = currentWeekNum - 1;
     } else {
-        weeks = getWeeksInYear(selectedYear) - 1;
+        weeks = getWeeksInYear(selectedYear);
     }
 
 
     var date = new Date(selectedYear, 0, 1);
-
-    // If first week of the year counts as week 52 of last year, move to next week
-    if (getWeekNumber(date) === 52) {
+    var firstWeekOfYear = getWeekNumber(date);
+    // If first week of the year counts as week 52 or 53 of last year, move to next week
+    if (firstWeekOfYear === 52 || firstWeekOfYear === 53) {
         date.setDate(date.getDate() + (8 - date.getDay()));
     }
 
@@ -215,9 +228,9 @@ function setByWeekOptions() {
 
         avOps.push({
             display: `WEEK ${padWithZeros(weekNum, 2)} ${startOfWeek} - ${endOfWeek}`,
-            activeColor: ref(null),
+            activeColor: selectedWeek1 === currentWeekNum ? props.accentOrange : null,
             value: weekNum,
-            selected: ref(selectedWeek1 === weekNum)
+            selected: selectedWeek1 === weekNum
         });
 
         // Increment date to next week
@@ -409,7 +422,7 @@ onUnmounted(() => {
 .selection-2 .selection-window,
 .selection-3 .selection-window {
     width: 300px;
-    transform: translate(-176px, -150px) scale(0);
+    transform: translate(-230px, -170px) scale(0);
 }
 
 .item-row-cont {
@@ -453,7 +466,7 @@ onUnmounted(() => {
 }
 
 .selection-3 .selection-window .item-row:hover .dot {
-    background: #00cbfd;
+    background: #00cbfd !important;
 }
 
 .item-row.selected .dot {

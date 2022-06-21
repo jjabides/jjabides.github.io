@@ -1,7 +1,13 @@
 <template>
     <div class="demo-cont">
-        <div class="side-panel" :class="{ 'display': props.fullscreen }">
+        <div class="side-panel" v-bind:class="{ 'display': props.fullscreen }">
             <FilterPanel v-bind="filterPanelParams"></FilterPanel>
+            <div class="legend-toggle">
+                <div class="legend-title">LEGEND</div>
+                <div class="switch" v-bind:class="{ on: displayLegend }" @click="toggleLegend">
+                    <div class="knob"></div>
+                </div>
+            </div>
             <div class="back-btn" @click="exitFullscreen">BACK</div>
         </div>
         <svg viewBox="0 0 632 632" height="100%" width="100%" class="sun-burst-svg" :key="componentKey">
@@ -13,7 +19,7 @@
             </g>
 
             <!-- end lines -->
-            <line opacity="0" class="start-line" v-bind="startLineCoordinates">
+            <line opacity="0" class="start-line" v-bind="startLineCoordinates" v-bind:class="{ display: !displayLegend }">
                 <animate attributeType="CSS" attributeName="opacity" from="0" to="1" dur=".5s" fill="freeze"></animate>
             </line>
             <line opacity="0" class="end-line" v-bind="endLineCoordinates">
@@ -32,7 +38,8 @@
             </g>
 
             <!-- legend lines -->
-            <g class="legend-lines">
+            <g class="legend-lines" v-bind:class="{ display: displayLegend }">
+                <rect width="274" height="128" y="60" v-bind="{ x: center - 280 }"></rect>
                 <g v-for="line in legendLines">
                     <line class="legend-line" v-bind="{ x1: line.x1, x2: line.x2, y1: line.y, y2: line.y }"></line>
                     <circle v-bind="{ cx: line.x1, cy: line.y, r: 3 }"></circle>
@@ -114,6 +121,7 @@ import FilterPanel from "./FilterPanel.vue";
 const props = defineProps({
     fullscreen: Boolean
 })
+
 const state = reactive({
     demoState: null
 })
@@ -140,6 +148,7 @@ const maxJobUnitLine = 1000;
 const jusPerYear = ref(getJUsPerYear());
 const JUUsed = ref(Math.floor(jusPerYear.value[selectedYear.value].reduce((sum, a) => sum + a, 0)));
 const timeUnits = ref();
+const displayLegend = ref(false);
 
 // --- positioning --- //
 const offsetFromTop = 60;
@@ -430,6 +439,10 @@ function exitFullscreen() {
 
 function selectYear(year) {
     selectedYear.value = year;
+
+    selectedWeek1.value = currentWeek.value;
+    selectedWeek2.value = null;
+
     draw();
     redraw();
 }
@@ -513,6 +526,10 @@ function generateJUs(year) {
     return retVal;
 }
 
+function toggleLegend() {
+    displayLegend.value = !displayLegend.value;
+}
+
 </script>
 
 <style scoped>
@@ -550,6 +567,48 @@ function generateJUs(year) {
     }
 }
 
+.legend-toggle {
+    background: #e1e1e1;
+    margin: 32px 0px 0px 36px;
+    border-radius: 18px;
+    width: 160px;
+    padding: 16px;
+}
+
+.legend-toggle .legend-title {
+    color: black;
+    margin: 0px 0px 16px 24px;
+}
+
+.legend-toggle .switch {
+    width: 36px;
+    height: 12px;
+    border-radius: 6px;
+    border: 1px solid black;
+    background: red;
+    margin-left: 24px;
+    cursor: pointer;
+    transition: background-color .3s;
+    display: flex;
+}
+
+.switch.on {
+    background: yellowgreen;
+}
+
+.legend-toggle .switch .knob {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background: black;
+    margin-left: 0px;
+    transition: margin-left .3s;
+}
+
+.switch.on .knob {
+    margin-left: 24px;
+}
+
 .side-panel .back-btn {
     width: 100px;
     height: 36px;
@@ -573,6 +632,14 @@ function generateJUs(year) {
 /* --- start sun burst diagram  */
 .sun-burst-svg {
     background: white;
+}
+
+.start-line {
+    display: none;
+}
+
+.start-line.display {
+    display: block;
 }
 
 .arc,
@@ -599,6 +666,20 @@ svg g .sun-ray {
 
 svg g .sun-ray:hover {
     fill: #fe6c00 !important;
+}
+
+.legend-lines {
+    opacity: 0;
+    transition: opacity .3s;
+}
+
+.legend-lines.display {
+    opacity: 1;
+}
+
+.legend-lines rect {
+    opacity: .6;
+    fill: white;
 }
 
 .legend-lines circle {
