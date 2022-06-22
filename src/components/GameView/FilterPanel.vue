@@ -311,12 +311,13 @@ onUnmounted(() => {
 
 <style scoped>
 .filter-panel {
-    width: 160px;
-    height: 208px;
+    width: 120px;
+    height: 160px;
     border-radius: 18px;
     background: #e1e1e1;
-    margin: 36px 0px 0px 36px;
+    margin: 8px 0px 0px 8px;
     padding: 16px;
+    font-size: 12px;
 }
 
 .filter-panel .title {
@@ -324,19 +325,18 @@ onUnmounted(() => {
     height: 20px;
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
-    margin-left: 24px;
+    margin-bottom: 8px;
 }
 
 .filter-panel .selection-cont {
     display: flex;
     height: 32px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     position: relative;
 }
 
 .selection-cont .selection-color-cont {
-    height: 32px;
+    height: 24px;
     width: 24px;
     display: flex;
     justify-content: center;
@@ -351,7 +351,7 @@ onUnmounted(() => {
 
 .selection-cont .selection-btn {
     width: 116px;
-    height: 32px;
+    height: 24px;
     border-radius: 18px;
     background-color: white;
     cursor: pointer;
@@ -392,7 +392,7 @@ onUnmounted(() => {
     position: absolute;
     border-radius: 18px;
     background: black;
-    left: 160px;
+    left: 100px;
     transition: transform .2s;
     z-index: 1;
     padding: 8px 8px 16px 26px;
@@ -421,13 +421,13 @@ onUnmounted(() => {
 
 .selection-2 .selection-window,
 .selection-3 .selection-window {
-    width: 300px;
-    transform: translate(-230px, -170px) scale(0);
+    width: 224px;
+    transform: translate(-176px, -136px) scale(0);
 }
 
 .item-row-cont {
     width: 100%;
-    max-height: 300px;
+    max-height: 200px;
     overflow-y: auto;
 }
 
@@ -491,4 +491,51 @@ onUnmounted(() => {
 ::-webkit-scrollbar-thumb:hover {
     background-color: #464646;
 }
+
+/* --- start media queries --- */
+@media screen and (min-width: 1180px) {
+    .filter-panel {
+        width: 160px;
+        height: 208px;
+        margin: 36px 0px 0px 36px;
+        font-size: 14px;
+    }
+
+    .filter-panel .title {
+        margin-bottom: 20px;
+        margin-left: 24px;
+    }
+
+    .filter-panel .selection-cont {
+        margin-bottom: 16px;
+    }
+
+    .selection-cont .selection-color-cont {
+        height: 32px;
+    }
+
+    .selection-cont .selection-btn {
+        height: 32px;
+    }
+
+    .selection-window {
+        left: 160px;
+    }
+
+    .selection-2 .selection-window,
+    .selection-3 .selection-window {
+        width: 300px;
+        transform: translate(-230px, -170px) scale(0);
+    }
+
+    .selection-window.open {
+        transform: translate(0, 0) scale(1);
+    }
+
+    .item-row-cont {
+        max-height: 300px;
+    }
+}
+
+/* --- end media queries --- */
 </style>

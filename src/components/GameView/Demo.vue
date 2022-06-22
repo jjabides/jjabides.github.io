@@ -19,7 +19,8 @@
             </g>
 
             <!-- end lines -->
-            <line opacity="0" class="start-line" v-bind="startLineCoordinates" v-bind:class="{ display: !displayLegend }">
+            <line opacity="0" class="start-line" v-bind="startLineCoordinates"
+                v-bind:class="{ display: !displayLegend }">
                 <animate attributeType="CSS" attributeName="opacity" from="0" to="1" dur=".5s" fill="freeze"></animate>
             </line>
             <line opacity="0" class="end-line" v-bind="endLineCoordinates">
@@ -30,9 +31,11 @@
 
             <!-- time units -->
             <g class="time-units">
-                <text dominant-basiline="middle" text-anchor="middle" style="opacity: 0;" v-for="{ x, y, rotation, text, animationDelay } in timeUnits"
+                <text dominant-basiline="middle" text-anchor="middle" style="opacity: 0;"
+                    v-for="{ x, y, rotation, text, animationDelay } in timeUnits"
                     v-bind="{ x: x, y: y, transform: rotation }">{{ text }}
-                    <animate attributeType="CSS" attributeName="opacity" from="0" to="1" v-bind="{ begin: animationDelay }" dur=".5s" fill="freeze">
+                    <animate attributeType="CSS" attributeName="opacity" from="0" to="1"
+                        v-bind="{ begin: animationDelay }" dur=".5s" fill="freeze">
                     </animate>
                 </text>
             </g>
@@ -52,7 +55,7 @@
             <!-- sun rays -->
             <g v-for="(ray, index) in sunRays">
                 <rect class="sun-ray" height="8"
-                    v-bind="{ x: ray.cx - 4, y: ray.cy - 4, transform: ray.rotation, fill: ray.fill, rx: 4 }">
+                    v-bind="{ x: ray.cx - 4, y: ray.cy - 4, transform: ray.rotation, fill: ray.fill, rx: 4, id: `sun-ray-${index}` }">
                     <animate attributeType="CSS" attributeName="width"
                         v-bind="{ from: '0', to: `${ray.l}`, begin: `${ray.animationDelay}s` }" dur=".5s" fill="freeze">
                     </animate>
@@ -81,7 +84,7 @@
                     </textPath>
                     <textPath dominant-baseline="hanging" text-anchor="middle" startOffset="50%"
                         xlink:href="#lower-curve">
-                        <tspan class="ju-used">{{ `${JUUsed} JU USED OF ${1000 * 52}` }}</tspan>
+                        <tspan class="ju-used">{{ `${JUUsed} JU USED OF ${1000 * 52} JU` }}</tspan>
                     </textPath>
                 </text>
 
@@ -114,7 +117,8 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, computed } from "vue";
+import { onMounted, reactive, ref, computed, watch } from "vue";
+import tippy, { roundArrow, followCursor } from "tippy.js";
 import postal from "postal";
 import FilterPanel from "./FilterPanel.vue";
 
@@ -130,6 +134,10 @@ const state = reactive({
 const channel = postal.channel("Notifications");
 channel.subscribe("selectYear", (year) => selectYear(year));
 channel.subscribe("selectWeek", ({ week, weekSelector }) => selectWeek(week, weekSelector));
+
+watch(props, (newProps) => {
+    applyToolTips();
+});
 // --- end subscriptions --- //
 
 const arcs = ref([]);
@@ -183,6 +191,7 @@ function draw() {
     drawEndLine();
     drawLegendLines();
     drawCenterText();
+    applyToolTips();
 }
 
 function redraw() {
@@ -261,7 +270,7 @@ function drawRays() {
             cy: y,
             fill: ref(fill),
             l: l < 8 ? 8 : l,
-            units: l,
+            units: jobUnit,
             animationDelay: delay + delayStagger
         }
 
@@ -393,7 +402,7 @@ function drawTimeUnits() {
         x = center + radius * Math.sin(rotation * Math.PI / 180);
         y = radius - radius * Math.cos(rotation * Math.PI / 180) + 28;
 
-        var delay = (rotation * (Math.PI / 180))/ degToLastUnit;
+        var delay = (rotation * (Math.PI / 180)) / degToLastUnit;
 
         var textRotation = `rotate(${rotation >= 180 ? rotation + 90 : rotation - 90} ${x},${y})`;
         units.push(
@@ -530,6 +539,31 @@ function toggleLegend() {
     displayLegend.value = !displayLegend.value;
 }
 
+function applyToolTips() {
+    const isTouchScreen = true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+
+    if (!isTouchScreen && props.fullscreen) {
+        // wait for elements to render
+        setTimeout(() => {
+            const count = sunRays.value.length;
+
+            for (var i = 0; i < count; i++) {
+                const ray = sunRays.value[i];
+                tippy(`#sun-ray-${i}`, {
+                    content: `${Math.floor(ray.units)} JU`,
+                    placement: 'bottom',
+                    theme: 'black',
+                    animation: 'shift-away',
+                    offset: [0, 20],
+                    arrow: roundArrow,
+                    followCursor: true,
+                    plugins: [ followCursor ]
+                })
+            }
+        }, 0)
+    }
+}
+
 </script>
 
 <style scoped>
@@ -537,47 +571,50 @@ function toggleLegend() {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
+    padding: 16px;
+    background-color: white;
 }
 
 /* --- start side-panel --- */
 
 .side-panel {
-    width: 0px;
-    height: 100%;
-    background: white;
+    width: 100%;
+    height: 0px;
     display: flex;
-    flex-direction: column;
     display: none;
-    overflow: hidden;
+    z-index: 1;
 }
 
 .side-panel.display {
     display: flex;
-    animation: side-panel-anim .4s forwards .2s;
+    animation: side-panel-anim .3s forwards .2s;
 }
 
 @keyframes side-panel-anim {
     from {
-        width: 0px;
+        height: 0px;
     }
 
     to {
-        width: 300px;
+        height: 30%;
         overflow: visible;
     }
 }
 
 .legend-toggle {
     background: #e1e1e1;
-    margin: 32px 0px 0px 36px;
+    margin: 8px 0px 0px 16px;
     border-radius: 18px;
-    width: 160px;
-    padding: 16px;
+    width: 120px;
+    height: 76px;
+    padding: 8px;
 }
 
 .legend-toggle .legend-title {
     color: black;
-    margin: 0px 0px 16px 24px;
+    margin: 8px 0px 8px 8px;
+    font-size: 12px;
 }
 
 .legend-toggle .switch {
@@ -586,7 +623,7 @@ function toggleLegend() {
     border-radius: 6px;
     border: 1px solid black;
     background: red;
-    margin-left: 24px;
+    margin-left: 8px;
     cursor: pointer;
     transition: background-color .3s;
     display: flex;
@@ -614,13 +651,17 @@ function toggleLegend() {
     height: 36px;
     background: #fe6c00;
     border-radius: 18px;
-    margin: auto 0px 36px 36px;
+    margin: 16px 0px 0px auto;
     cursor: pointer;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color .2s;
+    font-size: 16px;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
 }
 
 .back-btn:hover {
@@ -687,24 +728,89 @@ svg g .sun-ray:hover {
 }
 
 .legend-lines text {
-    font-size: 12px;
+    font-size: 16px;
     fill: #bcbcbc;
 }
 
 .center-text text {
-    font-size: 10px;
-    fill: #acacac;
-}
-
-.center-text .ju-used-cont text {
-    font-size: 20px;
-    fill: black;
-}
-
-.time-units text {
     font-size: 12px;
     fill: #acacac;
 }
 
+.center-text .ju-used-cont text {
+    font-size: 24px;
+    fill: black;
+}
+
+.time-units text {
+    font-size: 14px;
+    fill: #acacac;
+}
+
 /* --- end sun burst diagram --- */
+
+/* --- start media queries  */
+@media screen and (min-width: 768px) {
+    .demo-cont {
+        flex-direction: row;
+    }
+
+    .side-panel {
+        width: 0px;
+        height: 100%;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    @keyframes side-panel-anim {
+        from {
+            width: 0px;
+        }
+
+        to {
+            width: 300px;
+            overflow: visible;
+        }
+    }
+
+    .legend-toggle {
+        margin-left: 8px;
+    }
+}
+
+@media screen and (min-width: 1180px) {
+    .legend-toggle {
+        margin: 32px 0px 0px 36px;
+        width: 160px;
+        padding: 16px;
+        height: unset;
+    }
+
+    .legend-toggle .legend-title {
+        margin: 0px 0px 16px 24px;
+        font-size: 14px;
+    }
+
+    .legend-toggle .switch {
+        margin-left: 24px;
+    }
+
+    .legend-lines text {
+        font-size: 12px;
+    }
+
+    .center-text text {
+        font-size: 10px;
+    }
+
+    .center-text .ju-used-cont text {
+        font-size: 20px;
+    }
+
+    .time-units text {
+        font-size: 12px;
+    }
+}
+
+/* --- end media queries ---*/
 </style>

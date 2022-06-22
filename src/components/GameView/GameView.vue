@@ -13,7 +13,8 @@ var props = defineProps({
     descriptionUrl: String,
     interactiveImg: Boolean,
     links: Array,
-    type: String
+    type: String,
+    previewHeight: String,
 })
 
 const description = ref("");
@@ -75,6 +76,7 @@ function exitFullscreen() {
         <div class="preview-cont">
             <div class="game-preview" v-bind:id="gamePreviewId"
                 v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }"
+                v-bind:style="{ 'height': props.previewHeight }"
                 @click="enterFullscreen">
                 <ImageCarousel v-if="props.type === types.Carousel" v-bind="imageCarouselProps"></ImageCarousel>
                 <Demo v-else v-bind="{ fullscreen: fullscreen}"></Demo>
@@ -128,7 +130,7 @@ function exitFullscreen() {
 .game-preview.fullscreen {
     top: 0;
     width: 100%;
-    height: 100%;
+    height: 100% !important;
     position: absolute;
     cursor: initial;
 }
@@ -225,6 +227,10 @@ function exitFullscreen() {
 .links {
     padding: 16px;
     padding-bottom: 64px;
+}
+
+a.link {
+    color: rgb(0, 170, 255);
 }
 
 /* --- Media Queries ---*/

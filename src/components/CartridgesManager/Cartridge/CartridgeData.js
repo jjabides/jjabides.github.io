@@ -13,6 +13,7 @@ const cartridgeData = {
         title: "Track Attack",
         descriptionUrl: `${descriptionPath}trackAttack.txt`,
         interactiveImg: true,
+        previewHeight: '40%'
     },
     cartridge2: {
         images: [
@@ -25,6 +26,7 @@ const cartridgeData = {
         title: "Track Attack",
         descriptionUrl: `${descriptionPath}trackAttack.txt`,
         interactiveImg: true,
+        previewHeight: "40%",
         links: [
             {
                 title: "Promotional Video:",
@@ -46,7 +48,8 @@ const cartridgeData = {
         icon: `${imagesPath}AbsentChess_Preview1.PNG`,
         title: "Absent Chess",
         descriptionUrl: `${descriptionPath}absentChess.txt`,
-        interactiveImg: true
+        interactiveImg: true,
+        previewHeight: "40%",
     },
     cartridge4: {
         images: [
@@ -57,6 +60,7 @@ const cartridgeData = {
         title: "About Me",
         descriptionUrl: `${descriptionPath}aboutMe.txt`,
         interactiveImg: false,
+        previewHeight: "30%",
         links: [
             {
                 title: "Contact:",

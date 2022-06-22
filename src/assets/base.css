@@ -90,8 +90,19 @@ body {
   font-weight: bold;
 }
 
-.tippy-svg-arrow {
+.tippy-box[data-theme~='custom'] .tippy-svg-arrow {
   fill: rgb(83, 83, 208);
+}
+
+.tippy-box[data-theme~='black'] {
+  background-color: black;
+  color: white;
+  padding: 8px;
+  border-radius: 12px;
+}
+
+.tippy-box[data-theme~='black'] .tippy-svg-arrow {
+  fill: black;
 }
 
 /* --- Media Queries --- */
