@@ -9,9 +9,9 @@ export const types = {
 const cartridgeData = {
     cartridge1: {
         type: types.Demo,
-        icon: `${imagesPath}Track_Attack_Preview1.PNG`,
-        title: "Track Attack",
-        descriptionUrl: `${descriptionPath}trackAttack.txt`,
+        icon: `${imagesPath}Sunburst_Diagram.PNG`,
+        title: "Sunburst Diagram",
+        descriptionUrl: `${descriptionPath}sunburstDiagram.txt`,
         interactiveImg: true,
         previewHeight: '40%'
     },
