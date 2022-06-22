@@ -9,7 +9,7 @@ export const types = {
 const cartridgeData = {
     cartridge1: {
         type: types.Demo,
-        icon: `${imagesPath}Sunburst_Diagram.PNG`,
+        icon: `${imagesPath}Sunburst_Diagram.png`,
         title: "Sunburst Diagram",
         descriptionUrl: `${descriptionPath}sunburstDiagram.txt`,
         interactiveImg: true,
