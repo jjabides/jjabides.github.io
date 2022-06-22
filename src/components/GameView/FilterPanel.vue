@@ -363,6 +363,7 @@ onUnmounted(() => {
 
 .selection-text {
     color: black;
+    white-space: nowrap;
 }
 
 .selection-btn:hover,
