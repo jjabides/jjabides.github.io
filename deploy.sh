@@ -4,7 +4,7 @@
 set -e
 
 # build
-npm run build
+##npm run build
 
 # stage 'dist' folder
 git add dist -f
