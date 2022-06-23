@@ -61,6 +61,8 @@ function back() {
 }
 
 function enterFullscreen() {
+    if (!props.interactiveImg)
+        return;
     if (!fullscreen.value)
         fullscreen.value = true;
 }
