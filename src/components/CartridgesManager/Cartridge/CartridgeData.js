@@ -17,25 +17,19 @@ const cartridgeData = {
     },
     cartridge2: {
         images: [
-            `${imagesPath}Track_Attack_Gameplay.gif`,
-            `${imagesPath}Track_Attack_Preview1.PNG`,
-            `${imagesPath}Track_Attack_Preview3.PNG`
+            `${imagesPath}BatEotU_gameplay2.gif`,
         ],
         type: types.Carousel,
-        icon: `${imagesPath}Track_Attack_Preview1.PNG`,
-        title: "Track Attack",
-        descriptionUrl: `${descriptionPath}trackAttack.txt`,
+        icon: `${imagesPath}BatEotU_cover.png`,
+        title: "Bowling at the Edge of the Universe",
+        descriptionUrl: `${descriptionPath}batEotU.txt`,
         interactiveImg: true,
         previewHeight: "40%",
         links: [
             {
-                title: "Promotional Video:",
-                link: "https://www.youtube.com/watch?v=73vEu0uQ9Zo&feature=youtu.be"
+                title: "Play at:",
+                link: "https://jun-seiba.itch.io/bowling-at-the-edge-of-the-universe"
             },
-            {
-                title: "Download Link:",
-                link: "https://drive.google.com/file/d/1jnN2yKuC7CQgsLAKahJ4ogkLZ2n3FsAp/view?usp=sharing"
-            }
         ]
     },
     cartridge3: {
