@@ -1,4 +1,4 @@
-Absent Chess is a variant of Chess where you and the opponent start off with a King and summon pieces near your king each turn.
+Absent Chess is a variant of Chess where you and the opponent start off with a King and summon pieces near your King each turn.
 <br/>
 <br/>
 Rather than waiting for your turn to move your own pieces, you and your opponent may choose to move your pieces in the same turn or delay the movement of a piece for another turn. This allows you to create elaborate setups where several of your own pieces coordinate to attack the enemy King.
