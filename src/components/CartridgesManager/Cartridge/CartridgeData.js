@@ -40,16 +40,22 @@ const cartridgeData = {
     },
     cartridge3: {
         images: [
-            `${imagesPath}AbsentChess_Gameplay.gif`,
-            `${imagesPath}AbsentChess_Gameplay2.gif`,
-            `${imagesPath}AbsentChess_Preview1.PNG`
+            `${imagesPath}Basics_Example_1.gif`,
+            `${imagesPath}Basics_Example_2.gif`,
+            `${imagesPath}Basics_Example_3.gif`
         ],
         type: types.Carousel,
-        icon: `${imagesPath}AbsentChess_Preview1.PNG`,
+        icon: `${imagesPath}Absent_Chess_Cover.png`,
         title: "Absent Chess",
         descriptionUrl: `${descriptionPath}absentChess.txt`,
         interactiveImg: true,
         previewHeight: "40%",
+        links: [
+            {
+                title: "Play at:",
+                link: "https://jun-seiba.itch.io/absent-chess"
+            }
+        ]
     },
     cartridge4: {
         images: [

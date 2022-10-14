@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vue-tsc && vite build",
     "preview": "vite preview --port 5050",
     "deploy": "sh deploy.sh"
   },
@@ -11,7 +11,8 @@
     "jquery": "^3.6.0",
     "postal": "^2.0.6",
     "tippy.js": "^6.3.7",
-    "vue": "^3.2.33"
+    "vue": "^3.2.33",
+    "vue-tsc": "^1.0.7"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.1",
