@@ -111,6 +111,7 @@ function animate() {
 
 <template>
     <svg class="gameboy" id="gameboy" viewBox="0 0 200 100" v-bind:class="{ 'spinning': spinning, 'selected': props.cartridgeHasBeenSelected }" :style="styles">
+        <rect class="black-background" rx="20" ry="20" width="200" height="150" style="fill: black"></rect>
         <rect rx="20" ry="20" width="200" height="100" style="fill:rgb(82, 81, 81);"></rect>
         <rect class="screen" v-bind:class="{ 'turnon': turnOnScreen }" x="37.5" y="10" rx="8" ry="8" width="125" height="80" style="fill: black"></rect>
         <g class="buttons" transform="translate(0, 28)">
@@ -137,6 +138,7 @@ function animate() {
     z-index: 1;
     border-radius: 18px;
     animation: fade-in .3s forwards;
+    overflow: visible;
 }
 
 @keyframes fade-in {
