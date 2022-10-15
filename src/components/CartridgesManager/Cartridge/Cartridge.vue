@@ -6,12 +6,12 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, computed, watch, onMounted } from "vue";
 import postal from "postal";
-import resources from "../../utilities/resources";
+import resources from "../../../utilities/resources";
 import tippy, { animateFill, roundArrow } from "tippy.js";
-import { getTop, getLeft } from "../../utilities/utilities";
+import { getTop, getLeft } from "../../../utilities/utilities";
 import 'tippy.js/themes/light.css'
 import 'tippy.js/dist/backdrop.css';
 import 'tippy.js/animations/shift-away.css';
@@ -143,7 +143,7 @@ function animate() {
 }
 
 onMounted(() => {
-    const isTouchScreen = true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+    const isTouchScreen = true == ("ontouchstart" in window || window['DocumentTouch'] && document instanceof DocumentTouch);
 
     if (!isTouchScreen) {
         tippy('#' + state.id, {

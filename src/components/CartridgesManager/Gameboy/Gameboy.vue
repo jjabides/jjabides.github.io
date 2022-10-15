@@ -15,9 +15,9 @@
     </svg>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { watch, ref, computed } from "vue";
-import { getTop } from "../../utilities/utilities";
+import { getTop } from "../../../utilities/utilities";
 var props = defineProps({
    cartridgeHasBeenSelected: Boolean,
    top: Number,

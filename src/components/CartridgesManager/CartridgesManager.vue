@@ -8,16 +8,15 @@
 <Gameboy v-bind="gameboyProps"></Gameboy>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive } from 'vue';
 import Cartridge from './Cartridge/Cartridge.vue';
-import { getTop, getLeft } from '../utilities/utilities';
+import { getTop, getLeft } from '../../utilities/utilities';
 import Gameboy from "./Gameboy/Gameboy.vue";
 import CartridgeFactory from "./Cartridge/CartridgeFactory";
 import GameboyFactory from "./Gameboy/GameboyFactory";
 import postal from "postal";
 
-const props = defineProps({ mainBorderWidth: Number })
 const selectedCartridge = ref(null);
 const cartridgeFactory = new CartridgeFactory({ selectedCartridge });
 const gameboyFactory = new GameboyFactory({ selectedCartridge });
@@ -30,7 +29,7 @@ function click(index) {
     channel.publish("cartridgeSelected", true);
     var mainEl = document.getElementById('main');
 
-    var index = 0;
+    index = 0;
     for (var cartridge of cartridges) {
         let i = index;
         var cartridgeEl = document.getElementById('cartridge' + i);

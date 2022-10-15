@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, computed } from "vue";
-import resources from "../utilities/resources";
+import resources from "../../utilities/resources";
 import ImageCarousel from "./ImageCarousel.vue";
 import postal from "postal";
 import $ from "jquery";

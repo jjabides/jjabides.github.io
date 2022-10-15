@@ -76,7 +76,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, ref, onMounted, computed, onUnmounted, watch } from "vue";
 import postal from "postal";
 
@@ -254,7 +254,7 @@ function getMonthDayYearFromIso(isoDate) {
 }
 
 function getWeekNumber(date) {
-    var date = new Date(+date);
+    date = new Date(+date);
     date.setHours(0, 0, 0, 0);
 
     // Thursday in current week decides the year.
@@ -285,9 +285,9 @@ function setOffClickEvents() {
     const selection3El = document.getElementById('selection-3');
 
     document.addEventListener('click', function (event) {
-        const isClickInside1 = selection1El.contains(event.target);
-        const isClickInside2 = selection2El.contains(event.target);
-        const isClickInside3 = selection3El.contains(event.target);
+        const isClickInside1 = selection1El.contains(event.target as any);
+        const isClickInside2 = selection2El.contains(event.target as any);
+        const isClickInside3 = selection3El.contains(event.target as any);
 
         if (!isClickInside1) {
             state.selectionWindow1Open = false;

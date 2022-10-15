@@ -1,7 +1,7 @@
 <template>
     <div class="carousel">
         <div class="img-cont" v-if="!carouselMode">
-            <img v-bind:src="props.images[state.index]"/>
+            <img v-bind:src="(props.images[state.index] as string)"/>
         </div>
         <div class="carousel-mode" v-else>
             <div class="navigate-left" @click="(e) => navigate(e, 'left')" :style="{ visibility: navLeftActive ? 'visible' : 'hidden'}">
@@ -11,7 +11,7 @@
             </div>
             <div class="images-cont" id="images-cont" @click="exitFullscreen">
                 <div class="image-cont" v-for="image in props.images" :style="{ transform: translateX }">
-                    <img v-bind:src="image" />
+                    <img v-bind:src="(image as string)" />
                 </div>
             </div>
             <div class="navigate-right" @click="(e) => navigate(e, 'right')" :style="{ visibility: navRightActive ? 'visible' : 'hidden'}">
@@ -23,7 +23,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, computed, onMounted , ref, watch} from "vue"
 import postal from "postal";
 

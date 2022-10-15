@@ -1,18 +1,14 @@
-<script setup>
-import CartridgesManager from "./components/CartridgesManager/CartridgesManager.vue";
-import GameView from "./components/GameView/GameView.vue";
-import resources from "./components/utilities/resources";
+<script setup lang="ts">
+import resources from "./utilities/resources";
 import postal from "postal";
-import { ref } from "vue";
+import { ref, shallowRef } from "vue";
 
 var channel = postal.channel("Notifications");
 channel.subscribe("selectView", selectView);
 channel.subscribe("cartridgeSelected", (message) => setCartridgeSelection(message))
-const borderWidth = 1;
 
-const views = resources.views;
 const displayView = ref(false);
-const currentView = ref(resources.views.cartridgesManager);
+const currentView = shallowRef(resources.views.cartridgesManager);
 const gameViewProps = ref(null);
 const cartridgeSelected = ref(false);
 
@@ -27,6 +23,7 @@ function selectView(message) {
     case views.cartridgesManager:
       currentView.value = message.view;
       cartridgeSelected.value = false;
+      gameViewProps.value = null;
       break;
     default:
       break;
@@ -49,11 +46,9 @@ setTimeout(() => {
   <main id="main">
     <div class="select-cartridge-title" v-bind:class="{ 'selected': cartridgeSelected }">Select a Cartridge</div>
     <div class="views-cont" v-bind:style="{ 'display': displayView ? 'flex' : 'none' }">
-      <CartridgesManager v-if="currentView === views.cartridgesManager" v-bind:mainBorderWidth="borderWidth"></CartridgesManager>
-      <GameView  v-else-if="currentView === views.gameView" v-bind="gameViewProps"></GameView>
+      <component :is="currentView" v-bind="gameViewProps"></component>
     </div>
   </main>
-  
 </template>
 
 <style>

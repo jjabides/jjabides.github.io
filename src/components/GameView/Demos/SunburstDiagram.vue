@@ -116,7 +116,7 @@
 
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, reactive, ref, computed, watch } from "vue";
 import tippy, { roundArrow, followCursor } from "tippy.js";
 import postal from "postal";
@@ -428,7 +428,7 @@ function getWeeksInYear(year) {
 }
 
 function getWeekNumber(date) {
-    var date = new Date(+date);
+    date = new Date(+date);
     date.setHours(0, 0, 0, 0);
 
     // Thursday in current week decides the year.
