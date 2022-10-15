@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, shallowRef, watch, markRaw, defineComponent } from "vue";
 import resources from "../../utilities/resources";
 import ImageCarousel from "./ImageCarousel.vue";
 import postal from "postal";
-import $ from "jquery";
-import { types } from "../CartridgesManager/Cartridge/CartridgeData.js";
-import SunburstDiagram from "./Demos/SunburstDiagram.vue";
+import { types } from "../CartridgesManager/Cartridge/CartridgeData";
 import Bowling from "./Demos/Bowling.vue";
+import SunburstDiagram from "./Demos/SunburstDiagram.vue";
+
+const demoComponents = {
+    Bowling,
+    SunburstDiagram
+}
 
 var props = defineProps({
     images: Array,
@@ -23,53 +27,46 @@ const description = ref("");
 const fullscreen = ref(false);
 const gamePreviewId = "game-preview";
 const channel = postal.channel("Notifications");
+const selectedComponent = getSelectedComponent();
 
-// --- Subscriptions --- //
-channel.subscribe("exitFullscreen", exitFullscreen);
+function getSelectedComponent() {
+    if (props.type === types.Carousel) {
+        return ImageCarousel;
+    } else {
+        return demoComponents[props.demoComponent];
+    }
+}
 
-// To do: create props dynamically
-const imageCarouselProps = reactive({
+const carouselProps = reactive({
     images: props.images,
     gamePreviewId,
     fullscreen,
-})
+});
 
 const demoProps = reactive({
     gamePreviewId,
     fullscreen,
-})
-
-const interactiveImage = computed(() => {
-    return props.type === types.Demo || props.images
-})
-
-const demo = computed(() => {
-    switch (props.demoComponent) {
-        case "Bowling":
-            return Bowling;
-        case "SunburstDiagram":
-            return SunburstDiagram;
-        default:
-            return null;
-    }
 });
 
-// Get description file
-$.ajax({
-    async: false,
-    url: props.descriptionUrl,
-    dataType: 'text',
-    success: (text) => {
-        description.value = text;
-    }
+const componentProps = computed(() => {
+    if (props.type === types.Carousel)
+        return carouselProps;
+    else
+        return demoProps;
 })
+
+// Get description file
+var client = new XMLHttpRequest();
+client.open('GET', props.descriptionUrl);
+client.onreadystatechange = () => {
+    description.value = client.responseText;
+}
+client.send();
 
 function back() {
     var message = {
         view: resources.views.cartridgesManager,
     }
-
-
     channel.publish("selectView", message);
 }
 
@@ -92,8 +89,7 @@ function exitFullscreen() {
             <div class="game-preview" v-bind:id="gamePreviewId"
                 v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }"
                 v-bind:style="{ 'height': props.previewHeight }" @click="enterFullscreen">
-                <ImageCarousel v-if="props.type === types.Carousel" v-bind="imageCarouselProps"></ImageCarousel>
-                <component :is="demo" v-bind="demoProps"></component>
+                <component :is="selectedComponent" v-bind="componentProps" @exitFullscreen="exitFullscreen"></component>
             </div>
             <div class="main-content" :style="{ 'margin-top': fullscreen ? '30%' : '0'}">
                 <div class="header">
@@ -104,10 +100,10 @@ function exitFullscreen() {
                 </div>
                 <div class="description body-text" v-html="description"></div>
                 <div class="links body-text">
-                    <div v-if="props.links" v-for="(item, index) in props.links">
+                    <div v-if="props.links" v-for="(item, index) in (props.links as any)">
                         <div class="link-title">{{ item.title }}</div>
-                        <a class="link" v-bind:href="item.email ? `mailto: ${item.link}` : item.link">{{ item.link
-                        }}</a>
+                        <a class="link" v-bind:href="((item.email ? `mailto: ${item.link}` : item.link) as string)">{{
+                        item.link}}</a>
                     </div>
                 </div>
             </div>

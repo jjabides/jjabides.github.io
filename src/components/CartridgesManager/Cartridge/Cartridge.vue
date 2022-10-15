@@ -1,5 +1,5 @@
 <template>
-    <div class="cartridge-anchor" :style="anchorStyles">
+    <div class="cartridge-anchor" :style="(anchorStyles as any)">
         <div class="cartridge" v-bind="state" v-bind:class="classes">
             <img v-bind:src="data.icon"/>
         </div>
@@ -143,7 +143,7 @@ function animate() {
 }
 
 onMounted(() => {
-    const isTouchScreen = true == ("ontouchstart" in window || window['DocumentTouch'] && document instanceof DocumentTouch);
+    const isTouchScreen = true == ("ontouchstart" in window);
 
     if (!isTouchScreen) {
         tippy('#' + state.id, {

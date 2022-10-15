@@ -122,9 +122,13 @@ import tippy, { roundArrow, followCursor } from "tippy.js";
 import postal from "postal";
 import FilterPanel from "../FilterPanel.vue";
 
+//#region Component Definitions
 const props = defineProps({
     fullscreen: Boolean
-})
+});
+
+const emit = defineEmits(['exitFullscreen']);
+//#endregion Component Definitions
 
 const state = reactive({
     demoState: null
@@ -442,7 +446,7 @@ function getWeekNumber(date) {
 
 function exitFullscreen() {
     setTimeout(() => {
-        channel.publish("exitFullscreen");
+        emit("exitFullscreen");
     }, 0)
 }
 
@@ -540,7 +544,7 @@ function toggleLegend() {
 }
 
 function applyToolTips() {
-    const isTouchScreen = true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+    const isTouchScreen = true == ("ontouchstart" in window);
 
     if (!isTouchScreen && props.fullscreen) {
         // wait for elements to render

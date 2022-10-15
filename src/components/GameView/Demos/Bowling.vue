@@ -2,15 +2,17 @@
 import postal from "postal";
 import { watch } from "vue";
 
+//#region Component Definitions
 const props = defineProps({
     fullscreen: Boolean
 });
 
-const channel = postal.channel("Notifications");
+const emit = defineEmits(['exitFullscreen']);
+//#endregion Component Definitions
 
 function exitFullscreen() {
     setTimeout(() => {
-        channel.publish("exitFullscreen");
+        emit('exitFullscreen');
     }, 0)
 }
 

@@ -1,7 +1,8 @@
 import { computed } from "vue";
 
 class GameboyFactory {
-
+    public selectedCartridge;
+    
     constructor({ selectedCartridge }) {
         this.selectedCartridge = selectedCartridge;
     }

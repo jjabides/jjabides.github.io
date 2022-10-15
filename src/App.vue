@@ -5,11 +5,10 @@ import { ref, shallowRef } from "vue";
 
 var channel = postal.channel("Notifications");
 channel.subscribe("selectView", selectView);
-channel.subscribe("cartridgeSelected", (message) => setCartridgeSelection(message))
 
-const displayView = ref(false);
+const displayView = shallowRef(false);
 const currentView = shallowRef(resources.views.cartridgesManager);
-const gameViewProps = ref(null);
+const gameViewProps = shallowRef(null);
 const cartridgeSelected = ref(false);
 
 function selectView(message) {
@@ -46,7 +45,7 @@ setTimeout(() => {
   <main id="main">
     <div class="select-cartridge-title" v-bind:class="{ 'selected': cartridgeSelected }">Select a Cartridge</div>
     <div class="views-cont" v-bind:style="{ 'display': displayView ? 'flex' : 'none' }">
-      <component :is="currentView" v-bind="gameViewProps"></component>
+      <component :is="currentView" v-bind="gameViewProps" @cartridgeSelected="setCartridgeSelection"></component>
     </div>
   </main>
 </template>

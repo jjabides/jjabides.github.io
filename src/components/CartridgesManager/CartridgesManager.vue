@@ -1,13 +1,3 @@
-<template>
-<div class="cartridge-cont">
-    <div v-for="(cartridge, index) in cartridges">
-        <Cartridge v-bind="cartridge" @click="click(index)"></Cartridge>
-    </div>
-</div>
-
-<Gameboy v-bind="gameboyProps"></Gameboy>
-</template>
-
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import Cartridge from './Cartridge/Cartridge.vue';
@@ -15,7 +5,10 @@ import { getTop, getLeft } from '../../utilities/utilities';
 import Gameboy from "./Gameboy/Gameboy.vue";
 import CartridgeFactory from "./Cartridge/CartridgeFactory";
 import GameboyFactory from "./Gameboy/GameboyFactory";
-import postal from "postal";
+
+//#region Component Definitions
+const emit = defineEmits(['cartridgeSelected']);
+//#endregion Component Definitions
 
 const selectedCartridge = ref(null);
 const cartridgeFactory = new CartridgeFactory({ selectedCartridge });
@@ -25,8 +18,7 @@ const gameboyProps = reactive(gameboyFactory.getGameboyProps());
 
 function click(index) {
     selectedCartridge.value = index;
-    var channel = postal.channel("Notifications");
-    channel.publish("cartridgeSelected", true);
+    emit("cartridgeSelected", true);
     var mainEl = document.getElementById('main');
 
     index = 0;
@@ -45,6 +37,16 @@ function click(index) {
     gameboyProps.left = getLeft(gameboyEl, mainEl);
 }
 </script>
+
+<template>
+    <div class="cartridge-cont">
+        <div v-for="(cartridge, index) in cartridges">
+            <Cartridge v-bind="cartridge" @click="click(index)"></Cartridge>
+        </div>
+    </div>
+
+    <Gameboy v-bind="gameboyProps"></Gameboy>
+</template>
 
 <style scoped>
 .cartridge-cont {

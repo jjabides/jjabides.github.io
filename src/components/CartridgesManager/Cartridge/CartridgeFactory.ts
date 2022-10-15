@@ -2,6 +2,8 @@ import CartridgeData from "./CartridgeData";
 import { computed } from "vue";
 
 class CartridgeFactory {
+    public selectedCartridge;
+    
     constructor({ selectedCartridge }) {
         this.selectedCartridge = selectedCartridge;
     }

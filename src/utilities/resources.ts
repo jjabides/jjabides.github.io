@@ -9,8 +9,6 @@ var resources = {
     }
 }
 
-
-
 export default resources;
 
 interface ViewsResource {

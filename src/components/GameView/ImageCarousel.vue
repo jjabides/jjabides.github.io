@@ -1,39 +1,16 @@
-<template>
-    <div class="carousel">
-        <div class="img-cont" v-if="!carouselMode">
-            <img v-bind:src="(props.images[state.index] as string)"/>
-        </div>
-        <div class="carousel-mode" v-else>
-            <div class="navigate-left" @click="(e) => navigate(e, 'left')" :style="{ visibility: navLeftActive ? 'visible' : 'hidden'}">
-                <svg class="left-arrow" width="100%" viewBox="0 0 100 100">
-                    <path d="M75 100 L25 50 L75 0" style="stroke:white; stroke-width:1; fill:none;"></path>
-                </svg>
-            </div>
-            <div class="images-cont" id="images-cont" @click="exitFullscreen">
-                <div class="image-cont" v-for="image in props.images" :style="{ transform: translateX }">
-                    <img v-bind:src="(image as string)" />
-                </div>
-            </div>
-            <div class="navigate-right" @click="(e) => navigate(e, 'right')" :style="{ visibility: navRightActive ? 'visible' : 'hidden'}">
-            <svg class="right-arrow" width="100%" viewBox="0 0 100 100">
-                    <path d="M25 100 L75 50 L25 0" style="stroke:white; stroke-width:1; fill:none;"></path>
-            </svg>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
 import { reactive, computed, onMounted , ref, watch} from "vue"
 import postal from "postal";
 
+//#region Component Definitions
 const props = defineProps({
     images: Array,
     topLeftCornerId: String,
     fullscreen: Boolean
-})
+});
 
-const channel = postal.channel("Notifications");
+const emit = defineEmits(['exitFullscreen']);
+//#endregion Component Definitions
 
 // To Do: move all properties to "state"?
 const state = reactive({ index: 0 });
@@ -81,10 +58,35 @@ window.addEventListener('resize', () => {
 
 function exitFullscreen() {
     setTimeout(() => {
-        channel.publish("exitFullscreen");
+        emit("exitFullscreen");
     }, 0)
 }
 </script>
+
+<template>
+    <div class="carousel">
+        <div class="img-cont" v-if="!carouselMode">
+            <img v-bind:src="(props.images[state.index] as string)"/>
+        </div>
+        <div class="carousel-mode" v-else>
+            <div class="navigate-left" @click="(e) => navigate(e, 'left')" :style="{ visibility: navLeftActive ? 'visible' : 'hidden'}">
+                <svg class="left-arrow" width="100%" viewBox="0 0 100 100">
+                    <path d="M75 100 L25 50 L75 0" style="stroke:white; stroke-width:1; fill:none;"></path>
+                </svg>
+            </div>
+            <div class="images-cont" id="images-cont" @click="exitFullscreen">
+                <div class="image-cont" v-for="image in props.images" :style="{ transform: translateX }">
+                    <img v-bind:src="(image as string)" />
+                </div>
+            </div>
+            <div class="navigate-right" @click="(e) => navigate(e, 'right')" :style="{ visibility: navRightActive ? 'visible' : 'hidden'}">
+            <svg class="right-arrow" width="100%" viewBox="0 0 100 100">
+                    <path d="M25 100 L75 50 L25 0" style="stroke:white; stroke-width:1; fill:none;"></path>
+            </svg>
+            </div>
+        </div>
+    </div>
+</template>
 
 <style scoped>
 .carousel {
