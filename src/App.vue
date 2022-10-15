@@ -63,7 +63,6 @@ main {
   width: 100%;
   height: 100%;
   background: black;
-  border: 1px solid white;
   display: flex;
   overflow: hidden;
   position: relative;
