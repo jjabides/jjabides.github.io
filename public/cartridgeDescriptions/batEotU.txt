@@ -1,4 +1,4 @@
-"Bowling at the Edge of the Universe" is a simple infinite bowling game made in three.js and the Rapier3D physics engine.
+"Bowling at the Edge of the Universe" is a simple infinite bowling game made in three.js and the Rapier3D physics engine. Click on top window to play. 
 <br>
 <br>
 Control a bowling ball using the WASD keys. Successfully hitting each pin will generate a new lane, skewed in a random direction.

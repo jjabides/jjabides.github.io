@@ -9,6 +9,7 @@ export const types = {
 const cartridgeData = {
     cartridge1: {
         type: types.Demo,
+        demoComponent: "SunburstDiagram",
         icon: `${imagesPath}Sunburst_Diagram.png`,
         title: "Sunburst Diagram",
         descriptionUrl: `${descriptionPath}sunburstDiagram.txt`,
@@ -16,10 +17,8 @@ const cartridgeData = {
         previewHeight: '40%'
     },
     cartridge2: {
-        images: [
-            `${imagesPath}BatEotU_gameplay2.gif`,
-        ],
-        type: types.Carousel,
+        type: types.Demo,
+        demoComponent: "Bowling",
         icon: `${imagesPath}BatEotU_cover.png`,
         title: "Bowling at the Edge of the Universe",
         descriptionUrl: `${descriptionPath}batEotU.txt`,

@@ -5,7 +5,8 @@ import ImageCarousel from "./ImageCarousel.vue";
 import postal from "postal";
 import $ from "jquery";
 import { types } from "../CartridgesManager/Cartridge/CartridgeData.js";
-import Demo from "./Demo.vue";
+import SunburstDiagram from "./Demos/SunburstDiagram.vue";
+import Bowling from "./Demos/Bowling.vue";
 
 var props = defineProps({
     images: Array,
@@ -15,6 +16,7 @@ var props = defineProps({
     links: Array,
     type: String,
     previewHeight: String,
+    demoComponent: String
 })
 
 const description = ref("");
@@ -41,6 +43,17 @@ const interactiveImage = computed(() => {
     return props.type === types.Demo || props.images
 })
 
+const demo = computed(() => {
+    switch (props.demoComponent) {
+        case "Bowling":
+            return Bowling;
+        case "SunburstDiagram":
+            return SunburstDiagram;
+        default:
+            return null;
+    }
+});
+
 // Get description file
 $.ajax({
     async: false,
@@ -56,7 +69,7 @@ function back() {
         view: resources.views.cartridgesManager,
     }
 
-    
+
     channel.publish("selectView", message);
 }
 
@@ -78,10 +91,9 @@ function exitFullscreen() {
         <div class="preview-cont">
             <div class="game-preview" v-bind:id="gamePreviewId"
                 v-bind:class="{ 'interactive': props.interactiveImg, 'fullscreen': fullscreen }"
-                v-bind:style="{ 'height': props.previewHeight }"
-                @click="enterFullscreen">
+                v-bind:style="{ 'height': props.previewHeight }" @click="enterFullscreen">
                 <ImageCarousel v-if="props.type === types.Carousel" v-bind="imageCarouselProps"></ImageCarousel>
-                <Demo v-else v-bind="{ fullscreen: fullscreen}"></Demo>
+                <component :is="demo" v-bind="demoProps"></component>
             </div>
             <div class="main-content" :style="{ 'margin-top': fullscreen ? '30%' : '0'}">
                 <div class="header">
@@ -94,7 +106,8 @@ function exitFullscreen() {
                 <div class="links body-text">
                     <div v-if="props.links" v-for="(item, index) in props.links">
                         <div class="link-title">{{ item.title }}</div>
-                        <a class="link" v-bind:href="item.email ? `mailto: ${item.link}` : item.link">{{ item.link }}</a>
+                        <a class="link" v-bind:href="item.email ? `mailto: ${item.link}` : item.link">{{ item.link
+                        }}</a>
                     </div>
                 </div>
             </div>
