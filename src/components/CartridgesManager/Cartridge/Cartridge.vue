@@ -165,7 +165,6 @@ onMounted(() => {
     margin: 0px 16px;
 }
 
-
 .cartridge {
     width: 96px;
     height: 96px;
