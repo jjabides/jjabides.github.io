@@ -15,12 +15,17 @@ cd ../dist
 # copy all files and place into Web Portfolio gh-pages branch
 cp * -r /c/repos/'Web Portfolio'
 
+# navigate to Web Portfolio folder
 cd /c/repos/'Web Portfolio'
 
+# stage all changes
 git add .
 
+# commit
 git commit -m 'deploy'
 
+# push changes to gh-pages
 git push origin gh-pages
 
-cd -
+# switch back to main
+git checkout main
