@@ -38,6 +38,8 @@ function setCartridgeSelection(message) {
 setTimeout(() => {
   displayView.value = true;
 }, 1800)
+
+console.log('test')
 </script>
 
 <template>
