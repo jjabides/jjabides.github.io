@@ -6,15 +6,21 @@ set -e
 # build
 npm run build
 
-# stage 'dist' folder
-git add dist -f
+# switch to gh-pages
+git checkout gh-pages
 
-# if you are deploying to a custom domain
-# echo 'www.example.com' > CNAME
+# navigate to dist folder
+cd ../dist
+
+# copy all files and place into Web Portfolio gh-pages branch
+cp * -r /c/repos/'Web Portfolio'
+
+cd /c/repos/'Web Portfolio'
+
+git add .
 
 git commit -m 'deploy'
 
-# deploy to subtree 
-git subtree push --prefix dist origin gh-pages
+git push origin gh-pages
 
 cd -
