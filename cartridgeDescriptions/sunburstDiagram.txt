@@ -2,6 +2,6 @@ The Sunburst Diagram is a temporal radial graph that I developed while working a
 <br>
 <br>
 
-I've provided a demo you can interact with by clicking on the image at the top. For the graph I made at work, I developed using SVGs, CSS animations, and Knockout.js. For this demo (and for this entire web portfolio), I'm using Vue.js instead of Knockout.
+I've provided a demo you can interact with by clicking on the image at the top.
 <br>
 <br>
