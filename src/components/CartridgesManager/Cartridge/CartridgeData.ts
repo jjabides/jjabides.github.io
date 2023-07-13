@@ -27,7 +27,7 @@ const cartridgeData = {
         links: [
             {
                 title: "Play at:",
-                link: "https://jun-seiba.itch.io/bowling-at-the-edge-of-the-universe"
+                link: "https://j-seiba.itch.io/bowling-at-the-edge-of-the-universe"
             },
         ]
     },
