@@ -394,11 +394,13 @@ onUnmounted(() => {
     border-radius: 18px;
     background: black;
     left: 100px;
-    transition: transform .2s;
+    transition: transform .2s, opacity .2s;
     z-index: 1;
     padding: 8px 8px 16px 26px;
     display: flex;
     flex-flow: column;
+    opacity: 0;
+    display: none;
 }
 
 .selection-window .close-btn {
@@ -417,13 +419,11 @@ onUnmounted(() => {
 
 .selection-1 .selection-window {
     width: 200px;
-    transform: translate(-176px, -52px) scale(0);
 }
 
 .selection-2 .selection-window,
 .selection-3 .selection-window {
     width: 224px;
-    transform: translate(-176px, -136px) scale(0);
 }
 
 .item-row-cont {
@@ -433,7 +433,20 @@ onUnmounted(() => {
 }
 
 .selection-window.open {
-    transform: translate(0, 0) scale(1);
+    opacity: 1;
+    display: block;
+    animation: window-anim .2s forwards;
+}
+
+@keyframes window-anim {
+    0% {
+        opacity: 0;
+        transform: translateX(-16px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
 }
 
 .selection-window .item-row {
