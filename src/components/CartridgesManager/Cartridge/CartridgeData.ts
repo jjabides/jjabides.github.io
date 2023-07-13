@@ -46,7 +46,7 @@ const cartridgeData = {
         links: [
             {
                 title: "Play at:",
-                link: "https://jun-seiba.itch.io/absent-chess"
+                link: "https://j-seiba.itch.io/absent-chess"
             }
         ]
     },
@@ -70,10 +70,6 @@ const cartridgeData = {
                 title: "LinkedIn:",
                 link: "https://www.linkedin.com/in/jjabides/",
             },
-            {
-                title: "GitHub:",
-                link: "https://github.com/jjabides"
-            }
         ]
     },
 }
