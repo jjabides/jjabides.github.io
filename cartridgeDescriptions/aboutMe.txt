@@ -1,3 +1,13 @@
 Hello! My name is JJ Abides. I'm a software engineer with 4+ years of fullstack web development.
 <br/>
 <br/>
+Skills:
+<br/>
+<ul>
+<li>HTML/CSS/JavaScript</li>
+<li>Vue</li>
+<li>Vite</li>
+<li>Node.js</li>
+<li>.NET</li>
+<li>C#</li>
+</ul>
