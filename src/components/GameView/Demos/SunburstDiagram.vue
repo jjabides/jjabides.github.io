@@ -631,6 +631,7 @@ function applyToolTips() {
     cursor: pointer;
     transition: background-color .3s;
     display: flex;
+    align-items: center;
 }
 
 .switch.on {
@@ -734,6 +735,11 @@ svg g .sun-ray:hover {
 .legend-lines text {
     font-size: 16px;
     fill: #bcbcbc;
+    
+}
+
+.legend-lines g {
+    transform: translateX(4px);
 }
 
 .center-text text {
