@@ -1,0 +1,4 @@
+Created my own 3D model of an Asus Zenfone 9 in Blender and imported it into a three.js scene. 
+<br/>
+<br/>
+Added a UI based on Android 13 with a pseudo YouTube app, and a wallpaper app.
