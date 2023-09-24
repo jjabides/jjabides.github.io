@@ -16,19 +16,38 @@ const cartridgeData = {
         interactiveImg: true,
         previewHeight: '40%'
     },
+    // cartridge2: {
+    //     type: types.Demo,
+    //     demoComponent: "Bowling",
+    //     icon: `${imagesPath}BatEotU_cover.png`,
+    //     title: "Bowling at the Edge of the Universe",
+    //     descriptionUrl: `${descriptionPath}batEotU.txt`,
+    //     interactiveImg: true,
+    //     previewHeight: "40%",
+    //     links: [
+    //         {
+    //             title: "Play at:",
+    //             link: "https://j-seiba.itch.io/bowling-at-the-edge-of-the-universe"
+    //         },
+    //     ]
+    // },
     cartridge2: {
-        type: types.Demo,
-        demoComponent: "Bowling",
-        icon: `${imagesPath}BatEotU_cover.png`,
-        title: "Bowling at the Edge of the Universe",
-        descriptionUrl: `${descriptionPath}batEotU.txt`,
+        images: [
+            `${imagesPath}Zenfone_9_Front.JPG`,
+            `${imagesPath}Zenfone_9_Back.JPG`,
+            `${imagesPath}Zenfone_9_Wallpapers_app.JPG`,
+        ],
+        type: types.Carousel,
+        icon: `${imagesPath}Zenfone_9_Front.JPG`,
+        title: 'Zenfone 9',
+        descriptionUrl: `${descriptionPath}zenfone_9.txt`,
         interactiveImg: true,
         previewHeight: "40%",
         links: [
             {
-                title: "Play at:",
-                link: "https://j-seiba.itch.io/bowling-at-the-edge-of-the-universe"
-            },
+                title: "Link:",
+                link: "https://jj-abides-zenfone-9.netlify.app"
+            }
         ]
     },
     cartridge3: {
