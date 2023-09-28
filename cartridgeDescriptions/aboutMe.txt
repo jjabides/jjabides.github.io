@@ -6,6 +6,7 @@ Skills:
 <ul>
 <li>HTML/CSS/JavaScript</li>
 <li>Vue</li>
+<li>Three.js</li>
 <li>Vite</li>
 <li>Node.js</li>
 <li>.NET</li>
