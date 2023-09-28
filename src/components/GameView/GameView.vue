@@ -6,10 +6,12 @@ import postal from "postal";
 import { types } from "../CartridgesManager/Cartridge/CartridgeData";
 import Bowling from "./Demos/Bowling.vue";
 import SunburstDiagram from "./Demos/SunburstDiagram.vue";
+import BlackHole from "./Demos/BlackHole.vue";
 
 const demoComponents = {
     Bowling,
-    SunburstDiagram
+    SunburstDiagram,
+    BlackHole,
 }
 
 var props = defineProps({

@@ -16,22 +16,37 @@ const cartridgeData = {
         interactiveImg: true,
         previewHeight: '40%'
     },
-    // cartridge2: {
-    //     type: types.Demo,
-    //     demoComponent: "Bowling",
-    //     icon: `${imagesPath}BatEotU_cover.png`,
-    //     title: "Bowling at the Edge of the Universe",
-    //     descriptionUrl: `${descriptionPath}batEotU.txt`,
-    //     interactiveImg: true,
-    //     previewHeight: "40%",
-    //     links: [
-    //         {
-    //             title: "Play at:",
-    //             link: "https://j-seiba.itch.io/bowling-at-the-edge-of-the-universe"
-    //         },
-    //     ]
-    // },
     cartridge2: {
+        type: types.Demo,
+        demoComponent: "BlackHole",
+        icon: `${imagesPath}Black_Hole.png`,
+        title: 'Three.js Black Hole',
+        descriptionUrl: `${descriptionPath}black_hole.txt`,
+        interactiveImg: true,
+        previewHeight: "40%",
+        links: [
+            {
+                title: "Link:",
+                link: "https://jj-abides-black-hole.netlify.app/"
+            }
+        ]
+    },
+    cartridge3: {
+        type: types.Demo,
+        demoComponent: "Bowling",
+        icon: `${imagesPath}BatEotU_cover.png`,
+        title: "Bowling at the Edge of the Universe",
+        descriptionUrl: `${descriptionPath}batEotU.txt`,
+        interactiveImg: true,
+        previewHeight: "40%",
+        links: [
+            {
+                title: "Play at:",
+                link: "https://j-seiba.itch.io/bowling-at-the-edge-of-the-universe"
+            },
+        ]
+    },
+    cartridge4: {
         images: [
             `${imagesPath}Zenfone_9_Front.JPG`,
             `${imagesPath}Zenfone_9_Back.JPG`,
@@ -50,7 +65,7 @@ const cartridgeData = {
             }
         ]
     },
-    cartridge3: {
+    cartridge5: {
         images: [
             `${imagesPath}Basics_Example_1.gif`,
             `${imagesPath}Basics_Example_2.gif`,
@@ -69,7 +84,7 @@ const cartridgeData = {
             }
         ]
     },
-    cartridge4: {
+    cartridge6: {
         images: [
             `${imagesPath}Me.jpg`,
         ],
