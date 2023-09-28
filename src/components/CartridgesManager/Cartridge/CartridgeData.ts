@@ -47,12 +47,13 @@ const cartridgeData = {
         ]
     },
     cartridge4: {
-        images: [
-            `${imagesPath}Zenfone_9_Front.JPG`,
-            `${imagesPath}Zenfone_9_Back.JPG`,
-            `${imagesPath}Zenfone_9_Wallpapers_app.JPG`,
-        ],
-        type: types.Carousel,
+        // images: [
+        //     `${imagesPath}Zenfone_9_Front.JPG`,
+        //     `${imagesPath}Zenfone_9_Back.JPG`,
+        //     `${imagesPath}Zenfone_9_Wallpapers_app.JPG`,
+        // ],
+        demoComponent: "Zenfone",
+        type: types.Demo,
         icon: `${imagesPath}Zenfone_9_Front.JPG`,
         title: 'Zenfone 9',
         descriptionUrl: `${descriptionPath}zenfone_9.txt`,

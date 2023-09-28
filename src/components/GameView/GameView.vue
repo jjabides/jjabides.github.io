@@ -7,11 +7,13 @@ import { types } from "../CartridgesManager/Cartridge/CartridgeData";
 import Bowling from "./Demos/Bowling.vue";
 import SunburstDiagram from "./Demos/SunburstDiagram.vue";
 import BlackHole from "./Demos/BlackHole.vue";
+import Zenfone from "./Demos/Zenfone.vue";
 
 const demoComponents = {
     Bowling,
     SunburstDiagram,
     BlackHole,
+    Zenfone,
 }
 
 var props = defineProps({
